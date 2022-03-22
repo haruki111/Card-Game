@@ -1,6 +1,66 @@
 <script setup lang="ts">
+import { reactive } from "vue";
 import { RouterLink } from "vue-router";
+
+const inputName = () => {
+  gameSettingHash.name = inputs.text;
+};
+
+const selectGame = () => {
+  gameSettingHash.game = String(selects[0].selected);
+};
+const selectRound = () => {
+  gameSettingHash.round = Number(selects[1].selected);
+};
+const selectSpeed = () => {
+  gameSettingHash.speed = Number(selects[2].selected);
+};
+
+const gameSettingHash = reactive({
+  name: "",
+  game: "Black Jack",
+  round: 5,
+  speed: 1,
+}) as {
+  name: string;
+  game: string;
+  round: number;
+  speed: number;
+};
+
+const inputs: {
+  text: string;
+  label: string;
+  method: () => void;
+} = { text: gameSettingHash.name, label: "Name", method: inputName };
+
+const selects: {
+  selected: string | number;
+  options: string[] | number[];
+  label: string;
+  method: () => void;
+}[] = [
+  {
+    selected: gameSettingHash.game,
+    options: ["Black Jack", "Poker"],
+    label: "Game",
+    method: selectGame,
+  },
+  {
+    selected: gameSettingHash.round,
+    options: [5, 3, 1],
+    label: "Round",
+    method: selectRound,
+  },
+  {
+    selected: gameSettingHash.speed,
+    options: [1, 2],
+    label: "Speed",
+    method: selectSpeed,
+  },
+];
 </script>
+
 <template>
   <h1 class="sm:text-3xl text-2xl font-bold text-gray-100 text-center mb-4">
     Welcome to Card Game!
@@ -10,50 +70,35 @@ import { RouterLink } from "vue-router";
       <label
         for="name-input"
         class="block mb-2 text-sm font-medium text-gray-100"
-        >Name</label
       >
+        {{ inputs.label }}
+      </label>
       <input
+        v-model="inputs.text"
+        @input="inputs.method"
         type="text"
         id="name-input"
         placeholder="name"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
       />
     </div>
-    <div class="mb-6">
-      <label for="games" class="block mb-2 text-sm font-medium text-gray-100"
-        >Game</label
-      >
+
+    <div class="mb-6" v-for="(select, index) in selects" :key="index">
+      <label class="block mb-2 text-sm font-medium text-gray-100">
+        {{ select.label }}
+      </label>
       <select
-        id="games"
+        v-model="select.selected"
+        @change="select.method"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full block p-2.5"
       >
-        <option>Black Jack</option>
-        <option>Poker</option>
-      </select>
-    </div>
-    <div class="mb-6">
-      <label for="rounds" class="block mb-2 text-sm font-medium text-gray-100"
-        >Round</label
-      >
-      <select
-        id="rounds"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full block p-2.5"
-      >
-        <option>5</option>
-        <option>3</option>
-        <option>1</option>
-      </select>
-    </div>
-    <div class="mb-6">
-      <label for="speeds" class="block mb-2 text-sm font-medium text-gray-100"
-        >Speed</label
-      >
-      <select
-        id="speeds"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full block p-2.5"
-      >
-        <option>1</option>
-        <option>2</option>
+        <option
+          v-for="(option, index) in select.options"
+          :key="index"
+          :value="option"
+        >
+          {{ option }}
+        </option>
       </select>
     </div>
 
