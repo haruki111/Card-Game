@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { RouterLink } from "vue-router";
+</script>
 <template>
   <h1 class="sm:text-3xl text-2xl font-bold text-gray-100 text-center mb-4">
     Welcome to Card Game!
@@ -64,4 +66,7 @@
       </button>
     </div>
   </form>
+  <div class="text-center mt-5">
+    <router-link to="/game">gameページ</router-link>
+  </div>
 </template>
