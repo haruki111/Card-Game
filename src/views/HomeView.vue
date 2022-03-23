@@ -103,15 +103,13 @@ const selects: {
     </div>
 
     <div class="flex justify-center items-center">
-      <button
+      <router-link
+        to="/game"
         type="button"
         class="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center"
       >
         Start Game
-      </button>
+      </router-link>
     </div>
   </form>
-  <div class="text-center mt-5">
-    <router-link to="/game">gameページ</router-link>
-  </div>
 </template>
