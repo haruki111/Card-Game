@@ -1,47 +1,26 @@
 <script setup lang="ts">
-import HouseInfo from "@/components/HouseInfo.vue";
-import PlayerInfo from "@/components/PlayerInfo.vue";
-import GameCard from "@/components/GameCard.vue";
+import House from "../components/House.vue";
+import Player from "../components/Player.vue";
 import GameAction from "@/components/GameAction.vue";
 import GameRound from "@/components/GameRound.vue";
+import { usePlayerStore } from "@/stores/player";
+const players = usePlayerStore();
 </script>
 <template>
   <div>
     <div id="houseWrap" class="text-center">
-      <HouseInfo />
-      <div id="houseCards" class="flex justify-center pb-2">
-        <GameCard />
-        <GameCard />
-      </div>
+      <House />
     </div>
     <div id="playersWrap" class="flex justify-around">
-      <div id="player" class="text-center">
-        <PlayerInfo />
-
-        <div id="playerCards" class="flex justify-center pb-2">
-          <GameCard />
-          <GameCard />
-        </div>
-      </div>
-      <div id="player" class="text-center mt-24">
-        <PlayerInfo />
-
-        <div id="playerCards" class="flex justify-center pb-2">
-          <GameCard />
-          <GameCard />
-        </div>
-      </div>
-      <div id="player" class="text-center">
-        <PlayerInfo />
-        <div id="playerCards" class="flex justify-center pb-2">
-          <GameCard />
-          <GameCard />
-        </div>
-      </div>
+      <Player
+        v-for="(player, index) in players.players"
+        :key="index"
+        :index="index"
+      />
     </div>
   </div>
-  <gameAction />
-  <gameRound />
+  <GameAction />
+  <GameRound />
 
   <div class="text-center mt-5">
     <router-link to="/">homeページ</router-link>

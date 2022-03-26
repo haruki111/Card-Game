@@ -1,14 +1,20 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { usePlayerStore } from "../stores/player";
+const players = usePlayerStore();
+const house = players.house;
+</script>
 <template>
   <div id="houseInfo" class="text-gray-100 pb-2">
-    <p class="playerName sm:text-3xl text-2xl font-bold mb-2">Dealer</p>
+    <p class="playerName sm:text-3xl text-2xl font-bold mb-2">
+      {{ house.name }}
+    </p>
     <div class="playerStatus text-base">
-      <p>S:waitingForBets</p>
+      <p>S:{{ house.gameStatus }}</p>
     </div>
     <div id="playerScore" class="pb-2">
       <span
         class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
-        >50
+        >{{ players.houseHandScore() }}
       </span>
     </div>
   </div>
