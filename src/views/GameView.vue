@@ -4,7 +4,12 @@ import Player from "../components/Player.vue";
 import GameAction from "@/components/GameAction.vue";
 import GameRound from "@/components/GameRound.vue";
 import { usePlayerStore } from "@/stores/player";
+import { useTableStore } from "@/stores/table";
+const table = useTableStore();
 const players = usePlayerStore();
+table.deck.generateDeck();
+table.constructor("blackjack");
+table.blackjackAssignPlayerHands();
 </script>
 <template>
   <div>

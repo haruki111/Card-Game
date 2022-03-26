@@ -10,6 +10,7 @@ export class Card {
   }
 
   getRankNumber(): number {
+    if (this.rank == "?") return 0;
     if (this.rank == "A") return 11;
     else if (this.rank == "J" || this.rank == "Q" || this.rank == "K")
       return 10;

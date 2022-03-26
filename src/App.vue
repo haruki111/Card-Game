@@ -1,12 +1,5 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import { usePlayerStore } from "./stores/player";
-// import { storeToRefs } from "pinia";
-
-const player = usePlayerStore();
-console.log(player);
-player.constructor("はるき");
-console.log("dsfa")
 </script>
 
 <template>

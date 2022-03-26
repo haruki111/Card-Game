@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 // import { Deck } from "./deck";
-import { Card } from "./card";
+import { Card } from "./Card";
 interface Player {
   name: string;
   type: string;
@@ -10,7 +10,7 @@ interface Player {
   grades: []; //成績
   bet: 0; // 現在のラウンドでのベットしているチップ
   winAmount: 0; // 勝利金額
-  gameStatus: "betting";
+  gameStatus: string;
 }
 export const usePlayerStore = defineStore({
   id: "players",
@@ -18,20 +18,20 @@ export const usePlayerStore = defineStore({
     house: {
       name: "Dealer",
       type: "house",
-      gameType: "blackjack",
+      gameType: "",
       chips: -1,
-      hand: [new Card("D", "8"), new Card("?", "?")],
+      hand: [new Card("?", "?"), new Card("?", "?")],
       grades: [],
       bet: 0,
       winAmount: 0,
-      gameStatus: "betting",
-    },
+      gameStatus: "waitingForBets",
+    } as Player,
 
     players: [
       {
         name: "player1",
         type: "ai",
-        gameType: "blackjack",
+        gameType: "",
         chips: 400,
         hand: [new Card("D", "8"), new Card("D", "8")],
         grades: [],
@@ -42,7 +42,7 @@ export const usePlayerStore = defineStore({
       {
         name: "player2",
         type: "ai",
-        gameType: "blackjack",
+        gameType: "",
         chips: 400,
         hand: [new Card("D", "8"), new Card("D", "8")],
         grades: [],
@@ -53,7 +53,7 @@ export const usePlayerStore = defineStore({
       {
         name: "player3",
         type: "ai",
-        gameType: "blackjack",
+        gameType: "",
         chips: 400,
         hand: [new Card("D", "8"), new Card("D", "8")],
         grades: [],
@@ -62,17 +62,22 @@ export const usePlayerStore = defineStore({
         gameStatus: "betting",
       },
     ] as Player[],
-    // deck: new Deck("blackjack"),
   }),
 
   actions: {
+    constructor(gameType: string) {
+      this.house.gameType = gameType;
+      for (let i = 0; i < this.players.length; i++) {
+        this.players[i].gameType = gameType;
+      }
+    },
     getHandScore(index: number): number {
       const scoreAnd11AHash = this.scoreAnd11A(index);
       return scoreAnd11AHash["score"];
     },
 
     houseHandScore(): number {
-      if (this.house.gameStatus == "betting") {
+      if (this.house.gameStatus == "waitingForBets") {
         return this.house.hand[0].getRankNumber();
       } else return 10;
     },
