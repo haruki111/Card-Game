@@ -1,49 +1,41 @@
 <script setup lang="ts">
-import HouseInfo from "@/components/HouseInfo.vue";
-import PlayerInfo from "@/components/PlayerInfo.vue";
-import GameCard from "@/components/GameCard.vue";
+import House from "../components/House.vue";
+import Player from "../components/Player.vue";
 import GameAction from "@/components/GameAction.vue";
 import GameRound from "@/components/GameRound.vue";
+import GameBet from "@/components/GameBet.vue";
+import GameResult from "../components/GameResult.vue";
+import GameEndResult from "../components/GameEndResult.vue";
+
+import { useTableStore } from "@/stores/table";
+import { useRenderStore } from "@/stores/render";
+
+const table = useTableStore();
+const render = useRenderStore();
+
+render.renderTable();
 </script>
 <template>
   <div>
     <div id="houseWrap" class="text-center">
-      <HouseInfo />
-      <div id="houseCards" class="flex justify-center pb-2">
-        <GameCard />
-        <GameCard />
-      </div>
+      <House />
     </div>
-    <div id="playersWrap" class="flex justify-around">
-      <div id="player" class="text-center">
-        <PlayerInfo />
-
-        <div id="playerCards" class="flex justify-center pb-2">
-          <GameCard />
-          <GameCard />
-        </div>
-      </div>
-      <div id="player" class="text-center mt-24">
-        <PlayerInfo />
-
-        <div id="playerCards" class="flex justify-center pb-2">
-          <GameCard />
-          <GameCard />
-        </div>
-      </div>
-      <div id="player" class="text-center">
-        <PlayerInfo />
-        <div id="playerCards" class="flex justify-center pb-2">
-          <GameCard />
-          <GameCard />
-        </div>
-      </div>
+    <div id="playersWrap" class="flex justify-around mt-5">
+      <Player
+        v-for="(player, index) in table.players"
+        :key="index"
+        :index="index"
+      />
     </div>
   </div>
-  <gameAction />
-  <gameRound />
+  <GameAction v-if="render.renderAction" />
+  <GameBet v-if="render.renderBet" />
+  <GameResult v-if="render.renderResult" />
+  <GameEndResult v-if="render.renderEndResult" />
 
-  <div class="text-center mt-5">
+  <GameRound />
+
+  <div class="text-center">
     <router-link to="/">homeページ</router-link>
   </div>
 </template>

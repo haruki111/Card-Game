@@ -1,9 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useTableStore } from "@/stores/table";
+const table = useTableStore();
+</script>
 <template>
-  <div class="round flex justify-end text-white">
+  <div class="round flex justify-end text-white -mt-14">
     <div class="roundTextWrap flex items-center flex-col">
       <h3 class="text-xl">Round</h3>
-      <p>1 / 5</p>
+      <p>{{ table.currRound }} / {{ table.round }}</p>
     </div>
   </div>
 </template>
