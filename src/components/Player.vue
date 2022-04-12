@@ -2,7 +2,6 @@
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
 
-// import { usePlayerStore } from "../stores/player";
 import PlayerInfo from "./PlayerInfo.vue";
 import GameCard from "./GameCard.vue";
 

@@ -1,9 +1,18 @@
 <script setup lang="ts">
-// import { usePlayerStore } from "../stores/player";
+import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
-import { Player } from "../stores/player";
+import type { Player } from "../stores/player";
 
 const house: Player = useTableStore().house;
+interface Props {
+  isHide: boolean;
+}
+let props = defineProps<Props>();
+
+const displayHouseScore = computed(() => {
+  if (props.isHide == true) return house.hand[0].getRankNumber();
+  return house.getHandScore();
+});
 </script>
 <template>
   <div id="houseInfo" class="text-gray-100 pb-2">
@@ -16,7 +25,7 @@ const house: Player = useTableStore().house;
     <div id="playerScore" class="pb-2">
       <span
         class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
-        >{{ house.getHandScore() }}
+        >{{ displayHouseScore }}
       </span>
     </div>
   </div>

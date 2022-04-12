@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useTableStore } from "@/stores/table";
+import type { Player } from "../stores/player";
 
 interface Props {
   index: number;
 }
 
 let props = defineProps<Props>();
-const players = useTableStore().players;
-const player = players[props.index];
+const players: Player[] = useTableStore().players;
+const player: Player = players[props.index];
 </script>
 
 <template>

@@ -25,7 +25,7 @@ const houseCardHide = computed(() => {
 });
 </script>
 <template>
-  <HouseInfo />
+  <HouseInfo :isHide="houseCardHide[1]" />
   <div id="houseCards" class="flex justify-center pb-2">
     <GameCard
       v-for="(card, index) in house.hand"
