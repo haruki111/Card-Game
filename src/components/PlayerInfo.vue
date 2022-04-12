@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { usePlayerStore } from "../stores/player";
+import { useTableStore } from "@/stores/table";
 
 interface Props {
   index: number;
 }
 
 let props = defineProps<Props>();
-const players = usePlayerStore();
-const player = players.players[props.index];
+const players = useTableStore().players;
+const player = players[props.index];
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const player = players.players[props.index];
     <div id="playerScore" class="pb-2">
       <span
         class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
-        >{{ players.getHandScore(index) }}
+        >{{ player.getHandScore() }}
       </span>
     </div>
   </div>

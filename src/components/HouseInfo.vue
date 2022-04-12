@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { usePlayerStore } from "../stores/player";
-const players = usePlayerStore();
-const house = players.house;
+// import { usePlayerStore } from "../stores/player";
+import { useTableStore } from "@/stores/table";
+import { Player } from "../stores/player";
+
+const house: Player = useTableStore().house;
 </script>
 <template>
   <div id="houseInfo" class="text-gray-100 pb-2">
@@ -14,7 +16,7 @@ const house = players.house;
     <div id="playerScore" class="pb-2">
       <span
         class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
-        >{{ players.houseHandScore() }}
+        >{{ house.getHandScore() }}
       </span>
     </div>
   </div>

@@ -1,13 +1,37 @@
 <script setup lang="ts">
-import { usePlayerStore } from "../stores/player";
+import { computed } from "vue";
+import { useTableStore } from "@/stores/table";
 import HouseInfo from "./HouseInfo.vue";
 import GameCard from "./GameCard.vue";
-const players = usePlayerStore();
-const house = players.house;
+
+const table = useTableStore();
+
+const house = table.house;
+
+const houseCardHide = computed(() => {
+  if (table.gamePhase == "betting") return [true, true];
+  else if (
+    table.gamePhase != "evaluatingWinners" &&
+    table.gamePhase != "evaluatingEnd"
+  ) {
+    return [false, true];
+  } else {
+    let hideArr: boolean[] = [];
+    for (let i = 0; i < house.hand.length; i++) {
+      hideArr.push(false);
+    }
+    return hideArr;
+  }
+});
 </script>
 <template>
   <HouseInfo />
   <div id="houseCards" class="flex justify-center pb-2">
-    <GameCard v-for="(card, index) in house.hand" :key="index" :card="card" />
+    <GameCard
+      v-for="(card, index) in house.hand"
+      :key="index"
+      :card="card"
+      :isHide="houseCardHide[index]"
+    />
   </div>
 </template>
