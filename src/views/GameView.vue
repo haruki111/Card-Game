@@ -16,7 +16,7 @@ const render = useRenderStore();
 render.renderTable();
 </script>
 <template>
-  <div>
+  <div class="-mt-24">
     <div id="houseWrap" class="text-center">
       <House />
     </div>
@@ -28,14 +28,28 @@ render.renderTable();
       />
     </div>
   </div>
-  <GameAction v-if="render.renderAction" />
-  <GameBet v-if="render.renderBet" />
-  <GameResult v-if="render.renderResult" />
-  <GameEndResult v-if="render.renderEndResult" />
-
   <GameRound />
 
-  <div class="text-center">
+  <Transition name="fade">
+    <GameAction v-if="render.renderAction" />
+    <GameBet v-else-if="render.renderBet" />
+    <GameResult v-else-if="render.renderResult" />
+    <GameEndResult v-else-if="render.renderEndResult" />
+  </Transition>
+
+  <!-- <div class="text-center">
     <router-link to="/">homeページ</router-link>
-  </div>
+  </div> -->
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
