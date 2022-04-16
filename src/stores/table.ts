@@ -2,6 +2,8 @@ import { useDeckStore } from "./deck";
 import { defineStore } from "pinia";
 import { Player } from "./player";
 import { Card } from "./card";
+import type { GameDecision } from "../models/gameDecision";
+
 import { Investments } from "../models/Investments";
 
 interface Result {
@@ -83,39 +85,26 @@ export const useTableStore = defineStore({
       this.deck.generateDeck();
       this.deck.shuffleDeck();
     },
-    evaluateMove(
-      player: Player,
-      gameDecision:
-        | {
-            action: string;
-            amount: string | number;
-          }
-        | {
-            action: string | number | null;
-            amount: number;
-          }
-        | undefined
-    ) {
+
+    evaluateMove(player: Player, gameDecision: GameDecision) {
       if (
-        gameDecision?.action == "bet" &&
-        typeof gameDecision.amount === "number"
+        gameDecision.getAction() == "bet" &&
+        typeof gameDecision.getAmount() == "number"
       ) {
-        player.bet = gameDecision.amount;
+        player.bet = Number(gameDecision.getAmount());
         player.chips -= player.bet;
         player.gameStatus = "bet";
-        console.log("2222");
-      }
-      if (this.gamePhase == "acting") {
-        if (gameDecision?.action == "surrender") {
+      } else if (this.gamePhase == "acting") {
+        if (gameDecision.getAction() == "surrender") {
           player.gameStatus = "surrender";
           player.bet -= Math.ceil(player.bet / 2);
           player.chips += player.bet;
-        } else if (gameDecision?.action == "stand") {
+        } else if (gameDecision.getAction() == "stand") {
           player.gameStatus = "stand";
-        } else if (gameDecision?.action == "hit") {
+        } else if (gameDecision.getAction() == "hit") {
           player.gameStatus = "hit";
           player.hand.push(this.deck.drawOne());
-        } else if (gameDecision?.action == "double") {
+        } else if (gameDecision.getAction() == "double") {
           player.gameStatus = "double";
           player.bet *= 2;
           player.chips -= player.bet / 2;
@@ -127,6 +116,7 @@ export const useTableStore = defineStore({
         }
       }
     },
+
     blackjackGetRoundResults(): {
       round: number;
       result: Result[];
@@ -149,7 +139,6 @@ export const useTableStore = defineStore({
           chips: player.chips,
         };
       }
-      console.log(hash);
       this.resultsLog.push(hash);
       return hash;
     },
@@ -165,7 +154,7 @@ export const useTableStore = defineStore({
       this.house.hand[1] = this.deck.drawOne();
     },
 
-    validBlackJack() {
+    validBlackJack(): void {
       for (let i = 0; i < this.players.length; i++) {
         const player = this.players[i];
         if (player.getHandScore() == 21 && player.hand.length == 2)
@@ -176,9 +165,8 @@ export const useTableStore = defineStore({
     haveTurn(userData: number | string | null): void {
       const player: Player = this.getTurnPlayer;
 
-      console.log(player);
       if (this.gamePhase == "betting") {
-        const gameDecision = player.promptPlayer(userData);
+        const gameDecision: GameDecision = player.promptPlayer(userData);
         this.evaluateMove(player, gameDecision);
         if (this.onLastPlayer) {
           this.blackjackAssignPlayerHands(); //2枚カードを割り当て
@@ -188,9 +176,8 @@ export const useTableStore = defineStore({
         }
         this.turnCounter++;
       } else if (this.gamePhase == "acting") {
-        console.log("acting");
         if (player.gameStatus == "bet" || player.gameStatus == "hit") {
-          const gameDecision = player.promptPlayer(
+          const gameDecision: GameDecision = player.promptPlayer(
             userData,
             this.house.hand[0].getRankNumber()
           );
@@ -203,33 +190,28 @@ export const useTableStore = defineStore({
           this.turnCounter = -1;
         }
       } else if (this.gamePhase == "evaluatingWinners") {
-        if (
-          this.house.gameStatus == "waitingForActions" ||
-          this.house.gameStatus == "hit"
-        ) {
-          if (this.house.getHandScore() < 17) {
-            const houseHaveCard = this.house.hand.length;
-            this.house.hand[houseHaveCard] = this.deck.drawOne();
+        if (this.house.gameStatus == "waitingForActions") {
+          if (this.house.getHandScore() == 21 && this.house.hand.length == 2)
+            this.house.gameStatus = "blackjack";
+          else if (this.house.getHandScore() < 17)
             this.house.gameStatus = "hit";
-          } else {
-            if (this.house.getHandScore() == 21 && this.house.hand.length == 2)
-              this.house.gameStatus = "blackjack";
-            else if (this.house.getHandScore() > 21)
-              this.house.gameStatus = "bust";
-            else this.house.gameStatus = "stand";
-          }
+          else this.house.gameStatus = "bet";
+        } else if (this.house.gameStatus == "hit") {
+          this.house.hand.push(this.deck.drawOne());
+          if (this.house.getHandScore() > 21) this.house.gameStatus = "bust";
+          else if (this.house.getHandScore() >= 17)
+            this.house.gameStatus = "bet";
         } else {
           for (let i = 0; i < this.players.length; i++) {
             this.blackjackEvaluate(this.players[i]);
           }
           this.gamePhase = "evaluatingEnd";
-
           this.blackjackGetRoundResults();
         }
       }
     },
 
-    // TODO後で見直し
+    // TODO 後で見直し
     blackjackEvaluate(player: Player) {
       if (player.gameStatus == "bust" || player.gameStatus == "surrender")
         player.winAmount -= player.bet; //プレイヤーがバ-スト

@@ -1,4 +1,5 @@
 import { Card } from "./card";
+import { GameDecision } from "@/models/gameDecision";
 import {
   Investments,
   MartingaleMethod,
@@ -37,44 +38,35 @@ export class Player {
     this.gameStatus = "betting";
   }
 
+  // gameStatus if(betting, bet, hit)
   public promptPlayer(
     userData: number | string | null,
     houseScore?: number
-  ):
-    | {
-        action: string;
-        amount: string | number;
-      }
-    | {
-        action: string | number | null;
-        amount: number;
-      }
-    | undefined {
-    let gameDecision;
+  ): GameDecision {
     if (this.gameStatus == "betting") {
       if (userData == null) {
         let latch = this.investment.method(this);
         if (latch >= this.chips * 0.7) latch = Math.floor(this.chips / 2);
-        gameDecision = { action: "bet", amount: latch };
-      } else gameDecision = { action: "bet", amount: userData };
+        return new GameDecision("bet", latch);
+      } else return new GameDecision("bet", userData);
     } else if (this.gameStatus == "bet" || this.gameStatus == "hit") {
       if (userData == null && typeof houseScore == "number") {
         const playerScore = this.getHandScore();
 
         if (this.isValid11AOnce()) {
-          gameDecision = {
-            action: this.softHandAction(playerScore, houseScore),
-            amount: 0,
-          };
+          return new GameDecision(
+            this.softHandAction(playerScore, houseScore),
+            0
+          );
         } else {
-          gameDecision = {
-            action: this.hardHandAction(playerScore, houseScore),
-            amount: 0,
-          };
+          return new GameDecision(
+            this.hardHandAction(playerScore, houseScore),
+            0
+          );
         }
-      } else gameDecision = { action: userData, amount: 0 };
+      }
     }
-    return gameDecision;
+    return new GameDecision(userData, 0);
   }
 
   public getHandScore() {
@@ -166,8 +158,8 @@ export class Player {
 
     const houseSelect = houseSelectArr.indexOf(houseScore);
     let playerSelect = playerSelectArr.indexOf(playerScore);
-    if (playerScore < 9) playerSelect = 0;
-    if (playerScore > 16) playerSelect = 9;
+    if (playerScore < 8) playerSelect = 0;
+    if (playerScore > 17) playerSelect = 9;
 
     let playerAction = String(
       mapAction.get(hardHand[playerSelect][houseSelect])
