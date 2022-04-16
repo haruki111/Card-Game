@@ -22,11 +22,11 @@ let props = defineProps<Props>();
     name="card-reverse"
     class="card bg-white h-16 w-12 mx-2 p-1 rounded border border-gray-500 shadow-md"
   >
-    <div v-if="isHide == true">
+    <div key="hide" v-if="isHide == true">
       <div class="bg-red-600 h-full w-full rounded"></div>
     </div>
 
-    <div v-else>
+    <div key="show" v-else>
       <div class="h-8 w-8 m-auto">
         <img :src="imgMap.get(props.card.suit)" />
       </div>

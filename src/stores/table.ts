@@ -2,6 +2,7 @@ import { useDeckStore } from "./deck";
 import { defineStore } from "pinia";
 import { Player } from "./player";
 import { Card } from "./card";
+import { Investments } from "../models/Investments";
 
 interface Result {
   name: string;
@@ -304,7 +305,9 @@ export const useTableStore = defineStore({
       for (let i = 0; i < this.players.length; i++) {
         this.players[i].chips = 400;
         this.players[i].grades = []; //成績
-        // this.players[i].investment = new Investments(this.players[i].chips); //投資法
+        this.players[i].investment = new Investments(
+          this.players[i].chips
+        ).getInvestment(); //投資法
       }
     },
   },
