@@ -5,11 +5,12 @@ import { useTableStore } from "@/stores/table";
 import PlayerInfo from "./PlayerInfo.vue";
 import GameCard from "./GameCard.vue";
 
-let table = useTableStore();
+const table = useTableStore();
+
 const playerCardHide = computed(() => {
   if (table.gamePhase == "betting") return [true, true];
   else {
-    let hideArr = [];
+    let hideArr: boolean[] = [];
     for (let i = 0; i < player.hand.length; i++) {
       hideArr.push(false);
     }
@@ -28,14 +29,33 @@ const player = players[props.index];
 </script>
 <template>
   <div class="text-center">
-    <PlayerInfo :index="index" />
-    <div id="playerCards" class="flex justify-center pb-2">
+    <PlayerInfo :index="props.index" />
+    <TransitionGroup
+      name="player-cards"
+      tag="div"
+      class="flex justify-center pb-2"
+    >
       <GameCard
         v-for="(card, index) in player.hand"
         :key="index"
         :card="card"
         :isHide="playerCardHide[index]"
       />
-    </div>
+    </TransitionGroup>
   </div>
 </template>
+<style scoped>
+.player-cards-move,
+.player-cards-enter-active,
+.player-cards-leave-active {
+  transition: all 0.3s ease;
+}
+.player-cards-enter-from,
+.player-cards-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.player-cards-leave-active {
+  position: absolute;
+}
+</style>

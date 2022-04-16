@@ -3,8 +3,10 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <div id="app" class="h-screen flex items-center">
-    <main class="container mx-auto px-5 sm:py-12 py-4">
+  <div id="app">
+    <main
+      class="container h-screen mx-auto flex justify-center flex-col px-5 sm:py-12 py-4"
+    >
       <RouterView />
     </main>
   </div>

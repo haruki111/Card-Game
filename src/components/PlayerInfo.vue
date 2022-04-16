@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
 import type { Player } from "../stores/player";
 
@@ -9,6 +10,11 @@ interface Props {
 let props = defineProps<Props>();
 const players: Player[] = useTableStore().players;
 const player: Player = players[props.index];
+
+const statusColor = computed(() => {
+  if (player.gameStatus == "blackjack") return "text-yellow-400";
+  return "";
+});
 </script>
 
 <template>
@@ -17,7 +23,9 @@ const player: Player = players[props.index];
       {{ player.name }}
     </p>
     <div class="playerStatus text-base flex justify-between">
-      <p class="px-1">S:{{ player.gameStatus }}</p>
+      <p class="px-1">
+        S:<span :class="statusColor">{{ player.gameStatus }}</span>
+      </p>
       <p class="px-1">B:{{ player.bet }}</p>
       <p class="px-1">C:{{ player.chips }}</p>
     </div>

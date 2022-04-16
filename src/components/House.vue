@@ -5,7 +5,6 @@ import HouseInfo from "./HouseInfo.vue";
 import GameCard from "./GameCard.vue";
 
 const table = useTableStore();
-
 const house = table.house;
 
 const houseCardHide = computed(() => {
@@ -26,12 +25,31 @@ const houseCardHide = computed(() => {
 </script>
 <template>
   <HouseInfo :isHide="houseCardHide[1]" />
-  <div id="houseCards" class="flex justify-center pb-2">
+  <TransitionGroup
+    name="house-cards"
+    tag="div"
+    class="flex justify-center pb-2"
+  >
     <GameCard
       v-for="(card, index) in house.hand"
       :key="index"
       :card="card"
       :isHide="houseCardHide[index]"
     />
-  </div>
+  </TransitionGroup>
 </template>
+<style scoped>
+.house-cards-move,
+.house-cards-enter-active,
+.house-cards-leave-active {
+  transition: all 0.3s ease;
+}
+.house-cards-enter-from,
+.house-cards-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.player-cards-leave-active {
+  position: absolute;
+}
+</style>
