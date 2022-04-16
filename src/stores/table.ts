@@ -50,12 +50,11 @@ export const useTableStore = defineStore({
         ? state.players[state.players.length - 1]
         : state.players[turnPlayer - 1];
     },
+
     onLastPlayer(): boolean {
       return this.getTurnPlayer == this.players[this.players.length - 1];
     },
-    // TODO
-    // 毎回forを回すのはコストがかかるので、Mapを作り、setStatusになれば追加する
-    // lengthがplayersの数分になればTRUE
+
     allPlayerActionsResolved() {
       const setStatus = ["bust", "stand", "surrender", "double", "blackjack"];
       for (let i = 0; i < this.players.length; i++) {
@@ -70,7 +69,7 @@ export const useTableStore = defineStore({
       gameType: string,
       gameRound: number,
       gameSpeed: number
-    ) {
+    ): void {
       this.players[1].name = userName;
       const userType = userName == "ai" ? "ai" : "user";
       this.players[1].type = userType;
@@ -86,7 +85,7 @@ export const useTableStore = defineStore({
       this.deck.shuffleDeck();
     },
 
-    evaluateMove(player: Player, gameDecision: GameDecision) {
+    evaluateMove(player: Player, gameDecision: GameDecision): void {
       if (
         gameDecision.getAction() == "bet" &&
         typeof gameDecision.getAmount() == "number"
@@ -144,7 +143,7 @@ export const useTableStore = defineStore({
     },
 
     //house, playerに2枚ずつカードを配る
-    blackjackAssignPlayerHands() {
+    blackjackAssignPlayerHands(): void {
       for (let i = 0; i < this.players.length; i++) {
         this.players[i].hand[0] = this.deck.drawOne();
         this.players[i].hand[1] = this.deck.drawOne();
@@ -211,34 +210,36 @@ export const useTableStore = defineStore({
       }
     },
 
-    // TODO 後で見直し
-    blackjackEvaluate(player: Player) {
-      if (player.gameStatus == "bust" || player.gameStatus == "surrender")
-        player.winAmount -= player.bet; //プレイヤーがバ-スト
-      else if (this.house.gameStatus == "blackjack") {
-        //ハウスがブラックジャックの場合
-        if (player.gameStatus == "blackjack") {
-          player.chips += player.bet;
-          player.winAmount = 0;
-        } else player.winAmount -= player.bet;
-      } else if (
-        player.getHandScore() > this.house.getHandScore() ||
-        this.house.gameStatus == "bust" ||
-        player.gameStatus == "blackjack"
+    blackjackEvaluate(player: Player): void {
+      //プレイヤーがバ-スト or サレンダー
+      if (player.gameStatus == "bust" || player.gameStatus == "surrender") {
+        player.winAmount -= player.bet;
+      } // プレイヤー ハウス共にblackjack
+      else if (
+        player.gameStatus == "blackjack" &&
+        this.house.gameStatus == "blackjack"
       ) {
-        //ハウスがバ-スト、またはプレイヤーの手札がディーラの手札よりも大きい場合
-        if (player.gameStatus == "blackjack") {
-          player.chips += Math.ceil(player.bet * 2.5);
-          player.winAmount += Math.ceil(player.bet * 1.5);
-        } else {
-          player.chips += player.bet * 2;
-          player.winAmount += player.bet;
-        }
-      } else if (
+        player.chips += player.bet;
+        player.winAmount = 0;
+      } // ハウス blackjack
+      else if (this.house.gameStatus == "blackjack") {
+        player.winAmount -= player.bet;
+      } //プレイヤー blackjack
+      else if (player.gameStatus == "blackJack") {
+        player.chips += Math.ceil(player.bet * 2.5);
+        player.winAmount += Math.ceil(player.bet * 1.5);
+      } //ハウスがバ-スト、またはプレイヤーの手札がディーラの手札よりも大きい場合
+      else if (
+        player.getHandScore() > this.house.getHandScore() ||
+        this.house.gameStatus == "bust"
+      ) {
+        player.chips += player.bet * 2;
+        player.winAmount += player.bet;
+      } //ハウスがバ-ストしておらず、ハウスの手札がプレイヤーの手札より大きい場合
+      else if (
         this.house.gameStatus != "bust" &&
         player.getHandScore() < this.house.getHandScore()
       ) {
-        //ハウスがバ-ストしておらず、ハウスの手札がプレイヤーの手札より大きい場合
         player.winAmount -= player.bet;
       } else player.chips += player.bet; //引き分け
 
@@ -247,11 +248,11 @@ export const useTableStore = defineStore({
         this.nextGamePhase = "end";
     },
 
-    blackjackClearPlayerHandsAndBets() {
+    blackjackClearPlayerHandsAndBets(): void {
       this.deck.resetDeck();
 
       for (let i = 0; i < this.players.length; i++) {
-        const player = this.players[i];
+        const player: Player = this.players[i];
         player.bet = 0;
         player.winAmount = 0;
         player.hand.length = 0;
@@ -263,7 +264,7 @@ export const useTableStore = defineStore({
       this.house.hand = [new Card("?", "?"), new Card("?", "?")];
       this.house.gameStatus = "betting";
     },
-    nextTurn() {
+    nextTurn(): void {
       if (this.currRound == this.round || this.nextGamePhase == "end") {
         this.gamePhase = "end";
       } else {
