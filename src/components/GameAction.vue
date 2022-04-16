@@ -22,7 +22,7 @@ const disabledBgRedColor = computed(() => {
 });
 
 const action = (action: string) => {
-  render.renderTableHelper(action);
+  render.renderTableUserHelper(action);
   render.renderAction = false;
 };
 </script>
