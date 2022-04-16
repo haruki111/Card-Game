@@ -26,7 +26,6 @@ const renderChips = computed(() => {
     if ((user.chips - bet.value) / Number(chips) >= 1)
       chipsArr.push(Number(chips));
   }
-  console.log(chipsArr);
 
   return chipsArr;
 });

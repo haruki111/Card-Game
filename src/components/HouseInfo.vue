@@ -13,6 +13,11 @@ const displayHouseScore = computed(() => {
   if (props.isHide == true) return house.hand[0].getRankNumber();
   return house.getHandScore();
 });
+
+const statusColor = computed(() => {
+  if (house.gameStatus == "blackjack") return "text-yellow-400";
+  return "";
+});
 </script>
 <template>
   <div id="houseInfo" class="text-gray-100 pb-2">
@@ -20,7 +25,9 @@ const displayHouseScore = computed(() => {
       {{ house.name }}
     </p>
     <div class="playerStatus text-base">
-      <p>S:{{ house.gameStatus }}</p>
+      <p>
+        S:<span :class="statusColor">{{ house.gameStatus }}</span>
+      </p>
     </div>
     <div id="playerScore" class="pb-2">
       <span
