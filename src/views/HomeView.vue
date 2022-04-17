@@ -21,6 +21,9 @@ const selectSpeed = () => {
 const startGame = () => {
   if (gameSettingHash.name == "") inputs.alert = true;
   else {
+    table.deck.resetDeck();
+    table.$reset();
+
     router.push("game");
     table.constructor(
       gameSettingHash.name,

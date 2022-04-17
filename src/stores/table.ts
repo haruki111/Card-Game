@@ -3,8 +3,12 @@ import { defineStore } from "pinia";
 import { Player } from "./player";
 import { Card } from "./card";
 import type { GameDecision } from "../models/gameDecision";
-
 import { Investments } from "../models/Investments";
+
+import chipNum5 from "../assets/coin/chip_5.png";
+import chipNum20 from "../assets/coin/chip_20.png";
+import chipNum50 from "../assets/coin/chip_50.png";
+import chipNum100 from "../assets/coin/chip_100.png";
 
 interface Result {
   name: string;
@@ -21,10 +25,10 @@ export const useTableStore = defineStore({
     round: 0,
     gameSpeed: 1,
     betDenominations: {
-      5: "src/assets/coin/chip_5.png",
-      20: "src/assets/coin/chip_20.png",
-      50: "src/assets/coin/chip_50.png",
-      100: "src/assets/coin/chip_100.png",
+      5: chipNum5,
+      20: chipNum20,
+      50: chipNum50,
+      100: chipNum100,
     },
     deck: useDeckStore(),
     gamePhase: "betting", //betting, acting, 'evaluatingWinners, gameOver'
