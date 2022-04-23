@@ -2,11 +2,10 @@
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
 
-interface Props {
+let props = defineProps<{
   index: number;
-}
+}>();
 
-let props = defineProps<Props>();
 const players = useTableStore().table.players;
 const player = players[props.index];
 

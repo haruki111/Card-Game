@@ -18,11 +18,9 @@ const playerCardHide = computed(() => {
   }
 });
 
-interface Props {
+let props = defineProps<{
   index: number;
-}
-
-let props = defineProps<Props>();
+}>();
 
 const players = table.players;
 const player = players[props.index];

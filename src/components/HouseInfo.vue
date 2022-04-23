@@ -6,10 +6,10 @@ import type { BlackJackTable } from "@/models/table/blackjackTable";
 const table = useTableStore().table as BlackJackTable;
 
 const house = table.house;
-interface Props {
+
+let props = defineProps<{
   isHide: boolean;
-}
-let props = defineProps<Props>();
+}>();
 
 const displayHouseScore = computed(() => {
   if (props.isHide == true) return house.hand[0].getRankNumber();
