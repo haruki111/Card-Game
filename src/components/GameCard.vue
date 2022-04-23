@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import type { Card } from "../stores/card";
 
-interface Props {
+let props = defineProps<{
   card: Card;
   isHide: boolean;
-}
-let props = defineProps<Props>();
+}>();
 </script>
 <template>
   <transition

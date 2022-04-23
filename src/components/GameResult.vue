@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useTableStore } from "@/stores/table";
 import { useRenderStore } from "@/stores/render";
+import type { BlackJackTable } from "@/models/table/blackjackTable";
 
-const table = useTableStore();
+const table = useTableStore().table as BlackJackTable;
 const render = useRenderStore();
 
 const tableHeads: string[] = ["name", "result", "action", "won"];
@@ -17,7 +18,6 @@ const conversionGradesEng = (grades: number[]): string => {
 
 const resultOk = (): void => {
   render.renderResult = false;
-
   table.nextTurn();
   render.renderTable();
 };

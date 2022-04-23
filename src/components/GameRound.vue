@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useTableStore } from "@/stores/table";
-const table = useTableStore();
+import type { BlackJackTable } from "@/models/table/blackjackTable";
+
+const table = useTableStore().table as BlackJackTable;
 </script>
 <template>
   <div class="round flex justify-end text-white">

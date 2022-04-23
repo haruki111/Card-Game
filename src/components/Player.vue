@@ -5,7 +5,7 @@ import { useTableStore } from "@/stores/table";
 import PlayerInfo from "./PlayerInfo.vue";
 import GameCard from "./GameCard.vue";
 
-const table = useTableStore();
+const table = useTableStore().table;
 
 const playerCardHide = computed(() => {
   if (table.gamePhase == "betting") return [true, true];
@@ -18,13 +18,11 @@ const playerCardHide = computed(() => {
   }
 });
 
-interface Props {
+let props = defineProps<{
   index: number;
-}
+}>();
 
-let props = defineProps<Props>();
-
-const players = useTableStore().players;
+const players = table.players;
 const player = players[props.index];
 </script>
 <template>

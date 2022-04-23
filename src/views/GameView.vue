@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import router from "@/router";
 import House from "../components/House.vue";
 import Player from "../components/Player.vue";
 import GameAction from "@/components/GameAction.vue";
@@ -10,16 +9,11 @@ import GameEndResult from "../components/GameEndResult.vue";
 
 import { useTableStore } from "@/stores/table";
 import { useRenderStore } from "@/stores/render";
-import { onBeforeMount } from "vue";
 
-const table = useTableStore();
+const table = useTableStore().table;
 const render = useRenderStore();
 
 render.renderTable();
-
-onBeforeMount(() => {
-  if (table.gameType == "") router.push("/");
-});
 </script>
 <template>
   <div class="-mt-24">

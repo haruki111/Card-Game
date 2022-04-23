@@ -1,4 +1,4 @@
-import type { Player } from "../stores/player";
+import type { Player } from "@/models/player/player";
 
 export class Investments {
   private item;

@@ -4,14 +4,17 @@ import { useTableStore } from "@/stores/table";
 import HouseInfo from "./HouseInfo.vue";
 import GameCard from "./GameCard.vue";
 
-const table = useTableStore();
+import type { BlackJackTable } from "@/models/table/blackjackTable";
+
+const table = useTableStore().table as BlackJackTable;
 const house = table.house;
 
 const houseCardHide = computed(() => {
   if (table.gamePhase == "betting") return [true, true];
   else if (
     table.gamePhase != "evaluatingWinners" &&
-    table.gamePhase != "evaluatingEnd"
+    table.gamePhase != "evaluatingEnd" &&
+    table.gamePhase != "end"
   ) {
     return [false, true];
   } else {

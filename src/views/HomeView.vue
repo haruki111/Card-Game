@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import router from "@/router";
 import { reactive } from "vue";
 import { useTableStore } from "@/stores/table";
 const table = useTableStore();
+
+const startGame = () => {
+  if (gameSettingHash.name == "") inputs.alert = true;
+  else {
+    table.$reset();
+    table.setTable(gameSettingHash);
+  }
+};
 
 const inputName = () => {
   gameSettingHash.name = inputs.text;
@@ -16,22 +23,6 @@ const selectRound = () => {
 };
 const selectSpeed = () => {
   gameSettingHash.speed = Number(selects[2].selected);
-};
-
-const startGame = () => {
-  if (gameSettingHash.name == "") inputs.alert = true;
-  else {
-    table.deck.resetDeck();
-    table.$reset();
-
-    router.push("game");
-    table.constructor(
-      gameSettingHash.name,
-      gameSettingHash.game,
-      gameSettingHash.round,
-      gameSettingHash.speed
-    );
-  }
 };
 
 const gameSettingHash = reactive({
@@ -68,7 +59,7 @@ const selects: {
 }[] = reactive([
   {
     selected: gameSettingHash.game,
-    options: ["Black Jack", "Poker"],
+    options: ["Black Jack", "Turn8"],
     label: "Game",
     method: selectGame,
   },

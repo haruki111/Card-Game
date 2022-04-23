@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
-import type { Player } from "../stores/player";
 
-const house: Player = useTableStore().house;
-interface Props {
+import type { BlackJackTable } from "@/models/table/blackjackTable";
+const table = useTableStore().table as BlackJackTable;
+
+const house = table.house;
+
+let props = defineProps<{
   isHide: boolean;
-}
-let props = defineProps<Props>();
+}>();
 
 const displayHouseScore = computed(() => {
   if (props.isHide == true) return house.hand[0].getRankNumber();

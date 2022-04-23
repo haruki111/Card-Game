@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useRenderStore } from "@/stores/render";
 
-const table = useTableStore();
+const table = useTableStore().table;
 const render = useRenderStore();
 
 const validUserStatusBet = computed(() => {
