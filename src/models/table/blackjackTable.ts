@@ -1,5 +1,7 @@
 import { Table } from "./table";
-import { Player } from "@/stores/player";
+// import { Player } from "@/stores/player";
+import { BlackJackPlayer } from "@/models/player/blackJackPlayer";
+import type { Player } from "@/models/player/player";
 import { Card } from "@/stores/card";
 
 import type { GameDecision } from "../gameDecision";
@@ -18,7 +20,7 @@ interface Result {
   chips: number;
 }
 export class BlackJackTable extends Table {
-  private house: Player;
+  private house: BlackJackPlayer;
   private round: number;
   private nextGamePhase: string;
   private betDenominations: {
@@ -32,14 +34,15 @@ export class BlackJackTable extends Table {
     result: Result[];
   }[];
   private currRound: number;
+
   constructor(gameType: string, turnCounter: number, gameSpeed: number) {
     const players: Player[] = [
-      new Player("player1", "ai"),
-      new Player("", ""),
-      new Player("player3", "ai"),
+      new BlackJackPlayer("player1", "ai", 400),
+      new BlackJackPlayer("", "", 400),
+      new BlackJackPlayer("player3", "ai", 400),
     ];
     super(gameType, "betting", turnCounter, gameSpeed, players);
-    this.house = new Player("house", "house");
+    this.house = new BlackJackPlayer("house", "house", -1);
     this.round = 0;
     this.nextGamePhase = "";
     this.resultsLog = [];
@@ -50,17 +53,6 @@ export class BlackJackTable extends Table {
       50: chipNum50,
       100: chipNum100,
     };
-  }
-  getTurnPlayer(): Player {
-    if (this.turnCounter == -1) return this.house;
-    const turnPlayer = this.turnCounter % this.players.length;
-    return turnPlayer == 0
-      ? this.players[this.players.length - 1]
-      : this.players[turnPlayer - 1];
-  }
-
-  onLastPlayer(): boolean {
-    return this.getTurnPlayer() == this.players[this.players.length - 1];
   }
 
   allPlayerActionsResolved() {
@@ -85,6 +77,7 @@ export class BlackJackTable extends Table {
 
     for (let i = 0; i < this.players.length; i++) {
       const player = this.players[i];
+      console.log(player.name);
       hash.result[i] = {
         name: player.name,
         action: player.gameStatus,
@@ -107,7 +100,10 @@ export class BlackJackTable extends Table {
     this.house.hand[1] = this.deck.drawOne();
   }
 
-  evaluateMove(player: Player, gameDecision: GameDecision): void {
+  evaluateMove(
+    player: Player | BlackJackPlayer,
+    gameDecision: GameDecision
+  ): void {
     if (
       gameDecision.getAction() == "bet" &&
       typeof gameDecision.getAmount() == "number"
@@ -140,7 +136,7 @@ export class BlackJackTable extends Table {
 
   validBlackJack(): void {
     for (let i = 0; i < this.players.length; i++) {
-      const player = this.players[i];
+      const player: Player = this.players[i];
       if (player.getHandScore() == 21 && player.hand.length == 2)
         player.gameStatus = "blackjack";
     }
@@ -193,7 +189,7 @@ export class BlackJackTable extends Table {
     }
   }
 
-  blackjackEvaluate(player: Player): void {
+  blackjackEvaluate(player: Player | BlackJackPlayer): void {
     //プレイヤーがバ-スト or サレンダー
     if (player.gameStatus == "bust" || player.gameStatus == "surrender") {
       player.winAmount -= player.bet;

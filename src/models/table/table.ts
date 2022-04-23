@@ -1,8 +1,9 @@
-import type { Player } from "../../stores/player";
+import type { Player } from "@/models/player/player";
+import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import { useDeckStore } from "../../stores/deck";
 
 export abstract class Table {
-  public gameType: string;
+  protected gameType: string;
   protected gamePhase: string;
   protected turnCounter: number;
   protected gameSpeed: number;
