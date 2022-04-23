@@ -1,27 +1,57 @@
 import type { Player } from "@/models/player/player";
-import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import { useDeckStore } from "../../stores/deck";
 
 export abstract class Table {
-  protected gameType: string;
-  protected gamePhase: string;
-  protected turnCounter: number;
-  protected gameSpeed: number;
-  protected deck;
-  protected players: Player[];
+  protected _gameType: string;
+  protected _gamePhase: string;
+  protected _turnCounter: number;
+  protected _gameSpeed: number;
+  protected _deck;
+  protected _players: Player[];
   constructor(
     gameType: string,
     gamePhase: string,
     turnCounter: number,
-    gameSpeed: number,
     players: Player[]
   ) {
-    this.gameType = gameType;
-    this.gamePhase = gamePhase;
-    this.turnCounter = turnCounter;
-    this.gameSpeed = gameSpeed;
-    this.deck = useDeckStore();
-    this.players = players;
+    this._gameType = gameType;
+    this._gamePhase = gamePhase;
+    this._turnCounter = turnCounter;
+    this._gameSpeed = 1;
+    this._deck = useDeckStore();
+    this._players = players;
+  }
+
+  get gameType(): string {
+    return this._gameType;
+  }
+
+  get gamePhase(): string {
+    return this._gamePhase;
+  }
+
+  set gamePhase(gamePhase: string) {
+    this._gamePhase = gamePhase;
+  }
+
+  get turnCounter(): number {
+    return this._turnCounter;
+  }
+
+  set turnCounter(num: number) {
+    this._turnCounter = num;
+  }
+
+  get players(): Player[] {
+    return this._players;
+  }
+
+  get gameSpeed(): number {
+    return this._gameSpeed;
+  }
+
+  get deck() {
+    return this._deck;
   }
   public getTurnPlayer(): Player {
     const turnPlayer = this.turnCounter % this.players.length;
@@ -36,4 +66,6 @@ export abstract class Table {
   abstract assignPlayerHands(): void;
 
   abstract haveTurn(userData: number | string | null): void;
+
+  abstract nextTurn(): void;
 }

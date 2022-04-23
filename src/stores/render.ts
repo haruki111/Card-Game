@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { useTableStore } from "./table";
-const table = useTableStore();
+
+const table = useTableStore().table;
 
 export const useRenderStore = defineStore({
   id: "render",
@@ -24,7 +25,9 @@ export const useRenderStore = defineStore({
     },
 
     renderTable() {
-      const player = table.getTurnPlayer;
+      const player = table.getTurnPlayer();
+      console.log(player);
+
       if (table.gamePhase == "end") this.renderEndResult = true;
       else if (table.gamePhase == "evaluatingEnd") this.renderResult = true;
       else if (player.type == "user") {

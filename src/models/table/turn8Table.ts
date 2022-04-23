@@ -1,19 +1,19 @@
 import { Table } from "./table";
-import { Player } from "@/stores/player";
+import { Player } from "@/models/player/player";
 import { Card } from "@/stores/card";
 
 export class Turn8Table extends Table {
   // gamePhase distribute, play
   private dealerNum: number;
   private cardPlace: Card;
-  constructor(gameType: string, turnCounter: number, gameSpeed: number) {
+  constructor(gameType: string, gameSpeed: number) {
     const players: Player[] = [
       new Player("player1", "ai"),
       new Player("player2", "ai"),
       new Player("", ""),
       new Player("player3", "ai"),
     ];
-    super(gameType, "distribute", turnCounter, gameSpeed, players);
+    super(gameType, "distribute", gameSpeed, players);
     this.dealerNum = Math.floor(Math.random() * this.players.length);
     this.cardPlace = new Card("?", "?");
   }

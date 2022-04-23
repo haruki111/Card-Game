@@ -1,5 +1,4 @@
 import { Table } from "./table";
-// import { Player } from "@/stores/player";
 import { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import type { Player } from "@/models/player/player";
 import { Card } from "@/stores/card";
@@ -7,10 +6,10 @@ import { Card } from "@/stores/card";
 import type { GameDecision } from "../gameDecision";
 import { Investments } from "../Investments";
 
-import chipNum5 from "../assets/coin/chip_5.png";
-import chipNum20 from "../assets/coin/chip_20.png";
-import chipNum50 from "../assets/coin/chip_50.png";
-import chipNum100 from "../assets/coin/chip_100.png";
+import chipNum5 from "../../assets/coin/chip_5.png";
+import chipNum20 from "../../assets/coin/chip_20.png";
+import chipNum50 from "../../assets/coin/chip_50.png";
+import chipNum100 from "../../assets/coin/chip_100.png";
 
 interface Result {
   name: string;
@@ -20,39 +19,94 @@ interface Result {
   chips: number;
 }
 export class BlackJackTable extends Table {
-  private house: BlackJackPlayer;
-  private round: number;
-  private nextGamePhase: string;
-  private betDenominations: {
+  private _house: BlackJackPlayer;
+  private _round: number;
+  private _nextGamePhase: string;
+  private _betDenominations: {
     5: string;
     20: string;
     50: string;
     100: string;
   };
-  private resultsLog: {
+  private _resultsLog: {
     round: number;
     result: Result[];
   }[];
-  private currRound: number;
+  private _currRound: number;
 
-  constructor(gameType: string, turnCounter: number, gameSpeed: number) {
+  constructor(
+    userName: string,
+    gameType: string,
+    round: number,
+    gameSpeed: number
+  ) {
+    const userType = userName == "ai" ? "ai" : "user";
     const players: Player[] = [
       new BlackJackPlayer("player1", "ai", 400),
-      new BlackJackPlayer("", "", 400),
+      new BlackJackPlayer(userName, userType, 400),
       new BlackJackPlayer("player3", "ai", 400),
     ];
-    super(gameType, "betting", turnCounter, gameSpeed, players);
-    this.house = new BlackJackPlayer("house", "house", -1);
-    this.round = 0;
-    this.nextGamePhase = "";
-    this.resultsLog = [];
-    this.currRound = 1;
-    this.betDenominations = {
+    super(gameType, "betting", gameSpeed, players);
+    this._house = new BlackJackPlayer("house", "house", -1);
+    this._round = round;
+    this._nextGamePhase = "";
+    this._resultsLog = [];
+    this._currRound = 1;
+    this._betDenominations = {
       5: chipNum5,
       20: chipNum20,
       50: chipNum50,
       100: chipNum100,
     };
+  }
+
+  get house(): BlackJackPlayer {
+    return this._house;
+  }
+
+  get round(): number {
+    return this._round;
+  }
+
+  get nextGamePhase(): string {
+    return this._nextGamePhase;
+  }
+
+  set nextGamePhase(str: string) {
+    this._nextGamePhase = str;
+  }
+
+  get betDenominations() {
+    return this._betDenominations;
+  }
+
+  get resultsLog() {
+    return this._resultsLog;
+  }
+
+  set resultsLog(
+    log: {
+      round: number;
+      result: Result[];
+    }[]
+  ) {
+    this._resultsLog = log;
+  }
+
+  get currRound() {
+    return this._currRound;
+  }
+
+  set currRound(round: number) {
+    this._currRound = round;
+  }
+
+  getTurnPlayer(): Player {
+    if (this.turnCounter == -1) return this.house;
+    const turnPlayer = this.turnCounter % this.players.length;
+    return turnPlayer == 0
+      ? this.players[this.players.length - 1]
+      : this.players[turnPlayer - 1];
   }
 
   allPlayerActionsResolved() {

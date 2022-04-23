@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
-import type { Player } from "../stores/player";
 
-const house: Player = useTableStore().house;
+import type { BlackJackTable } from "@/models/table/blackjackTable";
+const table = useTableStore().table as BlackJackTable;
+
+const house = table.house;
 interface Props {
   isHide: boolean;
 }

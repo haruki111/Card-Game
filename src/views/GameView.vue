@@ -12,7 +12,7 @@ import { useTableStore } from "@/stores/table";
 import { useRenderStore } from "@/stores/render";
 import { onBeforeMount } from "vue";
 
-const table = useTableStore();
+const table = useTableStore().table;
 const render = useRenderStore();
 
 render.renderTable();

@@ -40,6 +40,10 @@ export abstract class Player {
     return this._name;
   }
 
+  get type(): string {
+    return this._type;
+  }
+
   set type(type: string) {
     this._type = type;
   }

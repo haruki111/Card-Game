@@ -2,8 +2,9 @@
 import { useTableStore } from "@/stores/table";
 import { useRenderStore } from "@/stores/render";
 import { useRouter } from "vue-router";
+import type { BlackJackTable } from "@/models/table/blackjackTable";
 
-const table = useTableStore();
+const table = useTableStore().table as BlackJackTable;
 const render = useRenderStore();
 const router = useRouter();
 
@@ -27,7 +28,7 @@ const toContinue = (): void => {
 const toHome = (): void => {
   render.renderEndResult = false;
   table.deck.resetDeck();
-  table.$reset();
+  useTableStore().$reset();
   router.push("/");
 };
 </script>

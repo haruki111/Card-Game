@@ -2,8 +2,9 @@
 import { ref, computed } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useRenderStore } from "@/stores/render";
+import type { BlackJackTable } from "@/models/table/blackjackTable";
 
-const table = useTableStore();
+const table = useTableStore().table as BlackJackTable;
 const render = useRenderStore();
 
 const user = table.players[1];

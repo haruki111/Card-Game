@@ -21,16 +21,19 @@ const selectSpeed = () => {
 const startGame = () => {
   if (gameSettingHash.name == "") inputs.alert = true;
   else {
-    table.deck.resetDeck();
     table.$reset();
+    // render.$reset();
+    table.setTable(gameSettingHash);
+    table.table.deck.resetDeck();
 
     router.push("game");
-    table.constructor(
-      gameSettingHash.name,
-      gameSettingHash.game,
-      gameSettingHash.round,
-      gameSettingHash.speed
-    );
+
+    // table.constructor(
+    //   gameSettingHash.name,
+    //   gameSettingHash.game,
+    //   gameSettingHash.round,
+    //   gameSettingHash.speed
+    // );
   }
 };
 
