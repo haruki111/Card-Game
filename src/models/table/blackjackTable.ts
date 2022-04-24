@@ -20,7 +20,6 @@ interface Result {
 }
 export class BlackJackTable extends Table {
   private _house: BlackJackPlayer;
-  private _round: number;
   private _nextGamePhase: string;
   private _betDenominations: {
     5: string;
@@ -32,7 +31,6 @@ export class BlackJackTable extends Table {
     round: number;
     result: Result[];
   }[];
-  private _currRound: number;
 
   constructor(
     userName: string,
@@ -40,18 +38,16 @@ export class BlackJackTable extends Table {
     round: number,
     gameSpeed: number
   ) {
-    const userType = userName == "ai" ? "ai" : "user";
+    const userType = userName.toLowerCase() == "ai" ? "ai" : "user";
     const players: Player[] = [
       new BlackJackPlayer("player1", "ai", 400),
       new BlackJackPlayer(userName, userType, 400),
       new BlackJackPlayer("player3", "ai", 400),
     ];
-    super(gameType, "betting", gameSpeed, players);
+    super(gameType, "betting", round, gameSpeed, players);
     this._house = new BlackJackPlayer("house", "house", -1);
-    this._round = round;
     this._nextGamePhase = "";
     this._resultsLog = [];
-    this._currRound = 1;
     this._betDenominations = {
       5: chipNum5,
       20: chipNum20,
@@ -62,10 +58,6 @@ export class BlackJackTable extends Table {
 
   get house(): BlackJackPlayer {
     return this._house;
-  }
-
-  get round(): number {
-    return this._round;
   }
 
   get nextGamePhase(): string {
@@ -91,10 +83,6 @@ export class BlackJackTable extends Table {
     }[]
   ) {
     this._resultsLog = log;
-  }
-
-  get currRound() {
-    return this._currRound;
   }
 
   set currRound(round: number) {

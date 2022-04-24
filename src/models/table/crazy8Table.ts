@@ -1,21 +1,32 @@
 import { Table } from "./table";
-import { Player } from "@/models/player/player";
+import type { Player } from "@/models/player/player";
+import { Crazy8Player } from "@/models/player/crazy8Player";
 import { Card } from "@/stores/card";
 
-export class Turn8Table extends Table {
+export class Crazy8Table extends Table {
   // gamePhase distribute, play
-  private dealerNum: number;
-  private cardPlace: Card;
-  constructor(gameType: string, gameSpeed: number) {
+  private _dealerNum: number;
+  private _cardPlace: Card;
+  constructor(
+    userName: string,
+    gameType: string,
+    round: number,
+    gameSpeed: number
+  ) {
+    const userType = userName.toLowerCase() == "ai" ? "ai" : "user";
     const players: Player[] = [
-      new Player("player1", "ai"),
-      new Player("player2", "ai"),
-      new Player("", ""),
-      new Player("player3", "ai"),
+      new Crazy8Player("player1", "ai", -1),
+      new Crazy8Player("player2", "ai", -1),
+      new Crazy8Player(userName, userType, -1),
+      new Crazy8Player("player3", "ai", -1),
     ];
-    super(gameType, "distribute", gameSpeed, players);
-    this.dealerNum = Math.floor(Math.random() * this.players.length);
-    this.cardPlace = new Card("?", "?");
+    super(gameType, "distribute", round, gameSpeed, players);
+    this._dealerNum = Math.floor(Math.random() * this.players.length);
+    this._cardPlace = new Card("?", "?");
+  }
+
+  set cardPlace(card: Card) {
+    this._cardPlace = card;
   }
   //playerに7 or 5枚ずつカードを配る
   public assignPlayerHands(): void {
@@ -40,5 +51,7 @@ export class Turn8Table extends Table {
       console.log("");
     }
   }
+  nextTurn(): void {
+    console.log("nextTurn");
+  }
 }
-// playerクラスも抽象クラスにしないといけない

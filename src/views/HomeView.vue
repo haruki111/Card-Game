@@ -26,8 +26,8 @@ const selectSpeed = () => {
 };
 
 const gameSettingHash = reactive({
-  name: "",
-  game: "Black Jack",
+  name: "haruki",
+  game: "Turn8",
   round: 5,
   speed: 1,
 }) as {

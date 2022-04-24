@@ -2,10 +2,16 @@
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
 
-import PlayerInfo from "./PlayerInfo.vue";
 import GameCard from "./GameCard.vue";
 
+let props = defineProps<{
+  index: number;
+}>();
+
 const table = useTableStore().table;
+
+const players = table.players;
+const player = players[props.index];
 
 const playerCardHide = computed(() => {
   if (table.gamePhase == "betting" || table.gamePhase == "distribute")
@@ -19,19 +25,26 @@ const playerCardHide = computed(() => {
   }
 });
 
-let props = defineProps<{
-  index: number;
-}>();
-
-const players = table.players;
-const player = players[props.index];
+const cardRotate = (index: number) => {
+  if (index == 1) {
+    return "rotate-90";
+  } else if (index == 3) {
+    return "-rotate-90";
+  }
+  return "";
+};
 </script>
 <template>
-  <div class="text-center">
-    <PlayerInfo :index="props.index" />
+  <div>
+    <div id="playerInfo" class="text-gray-100 text-center">
+      <p class="playerName sm:text-3xl text-2xl font-bold mb-2">
+        {{ player.name }}
+      </p>
+    </div>
     <TransitionGroup
       name="player-cards"
       tag="div"
+      :class="cardRotate(props.index)"
       class="flex justify-center pb-2"
     >
       <GameCard

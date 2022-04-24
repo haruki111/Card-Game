@@ -1,7 +1,7 @@
 import { Player } from "@/models/player/player";
 import { GameDecision } from "@/models/gameDecision";
 
-export class Turn8TPlayer extends Player {
+export class Crazy8Player extends Player {
   constructor(name: string, type: string, chips: number) {
     super(name, type, chips);
   }
