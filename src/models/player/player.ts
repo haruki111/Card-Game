@@ -1,4 +1,4 @@
-import { Card } from "@/stores/card";
+import type { Card } from "@/stores/card";
 import type { GameDecision } from "@/models/gameDecision";
 import {
   Investments,
@@ -28,7 +28,7 @@ export abstract class Player {
     this._type = type;
     this._chips = chips;
     if (this._type == "house") this._chips = -1;
-    this._hand = [new Card("?", "?"), new Card("?", "?")];
+    this._hand = [];
     this._grades = []; //成績
     this._investment = new Investments(this._chips).getInvestment(); //投資法
     this._bet = 0; // 現在のラウンドでのベットしているチップ

@@ -33,13 +33,21 @@ export class Crazy8Table extends Table {
     let howManyDistribute = 0;
     if (this.players.length == 2) howManyDistribute = 7;
     else howManyDistribute = 5;
+
     for (let i = 0; i < howManyDistribute; i++) {
       for (let j = 0; j < this.players.length; j++) {
-        setTimeout(() => {
-          this.players[j].hand[i] = this.deck.drawOne();
-        }, 200);
+        setTimeout(
+          () => (this.players[j].hand[i] = this.deck.drawOne()),
+          300 * (i * 4 + j),
+          i,
+          j
+        );
       }
     }
+  }
+
+  public assignPlayerHandsHelper(i: number, j: number): void {
+    this.players[j].hand[i] = this.deck.drawOne();
   }
 
   public haveTurn(userData: number | string | null): void {

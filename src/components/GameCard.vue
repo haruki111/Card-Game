@@ -22,7 +22,7 @@ let props = defineProps<{
         <img :src="props.card.getImg()" />
       </div>
       <div class="cardText pt-1 text-slate-900">
-        <p class="">{{ props.card.rank }}</p>
+        <p class="text-center">{{ props.card.rank }}</p>
       </div>
     </div>
   </transition>

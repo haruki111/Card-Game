@@ -13,8 +13,14 @@ const table = useTableStore().table;
   >
     <Crazy8Player :index="0" class="h-1/4" />
     <div class="flex justify-between h-1/3">
-      <Crazy8Player :index="1" class="flex items-center flex-row" />
-      <Crazy8Player :index="3" class="flex items-center flex-row-reverse" />
+      <Crazy8Player
+        :index="3"
+        class="flex items-center flex-row justify-around w-1/5"
+      />
+      <Crazy8Player
+        :index="1"
+        class="flex items-center flex-row-reverse justify-around w-1/5"
+      />
     </div>
     <Crazy8Player
       :index="2"
@@ -23,6 +29,13 @@ const table = useTableStore().table;
   </div>
 
   <GameRound />
+  <button
+    @click="table.assignPlayerHands()"
+    type="button"
+    class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2"
+  >
+    Default
+  </button>
 
   <Transition name="fade"> </Transition>
 </template>

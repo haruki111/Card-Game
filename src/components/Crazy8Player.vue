@@ -15,7 +15,7 @@ const player = players[props.index];
 
 const playerCardHide = computed(() => {
   if (table.gamePhase == "betting" || table.gamePhase == "distribute")
-    return [true, true];
+    return [false, false];
   else {
     let hideArr: boolean[] = [];
     for (let i = 0; i < player.hand.length; i++) {
@@ -25,11 +25,18 @@ const playerCardHide = computed(() => {
   }
 });
 
+const cardsRow = (index: number) => {
+  if (index == 1 || index == 3) {
+    return "flex-col";
+  }
+  return "";
+};
+
 const cardRotate = (index: number) => {
   if (index == 1) {
-    return "rotate-90";
-  } else if (index == 3) {
     return "-rotate-90";
+  } else if (index == 3) {
+    return "rotate-90";
   }
   return "";
 };
@@ -44,13 +51,14 @@ const cardRotate = (index: number) => {
     <TransitionGroup
       name="player-cards"
       tag="div"
-      :class="cardRotate(props.index)"
+      :class="cardsRow(props.index)"
       class="flex justify-center pb-2"
     >
       <GameCard
         v-for="(card, index) in player.hand"
         :key="index"
         :card="card"
+        :class="cardRotate(props.index)"
         :isHide="playerCardHide[index]"
       />
     </TransitionGroup>
