@@ -2,8 +2,10 @@
 import { useTableStore } from "@/stores/table";
 import Crazy8Player from "../components/Crazy8Player.vue";
 import GameRound from "@/components/GameRound.vue";
+import GameCard from "@/components/GameCard.vue";
+import type { Crazy8Table } from "@/models/table/crazy8Table";
 
-const table = useTableStore().table;
+const table = useTableStore().table as Crazy8Table;
 </script>
 <template>
   <div
@@ -12,25 +14,29 @@ const table = useTableStore().table;
     style="height: 70vh"
   >
     <Crazy8Player :index="0" class="h-1/4" />
-    <div class="flex justify-between h-1/3">
+    <div class="flex justify-between items-center h-2/3">
       <Crazy8Player
         :index="3"
         class="flex items-center flex-row justify-around w-1/5"
+      />
+
+      <GameCard
+        v-if="table.cardPlace.suit !== '?'"
+        :card="table.cardPlace"
+        :isHide="false"
       />
       <Crazy8Player
         :index="1"
         class="flex items-center flex-row-reverse justify-around w-1/5"
       />
     </div>
-    <Crazy8Player
-      :index="2"
-      class="h-1/4 flex justify-center flex-col-reverse"
-    />
+    <Crazy8Player :index="2" class="h-1/4" />
   </div>
 
   <GameRound />
+  <div>{{ table.gamePhase }}</div>
   <button
-    @click="table.assignPlayerHands()"
+    @click="table.haveTurn(1)"
     type="button"
     class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2"
   >

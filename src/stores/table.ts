@@ -8,7 +8,7 @@ import type { Table } from "@/models/table/table";
 export const useTableStore = defineStore({
   id: "table",
   state: () => ({
-    table: {} as Table | BlackJackTable,
+    table: {} as Table | BlackJackTable | Crazy8Table,
   }),
   actions: {
     setTable(gameSettingHash: {
@@ -26,7 +26,7 @@ export const useTableStore = defineStore({
         );
         this.table.deck.resetDeck();
         router.push("game");
-      } else if (gameSettingHash.game === "Turn8") {
+      } else if (gameSettingHash.game === "Crazy8") {
         this.table = new Crazy8Table(
           gameSettingHash.name,
           gameSettingHash.game,

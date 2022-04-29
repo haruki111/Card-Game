@@ -15,7 +15,7 @@ const player = players[props.index];
 
 const playerCardHide = computed(() => {
   if (table.gamePhase == "betting" || table.gamePhase == "distribute")
-    return [false, false];
+    return [false, false, false, false, false];
   else {
     let hideArr: boolean[] = [];
     for (let i = 0; i < player.hand.length; i++) {
