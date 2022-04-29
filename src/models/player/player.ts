@@ -112,11 +112,6 @@ export abstract class Player {
 
   abstract getHandScore(): number;
 
-  abstract promptPlayer(
-    userData: number | string | null,
-    houseScore?: number
-  ): GameDecision;
-
   public updateGrades() {
     if (this.winAmount > 0) this.grades.push(1);
     else if (this.winAmount == 0) this.grades.push(0);

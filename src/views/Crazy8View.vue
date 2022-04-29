@@ -21,8 +21,8 @@ const table = useTableStore().table as Crazy8Table;
       />
 
       <GameCard
-        v-if="table.cardPlace.suit !== '?'"
-        :card="table.cardPlace"
+        v-if="table.cardPlaceArr.length != 0"
+        :card="table.cardPlaceArr[table.cardPlaceArr.length - 1]"
         :isHide="false"
       />
       <Crazy8Player
@@ -36,7 +36,7 @@ const table = useTableStore().table as Crazy8Table;
   <GameRound />
   <div>{{ table.gamePhase }}</div>
   <button
-    @click="table.haveTurn(1)"
+    @click="table.haveTurn(null)"
     type="button"
     class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2"
   >

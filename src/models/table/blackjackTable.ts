@@ -85,10 +85,6 @@ export class BlackJackTable extends Table {
     this._resultsLog = log;
   }
 
-  set currRound(round: number) {
-    this._currRound = round;
-  }
-
   getTurnPlayer(): Player {
     if (this.turnCounter == -1) return this.house;
     const turnPlayer = this.turnCounter % this.players.length;
@@ -185,7 +181,7 @@ export class BlackJackTable extends Table {
   }
 
   haveTurn(userData: number | string | null): void {
-    const player: Player = this.getTurnPlayer();
+    const player = this.getTurnPlayer() as BlackJackPlayer;
 
     if (this.gamePhase == "betting") {
       const gameDecision: GameDecision = player.promptPlayer(userData);

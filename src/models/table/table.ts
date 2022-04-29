@@ -1,4 +1,5 @@
 import type { Player } from "@/models/player/player";
+import type { Card } from "@/stores/card";
 import { useDeckStore } from "../../stores/deck";
 
 export abstract class Table {
@@ -55,6 +56,10 @@ export abstract class Table {
     return this._currRound;
   }
 
+  set currRound(round: number) {
+    this._currRound = round;
+  }
+
   get players(): Player[] {
     return this._players;
   }
@@ -67,7 +72,7 @@ export abstract class Table {
     return this._deck;
   }
   public getTurnPlayer(): Player {
-    const turnPlayer = this.turnCounter % this.players.length;
+    const turnPlayer: number = this.turnCounter % this.players.length;
     return turnPlayer == 0
       ? this.players[this.players.length - 1]
       : this.players[turnPlayer - 1];
@@ -78,7 +83,7 @@ export abstract class Table {
 
   abstract assignPlayerHands(): void;
 
-  abstract haveTurn(userData: number | string | null): void;
+  abstract haveTurn(userData: number | string | Card | null): void;
 
   abstract nextTurn(): void;
 }
