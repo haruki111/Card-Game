@@ -34,11 +34,11 @@ const cardsRow = (index: number) => {
 
 const cardRotate = (index: number) => {
   if (index == 1) {
-    return "-rotate-90";
+    return { isRotate: true, class: "-rotate-90" };
   } else if (index == 3) {
-    return "rotate-90";
+    return { isRotate: true, class: "rotate-90" };
   }
-  return "";
+  return { isRotate: false, class: "" };
 };
 </script>
 <template>
@@ -58,8 +58,9 @@ const cardRotate = (index: number) => {
         v-for="(card, index) in player.hand"
         :key="index"
         :card="card"
-        :class="cardRotate(props.index)"
         :isHide="playerCardHide[index]"
+        :rotate="cardRotate(props.index)"
+        class="mx-1"
       />
     </TransitionGroup>
   </div>

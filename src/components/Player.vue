@@ -39,6 +39,7 @@ const player = players[props.index];
         :key="index"
         :card="card"
         :isHide="playerCardHide[index]"
+        :rotate="{ isRotate: false, class: '' }"
       />
     </TransitionGroup>
   </div>

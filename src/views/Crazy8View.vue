@@ -15,15 +15,13 @@ const table = useTableStore().table as Crazy8Table;
   >
     <Crazy8Player :index="0" class="h-1/4" />
     <div class="flex justify-between items-center h-2/3">
-      <Crazy8Player
-        :index="3"
-        class="flex items-center flex-row justify-around w-1/5"
-      />
+      <Crazy8Player :index="3" class="flex items-center justify-around w-1/5" />
 
       <GameCard
         v-if="table.cardPlaceArr.length != 0"
         :card="table.cardPlaceArr[table.cardPlaceArr.length - 1]"
         :isHide="false"
+        :rotate="{ isRotate: false, class: '' }"
       />
       <Crazy8Player
         :index="1"
