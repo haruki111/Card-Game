@@ -93,7 +93,7 @@ export class BlackJackTable extends Table {
       : this.players[turnPlayer - 1];
   }
 
-  allPlayerActionsResolved() {
+  allPlayerActionsResolved(): boolean {
     const setStatus = ["bust", "stand", "surrender", "double", "blackjack"];
     for (let i = 0; i < this.players.length; i++) {
       if (!setStatus.includes(this.players[i].gameStatus)) return false;
@@ -280,7 +280,7 @@ export class BlackJackTable extends Table {
     this.house.hand = [new Card("?", "?"), new Card("?", "?")];
     this.house.gameStatus = "betting";
   }
-  nextTurn(): void {
+  nextRound(): void {
     if (this.currRound == this.round || this.nextGamePhase == "end") {
       this.gamePhase = "end";
     } else {

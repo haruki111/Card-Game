@@ -18,7 +18,7 @@ const conversionGradesEng = (grades: number[]): string => {
 
 const resultOk = (): void => {
   render.renderResult = false;
-  table.nextTurn();
+  table.nextRound();
   render.renderTable();
 };
 </script>

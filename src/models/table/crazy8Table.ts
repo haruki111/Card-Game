@@ -6,8 +6,10 @@ import type { Card } from "@/stores/card";
 
 export class Crazy8Table extends Table {
   // gamePhase distribute, play
+  private _winPlayers: Player[];
   private _dealerNum: number;
   private _cardPlaceArr: Card[];
+  private _orderCorrection: number;
   constructor(
     userName: string,
     gameType: string,
@@ -16,25 +18,42 @@ export class Crazy8Table extends Table {
   ) {
     const userType = userName.toLowerCase() == "ai" ? "ai" : "user";
     const players: Player[] = [
-      new Crazy8Player("player1", "ai", -1),
-      new Crazy8Player("player2", "ai", -1),
-      new Crazy8Player(userName, userType, -1),
-      new Crazy8Player("player3", "ai", -1),
+      new Crazy8Player("player1", "ai", 0),
+      new Crazy8Player("player2", "ai", 0),
+      new Crazy8Player(userName, userType, 0),
+      new Crazy8Player("player3", "ai", 0),
     ];
+
     super(gameType, "distribute", round, gameSpeed, players);
+    this._winPlayers = [];
     this._dealerNum = Math.floor(Math.random() * this.players.length);
     this._cardPlaceArr = [];
+    this._orderCorrection = 0;
+  }
+
+  get winPlayers(): Player[] {
+    return this._winPlayers;
   }
 
   get dealerNum(): number {
     return this._dealerNum;
   }
-
   set dealerNum(number: number) {
     this._dealerNum = number;
   }
+
   get cardPlaceArr(): Card[] {
     return this._cardPlaceArr;
+  }
+  set cardPlaceArr(cards: Card[]) {
+    this._cardPlaceArr = cards;
+  }
+
+  get orderCorrection(): number {
+    return this._orderCorrection;
+  }
+  set orderCorrection(number: number) {
+    this._orderCorrection = number;
   }
 
   //playerに7 or 5枚ずつカードを配る
@@ -62,38 +81,56 @@ export class Crazy8Table extends Table {
 
   public getTurnPlayer(): Player {
     const turnPlayer: number =
-      (this.turnCounter + this.dealerNum) % this.players.length;
-    return turnPlayer == this.players.length
-      ? this.players[0]
-      : this.players[turnPlayer];
+      (this.turnCounter + this.dealerNum + this.orderCorrection) %
+      this.players.length;
+
+    return this.players[turnPlayer];
+  }
+
+  public allPlayerActionsResolved(): boolean {
+    for (const player of this.players) {
+      if (player.gameStatus !== "path") return false;
+    }
+    return true;
   }
 
   public evaluateMove(player: Crazy8Player, gameDecision: GameDecision): void {
-    console.log(this.turnCounter);
+    console.log(gameDecision);
     if (gameDecision.getAction() == "draw") {
+      if (this.deck.deck.length == 0) {
+        player.gameStatus = "path";
+        this.turnCounter++;
+        return;
+      }
       const drawCard: Card = this.deck.drawOne();
       const cardPlace: Card = this.cardPlaceArr[this.cardPlaceArr.length - 1];
+
       player.hand.push(drawCard);
-      if (
-        drawCard.suit == cardPlace.suit ||
-        drawCard.rank == cardPlace.rank ||
-        drawCard.rank == "8"
-      ) {
-        console.log("出す");
-        this.haveTurn(drawCard);
-      } else {
-        console.log("引く");
-        this.haveTurn("draw");
-      }
+
+      this.isValidPlayCard(drawCard, cardPlace);
     } else if (gameDecision.getAction() == "play") {
       const card = gameDecision.getAmount();
       if (typeof card === "object") {
-        console.log(card);
         const index: number = player.hand.indexOf(card);
         player.hand.splice(index, 1);
         this.cardPlaceArr.push(card);
+        this.isGameOut(player);
         this.turnCounter++;
       }
+    } else if (gameDecision.getAction() == "path") {
+      this.turnCounter++;
+    }
+  }
+
+  public isValidPlayCard(drawCard: Card, cardPlace: Card) {
+    if (
+      drawCard.suit == cardPlace.suit ||
+      drawCard.rank == cardPlace.rank ||
+      drawCard.rank == "8"
+    ) {
+      this.haveTurn(drawCard);
+    } else {
+      this.haveTurn("draw");
     }
   }
 
@@ -122,12 +159,92 @@ export class Crazy8Table extends Table {
         this.cardPlaceArr[this.cardPlaceArr.length - 1]
       );
       this.evaluateMove(player, gameDecision);
+
+      if (this.allPlayerActionsResolved()) {
+        this.gamePhase = "evaluatingDeckRunsOut";
+      }
+    }
+    if (this.gamePhase === "evaluatingDeckRunsOut") {
+      this.Crazy8EvaluateDeckRunsOut();
+      this.nextRound();
+      // 結果表示
+    }
+    if (this.gamePhase === "evaluatingWinners") {
+      this.crazy8Evaluate(player);
+      this.nextRound();
+      // 結果表示
     }
   }
-  nextTurn(): void {
-    console.log("nextTurn");
+
+  clearPlayerHandsAndDeck(): void {
+    this.deck.resetDeck();
+    for (const player of this.players) {
+      player.hand = [];
+      player.gameStatus = "betting";
+    }
+  }
+
+  nextRound(): void {
+    if (this.currRound == this.round) {
+      this.gamePhase = "end";
+    } else {
+      this.turnCounter = 1;
+      this.currRound++;
+      this.cardPlaceArr = [];
+      this.dealerNum = Math.floor(Math.random() * this.players.length);
+      this.gamePhase = "distribute";
+      this.clearPlayerHandsAndDeck();
+    }
+  }
+
+  Crazy8EvaluateDeckRunsOut(): void {
+    let playersTotalScore = this.players[0].getHandScore();
+    let lowScorePlayers = [this.players[0]];
+    for (let i = 1; i < this.players.length; i++) {
+      playersTotalScore += this.players[i].getHandScore();
+
+      if (this.players[i].getHandScore() < lowScorePlayers[0].getHandScore()) {
+        lowScorePlayers = [this.players[i]];
+      } else if (
+        this.players[i].getHandScore() == lowScorePlayers[0].getHandScore()
+      ) {
+        lowScorePlayers.push(this.players[i]);
+      }
+    }
+    for (const lowScorePlayer of lowScorePlayers) {
+      lowScorePlayer.chips =
+        playersTotalScore - 4 * lowScorePlayer.getHandScore();
+    }
+  }
+
+  crazy8Evaluate(winPlayer: Player): void {
+    for (const player of this.players) {
+      winPlayer.chips += player.getHandScore();
+    }
+  }
+
+  isGameOut(player: Crazy8Player): void {
+    if (player.hand.length == 0) {
+      this.gamePhase = "evaluatingWinners";
+    }
+    // gameを続けるときに使用
+
+    // if (player.hand.length == 0) {
+    //   const isPlayerDealer = this.dealerNum == this.players.indexOf(player);
+    //   if (isPlayerDealer && this.dealerNum + 1 > this.players.length) {
+    //     this.dealerNum = 0;
+    //   }
+
+    //   const turnPlayer: number =
+    //     (this.turnCounter + this.dealerNum + this.orderCorrection) %
+    //     this.players.length;
+    //   const nextPlayer: number =
+    //     (this.turnCounter + 1 + this.dealerNum) % (this.players.length - 1);
+    //   this.orderCorrection = turnPlayer - nextPlayer;
+
+    //   this.players.splice(this.players.indexOf(player), 1);
+    //   this.winPlayers.push(player);
+    // }
   }
 }
-// rank Aとか特殊数字の判定あっているか確認
-// 手札がなくなったら、playerは上がる処理を追加
-// hostの場合はhostから見て、左のplayerが後任
+// Result、endResult画面の表示

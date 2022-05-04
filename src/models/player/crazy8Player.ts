@@ -8,8 +8,10 @@ export class Crazy8Player extends Player {
   }
   public getHandScore(): number {
     let score = 0;
+
     for (let i = 0; i < this.hand.length; i++) {
       score += this.hand[i].getRankNumber();
+      if (this.hand[i].rank == "A") score -= 10;
     }
 
     return score;
@@ -34,7 +36,6 @@ export class Crazy8Player extends Player {
             Card8Arr.push(handCard);
           }
         }
-        console.log(playCardArr);
 
         if (playCardArr.length != 0) {
           const playCard =
@@ -49,11 +50,12 @@ export class Crazy8Player extends Player {
         // 出せるカードがないので引く
         return new GameDecision("draw", 0);
       } else if (typeof userData === "object") {
-        console.log("check");
         return new GameDecision("play", userData);
       } else {
         return new GameDecision("draw", 0);
       }
+    } else if (this.gameStatus == "path") {
+      return new GameDecision("path", 1);
     }
     return new GameDecision("draw", 1); //temp
   }

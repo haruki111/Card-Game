@@ -47,6 +47,9 @@ const cardRotate = (index: number) => {
       <p class="playerName sm:text-3xl text-2xl font-bold mb-2">
         {{ player.name }}
       </p>
+      <p class="playerName sm:text-3xl text-2xl font-bold mb-2">
+        {{ player.chips }}
+      </p>
     </div>
     <TransitionGroup
       name="player-cards"

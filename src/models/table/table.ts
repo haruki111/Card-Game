@@ -21,7 +21,7 @@ export abstract class Table {
     this._gameType = gameType;
     this._gamePhase = gamePhase;
     this._turnCounter = 1;
-    this._round = round; // totalRound 後日書き換え
+    this._round = round; // todo totalRound 後日書き換え
     this._currRound = 1;
     this._gameSpeed = gameSpeed;
     this._deck = useDeckStore();
@@ -85,5 +85,5 @@ export abstract class Table {
 
   abstract haveTurn(userData: number | string | Card | null): void;
 
-  abstract nextTurn(): void;
+  abstract nextRound(): void;
 }
