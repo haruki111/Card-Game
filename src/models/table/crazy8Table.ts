@@ -177,8 +177,9 @@ export class Crazy8Table extends Table {
 
           if (this.allPlayerActionsResolved()) {
             this.gamePhase = "evaluatingDeckRunsOut";
-          }
-          resolve("success");
+            resolve("success");
+            this.haveTurn(null);
+          } else resolve("success");
         };
         haveTurnPlay();
       }
@@ -233,6 +234,7 @@ export class Crazy8Table extends Table {
       }
     }
     for (const lowScorePlayer of lowScorePlayers) {
+      this.winPlayers.push(lowScorePlayer);
       lowScorePlayer.chips =
         playersTotalScore - 4 * lowScorePlayer.getHandScore();
     }
@@ -246,6 +248,7 @@ export class Crazy8Table extends Table {
 
   isGameOut(player: Crazy8Player): void {
     if (player.hand.length == 0) {
+      this.winPlayers.push(player);
       this.gamePhase = "evaluatingWinners";
     }
     // gameを続けるときに使用

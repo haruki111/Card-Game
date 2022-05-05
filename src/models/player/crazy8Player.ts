@@ -37,12 +37,12 @@ export class Crazy8Player extends Player {
           }
         }
 
-        if (playCardArr.length != 0) {
+        if (playCardArr.length) {
           const playCard =
             playCardArr[Math.floor(Math.random() * playCardArr.length)];
           return new GameDecision("play", playCard);
         } //8を持っているので引く
-        else if (Card8Arr.length != 0) {
+        else if (Card8Arr.length) {
           const playCard =
             Card8Arr[Math.floor(Math.random() * Card8Arr.length)];
           return new GameDecision("play", playCard);
@@ -54,7 +54,7 @@ export class Crazy8Player extends Player {
       } else {
         return new GameDecision("draw", 0);
       }
-    } else if (this.gameStatus == "path") {
+    } else if (this.gameStatus == "path" || userData === "path") {
       return new GameDecision("path", 1);
     }
     return new GameDecision("draw", 1); //temp
