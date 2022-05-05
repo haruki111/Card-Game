@@ -65,10 +65,22 @@ const blinkTurnPlayer = computed(() => {
   }
   return "";
 });
+
+const winOrLose = computed(() => {
+  if (table.winPlayers.includes(player)) return "WIN";
+  else return "LOSE";
+});
 </script>
 <template>
   <div>
     <div id="playerInfo" class="text-gray-100 text-center">
+      <div
+        v-if="table.gamePhase === 'betweenGames'"
+        class="text-3xl font-bold"
+        style="text-shadow: 0px 2px 3px darkgrey"
+      >
+        {{ winOrLose }}
+      </div>
       <div
         v-if="table.dealerNum == index"
         class="w-8 h-8 m-auto flex items-center justify-center border border-gray-600 bg-gray-100 text-gray-800 text-sm font-medium rounded-full"

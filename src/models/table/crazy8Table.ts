@@ -87,7 +87,7 @@ export class Crazy8Table extends Table {
     return this.players[turnPlayer];
   }
 
-  public allPlayerActionsResolved(): boolean {
+  public isAllPlayerActionsResolved(): boolean {
     for (const player of this.players) {
       if (player.gameStatus !== "path") return false;
     }
@@ -157,6 +157,7 @@ export class Crazy8Table extends Table {
               this.cardPlaceArr.push(this.deck.drawOne());
               this.gamePhase = "play";
               for (const player of this.players) player.gameStatus = "play";
+              this.deck.deck = [];
               resolve("success");
             }, time);
           });
@@ -175,25 +176,38 @@ export class Crazy8Table extends Table {
         const haveTurnPlay = async () => {
           await this.evaluateMove(player, gameDecision);
 
-          if (this.allPlayerActionsResolved()) {
+          if (this.isAllPlayerActionsResolved()) {
             this.gamePhase = "evaluatingDeckRunsOut";
             resolve("success");
-            this.haveTurn(null);
           } else resolve("success");
         };
         haveTurnPlay();
-      }
-      if (this.gamePhase === "evaluatingDeckRunsOut") {
+      } else if (this.gamePhase === "evaluatingDeckRunsOut") {
         this.Crazy8EvaluateDeckRunsOut();
-        this.nextRound();
-        resolve("success");
-        // 結果表示
-      }
-      if (this.gamePhase === "evaluatingWinners") {
+        this.gamePhase = "betweenGames";
+        const temp = async () => {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              this.nextRound();
+              resolve("success");
+            }, 3000);
+          });
+          resolve("success");
+        };
+        temp();
+      } else if (this.gamePhase === "evaluatingWinners") {
         this.crazy8Evaluate(player);
-        this.nextRound();
-        resolve("success");
-        // 結果表示
+        this.gamePhase = "betweenGames";
+        const temp = async () => {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              this.nextRound();
+              resolve("success");
+            }, 3000);
+          });
+          resolve("success");
+        };
+        temp();
       }
     });
   }
