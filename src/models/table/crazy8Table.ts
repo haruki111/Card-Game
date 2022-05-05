@@ -94,32 +94,45 @@ export class Crazy8Table extends Table {
     return true;
   }
 
-  public evaluateMove(player: Crazy8Player, gameDecision: GameDecision): void {
-    console.log(gameDecision);
-    if (gameDecision.getAction() == "draw") {
-      if (this.deck.deck.length == 0) {
-        player.gameStatus = "path";
-        this.turnCounter++;
-        return;
-      }
-      const drawCard: Card = this.deck.drawOne();
-      const cardPlace: Card = this.cardPlaceArr[this.cardPlaceArr.length - 1];
+  public evaluateMove(
+    player: Crazy8Player,
+    gameDecision: GameDecision
+  ): Promise<unknown> {
+    return new Promise((resolve) => {
+      if (gameDecision.getAction() == "draw") {
+        if (this.deck.deck.length == 0) {
+          player.gameStatus = "path";
+          this.turnCounter++;
+          resolve("success");
+          return;
+        }
+        const drawCard: Card = this.deck.drawOne();
 
-      player.hand.push(drawCard);
-
-      this.isValidPlayCard(drawCard, cardPlace);
-    } else if (gameDecision.getAction() == "play") {
-      const card = gameDecision.getAmount();
-      if (typeof card === "object") {
-        const index: number = player.hand.indexOf(card);
-        player.hand.splice(index, 1);
-        this.cardPlaceArr.push(card);
-        this.isGameOut(player);
+        const helper = async () => {
+          await new Promise((resolve) => {
+            player.hand.push(drawCard);
+            setTimeout(() => {
+              resolve("success");
+            }, 1000);
+          });
+          resolve("success");
+        };
+        helper();
+      } else if (gameDecision.getAction() == "play") {
+        const card = gameDecision.getAmount();
+        if (typeof card === "object") {
+          const index: number = player.hand.indexOf(card);
+          player.hand.splice(index, 1);
+          this.cardPlaceArr.push(card);
+          this.isGameOut(player);
+          this.turnCounter++;
+          resolve("success");
+        }
+      } else if (gameDecision.getAction() == "path") {
         this.turnCounter++;
+        resolve("success");
       }
-    } else if (gameDecision.getAction() == "path") {
-      this.turnCounter++;
-    }
+    });
   }
 
   public isValidPlayCard(drawCard: Card, cardPlace: Card) {
@@ -134,46 +147,54 @@ export class Crazy8Table extends Table {
     }
   }
 
-  public haveTurn(userData: number | string | Card | null): void {
-    const player = this.getTurnPlayer() as Crazy8Player;
-    if (this.gamePhase === "distribute") {
-      const haveTurnDistributeHelper = (time: number) =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            this.cardPlaceArr.push(this.deck.drawOne());
-            this.gamePhase = "play";
-            for (const player of this.players) player.gameStatus = "play";
+  public haveTurn(userData: number | string | Card | null): Promise<unknown> {
+    return new Promise((resolve) => {
+      const player = this.getTurnPlayer() as Crazy8Player;
+      if (this.gamePhase === "distribute") {
+        const haveTurnDistributeHelper = (time: number) =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              this.cardPlaceArr.push(this.deck.drawOne());
+              this.gamePhase = "play";
+              for (const player of this.players) player.gameStatus = "play";
+              resolve("success");
+            }, time);
+          });
 
-            resolve("success");
-          }, time);
-        });
+        const haveTurnDistribute = async () => {
+          await this.assignPlayerHands();
+          await haveTurnDistributeHelper(500);
+          resolve("success");
+        };
+        haveTurnDistribute();
+      } else if (this.gamePhase === "play") {
+        const gameDecision: GameDecision = player.promptPlayer(
+          userData,
+          this.cardPlaceArr[this.cardPlaceArr.length - 1]
+        );
+        const haveTurnPlay = async () => {
+          await this.evaluateMove(player, gameDecision);
 
-      const haveTurnDistribute = async () => {
-        await this.assignPlayerHands();
-        await haveTurnDistributeHelper(500);
-      };
-      haveTurnDistribute();
-    } else if (this.gamePhase === "play") {
-      const gameDecision: GameDecision = player.promptPlayer(
-        userData,
-        this.cardPlaceArr[this.cardPlaceArr.length - 1]
-      );
-      this.evaluateMove(player, gameDecision);
-
-      if (this.allPlayerActionsResolved()) {
-        this.gamePhase = "evaluatingDeckRunsOut";
+          if (this.allPlayerActionsResolved()) {
+            this.gamePhase = "evaluatingDeckRunsOut";
+          }
+          resolve("success");
+        };
+        haveTurnPlay();
       }
-    }
-    if (this.gamePhase === "evaluatingDeckRunsOut") {
-      this.Crazy8EvaluateDeckRunsOut();
-      this.nextRound();
-      // 結果表示
-    }
-    if (this.gamePhase === "evaluatingWinners") {
-      this.crazy8Evaluate(player);
-      this.nextRound();
-      // 結果表示
-    }
+      if (this.gamePhase === "evaluatingDeckRunsOut") {
+        this.Crazy8EvaluateDeckRunsOut();
+        this.nextRound();
+        resolve("success");
+        // 結果表示
+      }
+      if (this.gamePhase === "evaluatingWinners") {
+        this.crazy8Evaluate(player);
+        this.nextRound();
+        resolve("success");
+        // 結果表示
+      }
+    });
   }
 
   clearPlayerHandsAndDeck(): void {

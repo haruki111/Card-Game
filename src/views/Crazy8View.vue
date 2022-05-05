@@ -4,8 +4,12 @@ import Crazy8Player from "../components/Crazy8Player.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
+import { useCrazy8RenderStore } from "@/stores/crazy8Render";
 
 const table = useTableStore().table as Crazy8Table;
+const render = useCrazy8RenderStore();
+
+render.renderTable();
 </script>
 <template>
   <div
