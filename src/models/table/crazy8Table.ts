@@ -169,6 +169,7 @@ export class Crazy8Table extends Table {
         };
         haveTurnDistribute();
       } else if (this.gamePhase === "play") {
+        player.gameStatus = "play";
         const gameDecision: GameDecision = player.promptPlayer(
           userData,
           this.cardPlaceArr[this.cardPlaceArr.length - 1]

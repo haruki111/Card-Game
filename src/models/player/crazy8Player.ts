@@ -54,9 +54,9 @@ export class Crazy8Player extends Player {
       } else {
         return new GameDecision("draw", 0);
       }
-    } else if (this.gameStatus == "path" || userData === "path") {
+    } else if (userData === "path") {
+      this.gameStatus = "path";
       return new GameDecision("path", 1);
-    }
-    return new GameDecision("draw", 1); //temp
+    } else return new GameDecision("draw", 1); //temp
   }
 }

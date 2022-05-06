@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from "vue";
+import { computed, ref, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
 import type { Card } from "@/stores/card";
@@ -23,6 +23,17 @@ const tweened = reactive({
 
 watch(useTableStore().table.players[props.index], (n) => {
   gsap.to(tweened, { duration: 0.5, score: Number(n.chips) || 0 });
+});
+
+const isDisplayBalloon = ref(false);
+
+watch(player, (n) => {
+  if (n.gameStatus === "path") {
+    isDisplayBalloon.value = true;
+    setTimeout(() => {
+      isDisplayBalloon.value = false;
+    }, 2000);
+  }
 });
 
 const playerCardHide = computed(() => {
@@ -81,7 +92,7 @@ const winOrLose = computed(() => {
 </script>
 <template>
   <div>
-    <div id="playerInfo" class="text-gray-100 text-center">
+    <div id="playerInfo" class="text-gray-100 text-center relative">
       <div
         v-if="table.gamePhase === 'betweenGames'"
         class="text-3xl font-bold"
@@ -106,7 +117,18 @@ const winOrLose = computed(() => {
       <p class="sm:text-3xl text-2xl font-bold mb-2">
         {{ tweened.score.toFixed(0) }}
       </p>
+      <Transition name="fade">
+        <div
+          v-if="player.gameStatus === 'path' && isDisplayBalloon == true"
+          class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
+        >
+          <p class="sm:text-xl text-lg font-bold">
+            {{ player.gameStatus }}
+          </p>
+        </div>
+      </Transition>
     </div>
+
     <TransitionGroup
       name="player-cards"
       tag="div"
@@ -126,6 +148,31 @@ const winOrLose = computed(() => {
   </div>
 </template>
 <style scoped>
+.status-balloon {
+  display: inline-block;
+  padding: 7px 10px;
+  max-width: 100%;
+  color: #030303;
+  font-size: 16px;
+  background: #f9f9f9;
+  border-radius: 15px;
+}
+
+.status-balloon:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -15px;
+  border: 15px solid transparent;
+  border-top: 15px solid #f9f9f9;
+}
+
+.status-balloon p {
+  margin: 0;
+  padding: 0;
+}
+
 .player-cards-move,
 .player-cards-enter-active,
 .player-cards-leave-active {
@@ -138,6 +185,16 @@ const winOrLose = computed(() => {
 }
 .player-cards-leave-active {
   position: absolute;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .blinkTurnPlayer {

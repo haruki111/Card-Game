@@ -40,11 +40,12 @@ export const useCrazy8RenderStore = defineStore({
       } else if (table.gamePhase === "distribute") {
         this.renderTableAiHelper(null, table);
       } else if (table.gamePhase === "play") {
-        if (player.type === "user" && player.gameStatus === "play")
+        if (
+          player.type === "user" &&
+          (player.gameStatus === "play" || player.gameStatus === "path")
+        )
           this.renderAction = true;
-        else if (player.type === "user" && player.gameStatus === "path") {
-          this.renderTableAiHelper(null, table);
-        } else this.renderTableAiHelper(null, table);
+        else this.renderTableAiHelper(null, table);
       }
     },
   },

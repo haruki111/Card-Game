@@ -70,7 +70,6 @@ render.renderTable(table);
       table.getTurnPlayer().type === 'user'
     "
     @click="
-      table.getTurnPlayer().gameStatus = 'path';
       render.renderAction = false;
       render.renderTableUserHelper('path', table);
     "
