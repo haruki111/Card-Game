@@ -267,8 +267,7 @@ export class BlackJackTable extends Table {
   blackjackClearPlayerHandsAndBets(): void {
     this.deck.resetDeck();
 
-    for (let i = 0; i < this.players.length; i++) {
-      const player: Player = this.players[i];
+    for (const player of this.players) {
       player.bet = 0;
       player.winAmount = 0;
       player.hand.length = 0;

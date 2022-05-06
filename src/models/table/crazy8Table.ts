@@ -212,8 +212,7 @@ export class Crazy8Table extends Table {
     });
   }
 
-  clearPlayerHandsAndDeck(): void {
-    this.deck.resetDeck();
+  clearPlayerHands(): void {
     for (const player of this.players) {
       player.hand = [];
       player.gameStatus = "betting";
@@ -229,7 +228,8 @@ export class Crazy8Table extends Table {
       this.cardPlaceArr = [];
       this.dealerNum = Math.floor(Math.random() * this.players.length);
       this.gamePhase = "distribute";
-      this.clearPlayerHandsAndDeck();
+      this.deck.resetDeck();
+      this.clearPlayerHands();
     }
   }
 
@@ -260,10 +260,27 @@ export class Crazy8Table extends Table {
     }
   }
 
+  formatTable(): void {
+    this.gamePhase = "distribute";
+    this.currRound = 1;
+    this.turnCounter = 1;
+    this.dealerNum = Math.floor(Math.random() * this.players.length);
+    this.cardPlaceArr = [];
+    this.deck.resetDeck();
+  }
+
+  formatPlayer(): void {
+    this.clearPlayerHands();
+    for (const player of this.players) {
+      player.chips = 0;
+    }
+  }
+
   isGameOut(player: Crazy8Player): void {
     if (player.hand.length == 0) {
       this.winPlayers.push(player);
       this.gamePhase = "evaluatingWinners";
+      this.turnCounter--;
     }
     // gameを続けるときに使用
 

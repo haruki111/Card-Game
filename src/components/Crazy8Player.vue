@@ -54,7 +54,7 @@ const play = (card: Card) => {
       card.rank == "8"
     ) {
       render.renderAction = false;
-      render.renderTableUserHelper(card);
+      render.renderTableUserHelper(card, table);
     }
   }
 };

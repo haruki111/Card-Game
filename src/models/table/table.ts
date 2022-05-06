@@ -83,7 +83,7 @@ export abstract class Table {
 
   abstract assignPlayerHands(): void;
 
-  abstract haveTurn(userData: number | string | Card | null): void;
+  abstract haveTurn(userData: number | string | null | Card): void;
 
   abstract nextRound(): void;
 }

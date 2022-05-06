@@ -6,6 +6,7 @@ import type { Crazy8Table } from "@/models/table/crazy8Table";
 import Crazy8Player from "../components/Crazy8Player.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
+import Crazy8EndResult from "@/components/results/Crazy8EndResult.vue";
 
 const table = useTableStore().table as Crazy8Table;
 const render = useCrazy8RenderStore();
@@ -18,7 +19,7 @@ const draw = () => {
   }
 };
 
-render.renderTable();
+render.renderTable(table);
 </script>
 <template>
   <div
@@ -58,23 +59,25 @@ render.renderTable();
   <div>{{ table.gamePhase }}</div>
 
   <Transition name="fade">
-    <!-- temp TODO デザイン -->
-    <button
-      v-if="
-        render.renderAction == true &&
-        table.deck.deck.length == 0 &&
-        table.getTurnPlayer().type === 'user'
-      "
-      @click="
-        table.getTurnPlayer().gameStatus = 'path';
-        render.renderAction = false;
-        render.renderTableUserHelper('path');
-      "
-    >
-      path
-    </button>
-    <!-- ↑ -->
+    <Crazy8EndResult v-if="render.renderEndResult == true" />
   </Transition>
+
+  <!-- temp TODO デザイン -->
+  <button
+    v-if="
+      render.renderAction == true &&
+      table.deck.deck.length == 0 &&
+      table.getTurnPlayer().type === 'user'
+    "
+    @click="
+      table.getTurnPlayer().gameStatus = 'path';
+      render.renderAction = false;
+      render.renderTableUserHelper('path', table);
+    "
+  >
+    path
+  </button>
+  <!-- ↑ -->
 </template>
 <style scoped>
 .fade-enter-active,
