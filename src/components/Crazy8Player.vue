@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
 import type { Card } from "@/stores/card";
 import GameCard from "./GameCard.vue";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
+import { gsap } from "gsap";
 
 const render = useCrazy8RenderStore();
 
@@ -14,8 +15,15 @@ let props = defineProps<{
 
 const table = useTableStore().table as Crazy8Table;
 
-const players = table.players;
-const player = players[props.index];
+const player = table.players[props.index];
+
+const tweened = reactive({
+  score: 0,
+});
+
+watch(useTableStore().table.players[props.index], (n) => {
+  gsap.to(tweened, { duration: 0.5, score: Number(n.chips) || 0 });
+});
 
 const playerCardHide = computed(() => {
   if (table.gamePhase == "betting" || table.gamePhase == "distribute")
@@ -96,7 +104,7 @@ const winOrLose = computed(() => {
       </p>
 
       <p class="sm:text-3xl text-2xl font-bold mb-2">
-        {{ player.chips }}
+        {{ tweened.score.toFixed(0) }}
       </p>
     </div>
     <TransitionGroup
