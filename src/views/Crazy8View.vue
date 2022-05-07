@@ -32,6 +32,11 @@ const selectSuit = (suit: string) => {
   );
 };
 
+const stackDeckStyle = (index: number) => {
+  if (index == 0) return "70px";
+  return "margin-left: -70px";
+};
+
 render.renderTable(table);
 </script>
 <template>
@@ -80,13 +85,22 @@ render.renderTable(table);
           :isHide="false"
           :rotate="{ isRotate: false, class: '' }"
         />
-        <GameCard
+        <TransitionGroup
+          name="deck"
+          tag="div"
           v-if="table.deck.deck.length != 0"
-          @click="draw()"
-          :card="table.deck.deck[table.deck.deck.length - 1]"
-          :isHide="true"
-          :rotate="{ isRotate: false, class: '' }"
-        />
+          class="flex"
+        >
+          <GameCard
+            v-for="(card, index) of table.deck.deck"
+            :key="index"
+            @click="draw()"
+            :card="card"
+            :isHide="true"
+            :rotate="{ isRotate: false, class: '' }"
+            :style="stackDeckStyle(index)"
+          />
+        </TransitionGroup>
       </div>
 
       <Crazy8Player
@@ -129,5 +143,19 @@ render.renderTable(table);
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.deck-move,
+.deck-enter-active,
+.deck-leave-active {
+  transition: all 0.5s ease;
+}
+.deck-enter-from,
+.deck-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.deck-leave-active {
+  position: absolute;
 }
 </style>

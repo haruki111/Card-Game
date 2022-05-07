@@ -151,7 +151,6 @@ export class Crazy8Table extends Table {
               this.cardPlaceArr.push(this.deck.drawOne());
               this.gamePhase = "play";
               for (const player of this.players) player.gameStatus = "play";
-              this.deck.deck = [];
               resolve("success");
             }, time);
           });
