@@ -12,7 +12,7 @@ export class Crazy8Player extends Player {
     for (let i = 0; i < this.hand.length; i++) {
       score += this.hand[i].getRankNumber();
       if (this.hand[i].rank === "A") score -= 10;
-      if (this.hand[i].suit === "8") score += 42;
+      if (this.hand[i].rank === "8") score += 42;
     }
 
     return score;
