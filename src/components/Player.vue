@@ -8,7 +8,8 @@ import GameCard from "./GameCard.vue";
 const table = useTableStore().table;
 
 const playerCardHide = computed(() => {
-  if (table.gamePhase == "betting") return [true, true];
+  if (table.gamePhase == "betting" || table.gamePhase == "distribute")
+    return [true, true];
   else {
     let hideArr: boolean[] = [];
     for (let i = 0; i < player.hand.length; i++) {
@@ -38,6 +39,7 @@ const player = players[props.index];
         :key="index"
         :card="card"
         :isHide="playerCardHide[index]"
+        :rotate="{ isRotate: false, class: '' }"
       />
     </TransitionGroup>
   </div>

@@ -62,5 +62,12 @@ export const useDeckStore = defineStore({
       this.generateDeck();
       this.shuffleDeck();
     },
+
+    reuseCards(cards: Card[]): void {
+      for (const card of cards) {
+        this.deck.push(card);
+      }
+      this.shuffleDeck();
+    },
   },
 });

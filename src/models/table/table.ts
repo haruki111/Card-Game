@@ -5,19 +5,24 @@ export abstract class Table {
   protected _gameType: string;
   protected _gamePhase: string;
   protected _turnCounter: number;
+  protected _round: number;
+  protected _currRound: number;
   protected _gameSpeed: number;
   protected _deck;
   protected _players: Player[];
   constructor(
     gameType: string,
     gamePhase: string,
-    turnCounter: number,
+    round: number,
+    gameSpeed: number,
     players: Player[]
   ) {
     this._gameType = gameType;
     this._gamePhase = gamePhase;
-    this._turnCounter = turnCounter;
-    this._gameSpeed = 1;
+    this._turnCounter = 1;
+    this._round = round; // todo totalRound 後日書き換え
+    this._currRound = 1;
+    this._gameSpeed = gameSpeed;
     this._deck = useDeckStore();
     this._players = players;
   }
@@ -42,6 +47,18 @@ export abstract class Table {
     this._turnCounter = num;
   }
 
+  get round(): number {
+    return this._round;
+  }
+
+  get currRound(): number {
+    return this._currRound;
+  }
+
+  set currRound(round: number) {
+    this._currRound = round;
+  }
+
   get players(): Player[] {
     return this._players;
   }
@@ -54,7 +71,7 @@ export abstract class Table {
     return this._deck;
   }
   public getTurnPlayer(): Player {
-    const turnPlayer = this.turnCounter % this.players.length;
+    const turnPlayer: number = this.turnCounter % this.players.length;
     return turnPlayer == 0
       ? this.players[this.players.length - 1]
       : this.players[turnPlayer - 1];
@@ -67,5 +84,5 @@ export abstract class Table {
 
   abstract haveTurn(userData: number | string | null): void;
 
-  abstract nextTurn(): void;
+  abstract nextRound(): void;
 }

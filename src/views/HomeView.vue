@@ -26,8 +26,8 @@ const selectSpeed = () => {
 };
 
 const gameSettingHash = reactive({
-  name: "",
-  game: "Black Jack",
+  name: "haruki",
+  game: "Crazy8",
   round: 5,
   speed: 1,
 }) as {
@@ -59,7 +59,7 @@ const selects: {
 }[] = reactive([
   {
     selected: gameSettingHash.game,
-    options: ["Black Jack", "Turn8"],
+    options: ["Black Jack", "Crazy8"],
     label: "Game",
     method: selectGame,
   },
