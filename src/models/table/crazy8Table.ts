@@ -99,7 +99,7 @@ export class Crazy8Table extends Table {
     gameDecision: GameDecision
   ): Promise<unknown> {
     return new Promise((resolve) => {
-      if (gameDecision.getAction() == "draw") {
+      if (gameDecision.getAction() === "draw") {
         if (this.deck.deck.length == 0) {
           player.gameStatus = "path";
           this.turnCounter++;
@@ -118,36 +118,30 @@ export class Crazy8Table extends Table {
           resolve("success");
         };
         helper();
-      } else if (gameDecision.getAction() == "play") {
-        const card = gameDecision.getAmount();
-        if (typeof card === "object") {
+      } else if (gameDecision.getAction() === "play") {
+        const amount = gameDecision.getAmount();
+        if (typeof amount === "object") {
+          const card = amount.card;
           const index: number = player.hand.indexOf(card);
           player.hand.splice(index, 1);
+          if (amount.nextSuit !== "") {
+            card.suit = amount.nextSuit;
+          }
           this.cardPlaceArr.push(card);
           this.isGameOut(player);
           this.turnCounter++;
           resolve("success");
         }
-      } else if (gameDecision.getAction() == "path") {
+      } else if (gameDecision.getAction() === "path") {
         this.turnCounter++;
         resolve("success");
       }
     });
   }
 
-  public isValidPlayCard(drawCard: Card, cardPlace: Card) {
-    if (
-      drawCard.suit == cardPlace.suit ||
-      drawCard.rank == cardPlace.rank ||
-      drawCard.rank == "8"
-    ) {
-      this.haveTurn(drawCard);
-    } else {
-      this.haveTurn("draw");
-    }
-  }
-
-  public haveTurn(userData: number | string | Card | null): Promise<unknown> {
+  public haveTurn(
+    userData: number | string | { card: Card; nextSuit: string } | null
+  ): Promise<unknown> {
     return new Promise((resolve) => {
       const player = this.getTurnPlayer() as Crazy8Player;
       if (this.gamePhase === "distribute") {

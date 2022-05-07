@@ -67,13 +67,13 @@ const cardRotate = (index: number) => {
 const play = (card: Card) => {
   const cardPlace = table.cardPlaceArr[table.cardPlaceArr.length - 1];
   if (render.renderAction == true && player.type == "user") {
-    if (
-      card.suit == cardPlace.suit ||
-      card.rank == cardPlace.rank ||
-      card.rank == "8"
-    ) {
+    if (card.rank === "8") {
       render.renderAction = false;
-      render.renderTableUserHelper(card, table);
+      render.renderSelectSuit = true;
+      table.cardPlaceArr.push(card);
+    } else if (card.suit == cardPlace.suit || card.rank == cardPlace.rank) {
+      render.renderAction = false;
+      render.renderTableUserHelper({ card: card, nextSuit: "" }, table);
     }
   }
 };

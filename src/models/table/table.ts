@@ -1,5 +1,4 @@
 import type { Player } from "@/models/player/player";
-import type { Card } from "@/stores/card";
 import { useDeckStore } from "../../stores/deck";
 
 export abstract class Table {
@@ -83,7 +82,7 @@ export abstract class Table {
 
   abstract assignPlayerHands(): void;
 
-  abstract haveTurn(userData: number | string | null | Card): void;
+  abstract haveTurn(userData: number | string | null): void;
 
   abstract nextRound(): void;
 }

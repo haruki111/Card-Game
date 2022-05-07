@@ -18,21 +18,30 @@ export class Crazy8Player extends Player {
   }
 
   public promptPlayer(
-    userData: string | number | Card | null,
+    userData: string | number | { card: Card; nextSuit: string } | null,
     cardPlace: Card
   ): GameDecision {
     if (this.gameStatus == "play") {
       const playCardArr: Card[] = [];
       const Card8Arr: Card[] = [];
+      const cardSuitMap: Map<string, number> = new Map([
+        ["H", 0],
+        ["D", 0],
+        ["C", 0],
+        ["S", 0],
+      ]);
       if (userData == null) {
         for (const handCard of this.hand) {
+          const suit: string = handCard.suit;
+          const count: number = cardSuitMap.get(suit) ?? 0;
+          cardSuitMap.set(suit, count + 1);
+
           if (
-            handCard.suit == cardPlace.suit ||
-            handCard.rank == cardPlace.rank
+            handCard.rank !== "8" &&
+            (handCard.suit == cardPlace.suit || handCard.rank == cardPlace.rank)
           ) {
             playCardArr.push(handCard);
-          }
-          if (handCard.rank == "8") {
+          } else if (handCard.rank === "8") {
             Card8Arr.push(handCard);
           }
         }
@@ -40,12 +49,23 @@ export class Crazy8Player extends Player {
         if (playCardArr.length) {
           const playCard =
             playCardArr[Math.floor(Math.random() * playCardArr.length)];
-          return new GameDecision("play", playCard);
-        } //8を持っているので引く
+          return new GameDecision("play", { card: playCard, nextSuit: "" });
+        } //8のみ持っているので出す
         else if (Card8Arr.length) {
           const playCard =
             Card8Arr[Math.floor(Math.random() * Card8Arr.length)];
-          return new GameDecision("play", playCard);
+
+          let nextSuit = "H";
+          for (const cardSuit of cardSuitMap) {
+            if (cardSuit[0] == playCard.suit) cardSuit[1]--;
+            if (cardSuit[1] > (cardSuitMap.get(nextSuit) ?? 0))
+              nextSuit = cardSuit[0];
+          }
+
+          return new GameDecision("play", {
+            card: playCard,
+            nextSuit: nextSuit,
+          });
         }
         // 出せるカードがないので引く
         return new GameDecision("draw", 0);

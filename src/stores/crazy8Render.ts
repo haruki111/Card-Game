@@ -6,11 +6,12 @@ export const useCrazy8RenderStore = defineStore({
   id: "crazy8Render",
   state: () => ({
     renderAction: false,
+    renderSelectSuit: false,
     renderEndResult: false,
   }),
   actions: {
     async renderTableUserHelper(
-      userData: number | string | null | Card,
+      userData: number | string | { card: Card; nextSuit: string } | null,
       table: Crazy8Table
     ) {
       await table.haveTurn(userData);
