@@ -10,27 +10,28 @@ export const useBlackJackRenderStore = defineStore({
     renderEndResult: false,
   }),
   actions: {
-    renderTableUserHelper(
+    async renderTableUserHelper(
       userData: number | string | null,
       table: BlackJackTable
     ) {
-      table.haveTurn(userData);
-      this.renderTable(table);
+      await table.haveTurn(userData);
+      setTimeout(() => {
+        this.renderTable(table);
+      }, 1000 / table.gameSpeed);
     },
 
-    renderTableAiHelper(
+    async renderTableAiHelper(
       userData: number | string | null,
       table: BlackJackTable
     ) {
+      await table.haveTurn(userData);
       setTimeout(() => {
-        table.haveTurn(userData);
         this.renderTable(table);
       }, 1000 / table.gameSpeed);
     },
 
     renderTable(table: BlackJackTable) {
       const player = table.getTurnPlayer();
-      console.log(player);
 
       if (table.gamePhase == "end") this.renderEndResult = true;
       else if (table.gamePhase == "evaluatingEnd") this.renderResult = true;

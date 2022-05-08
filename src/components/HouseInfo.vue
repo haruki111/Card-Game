@@ -13,7 +13,8 @@ let props = defineProps<{
 }>();
 
 const displayHouseScore = computed(() => {
-  if (props.isHide == true) return house.hand[0].getRankNumber();
+  if (!house.hand.length) return 0;
+  else if (props.isHide == true) return house.hand[0].getRankNumber();
   return house.getHandScore();
 });
 

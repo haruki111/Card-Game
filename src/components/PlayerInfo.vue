@@ -19,6 +19,12 @@ const blinkTurnPlayer = computed(() => {
   }
   return "";
 });
+
+const displayScore = computed(() => {
+  const player = props.player;
+  if (!player.hand.length) return 0;
+  else return player.getHandScore();
+});
 </script>
 
 <template>
@@ -39,7 +45,7 @@ const blinkTurnPlayer = computed(() => {
     <div id="playerScore" class="pb-2">
       <span
         class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
-        >{{ player.getHandScore() }}
+        >{{ displayScore }}
       </span>
     </div>
   </div>

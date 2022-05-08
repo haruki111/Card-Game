@@ -1,7 +1,6 @@
 import { Table } from "./table";
 import { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import type { Player } from "@/models/player/player";
-import { Card } from "@/stores/card";
 
 import type { GameDecision } from "../gameDecision";
 import { Investments } from "../Investments";
@@ -115,7 +114,6 @@ export class BlackJackTable extends Table {
 
     for (let i = 0; i < this.players.length; i++) {
       const player = this.players[i];
-      console.log(player.name);
       hash.result[i] = {
         name: player.name,
         action: player.gameStatus,
@@ -128,14 +126,28 @@ export class BlackJackTable extends Table {
     return hash;
   }
 
-  assignPlayerHands(): void {
-    for (let i = 0; i < this.players.length; i++) {
-      this.players[i].hand[0] = this.deck.drawOne();
-      this.players[i].hand[1] = this.deck.drawOne();
-    }
-
-    this.house.hand[0] = this.deck.drawOne();
-    this.house.hand[1] = this.deck.drawOne();
+  assignPlayerHands(): Promise<unknown> {
+    return new Promise((resolve) => {
+      for (let ci = 0; ci < 2; ci++) {
+        for (let pj = 0; pj < this.players.length + 1; pj++) {
+          setTimeout(
+            () => {
+              if (pj == this.players.length) {
+                this.house.hand[ci] = this.deck.drawOne();
+              } else {
+                this.players[pj].hand[ci] = this.deck.drawOne();
+              }
+              if (ci === 1 && pj === this.players.length) {
+                resolve("success");
+              }
+            },
+            300 * (ci * (this.players.length + 1) + pj),
+            ci,
+            pj
+          );
+        }
+      }
+    });
   }
 
   evaluateMove(
@@ -173,58 +185,72 @@ export class BlackJackTable extends Table {
   }
 
   validBlackJack(): void {
-    for (let i = 0; i < this.players.length; i++) {
-      const player: Player = this.players[i];
+    for (const player of this.players) {
       if (player.getHandScore() == 21 && player.hand.length == 2)
         player.gameStatus = "blackjack";
     }
   }
 
-  haveTurn(userData: number | string | null): void {
-    const player = this.getTurnPlayer() as BlackJackPlayer;
+  haveTurn(userData: number | string | null): Promise<unknown> {
+    return new Promise((resolve) => {
+      const player = this.getTurnPlayer() as BlackJackPlayer;
 
-    if (this.gamePhase == "betting") {
-      const gameDecision: GameDecision = player.promptPlayer(userData);
-      this.evaluateMove(player, gameDecision);
-      if (this.onLastPlayer()) {
-        this.assignPlayerHands(); //2枚カードを割り当て
-        this.gamePhase = "acting";
-        this.house.gameStatus = "waitingForActions";
-        this.validBlackJack();
-      }
-      this.turnCounter++;
-    } else if (this.gamePhase == "acting") {
-      if (player.gameStatus == "bet" || player.gameStatus == "hit") {
-        const gameDecision: GameDecision = player.promptPlayer(
-          userData,
-          this.house.hand[0].getRankNumber()
-        );
+      if (this.gamePhase == "betting") {
+        const gameDecision: GameDecision = player.promptPlayer(userData);
         this.evaluateMove(player, gameDecision);
-      }
-      this.turnCounter++;
-
-      if (this.allPlayerActionsResolved() && this.onLastPlayer()) {
-        this.gamePhase = "evaluatingWinners";
-        this.turnCounter = -1;
-      }
-    } else if (this.gamePhase == "evaluatingWinners") {
-      if (this.house.gameStatus == "waitingForActions") {
-        if (this.house.getHandScore() == 21 && this.house.hand.length == 2)
-          this.house.gameStatus = "blackjack";
-        else if (this.house.getHandScore() < 17) this.house.gameStatus = "hit";
-        else this.house.gameStatus = "bet";
-      } else if (this.house.gameStatus == "hit") {
-        this.house.hand.push(this.deck.drawOne());
-        if (this.house.getHandScore() > 21) this.house.gameStatus = "bust";
-        else if (this.house.getHandScore() >= 17) this.house.gameStatus = "bet";
-      } else {
-        for (let i = 0; i < this.players.length; i++) {
-          this.blackjackEvaluate(this.players[i]);
+        const haveTurnBettingHelper = async () => {
+          await this.assignPlayerHands(); //2枚カードを割り当て
+          this.gamePhase = "acting";
+          this.house.gameStatus = "waitingForActions";
+          this.validBlackJack();
+          this.turnCounter++;
+          resolve("success");
+        };
+        if (this.onLastPlayer()) {
+          haveTurnBettingHelper();
+        } else {
+          this.turnCounter++;
+          resolve("success");
         }
-        this.gamePhase = "evaluatingEnd";
-        this.blackjackGetRoundResults();
+      } else if (this.gamePhase == "acting") {
+        if (player.gameStatus == "bet" || player.gameStatus == "hit") {
+          const gameDecision: GameDecision = player.promptPlayer(
+            userData,
+            this.house.hand[0].getRankNumber()
+          );
+          this.evaluateMove(player, gameDecision);
+        }
+        this.turnCounter++;
+
+        if (this.allPlayerActionsResolved() && this.onLastPlayer()) {
+          this.gamePhase = "evaluatingWinners";
+          this.turnCounter = -1;
+          resolve("success");
+        } else resolve("success");
+      } else if (this.gamePhase == "evaluatingWinners") {
+        if (this.house.gameStatus == "waitingForActions") {
+          if (this.house.getHandScore() == 21 && this.house.hand.length == 2)
+            this.house.gameStatus = "blackjack";
+          else if (this.house.getHandScore() < 17)
+            this.house.gameStatus = "hit";
+          else this.house.gameStatus = "bet";
+          resolve("success");
+        } else if (this.house.gameStatus == "hit") {
+          this.house.hand.push(this.deck.drawOne());
+          if (this.house.getHandScore() > 21) this.house.gameStatus = "bust";
+          else if (this.house.getHandScore() >= 17)
+            this.house.gameStatus = "bet";
+          resolve("success");
+        } else {
+          for (let i = 0; i < this.players.length; i++) {
+            this.blackjackEvaluate(this.players[i]);
+          }
+          this.gamePhase = "evaluatingEnd";
+          this.blackjackGetRoundResults();
+          resolve("success");
+        }
       }
-    }
+    });
   }
 
   blackjackEvaluate(player: Player | BlackJackPlayer): void {
@@ -271,12 +297,10 @@ export class BlackJackTable extends Table {
       player.bet = 0;
       player.winAmount = 0;
       player.hand.length = 0;
-      player.hand = [new Card("?", "?"), new Card("?", "?")];
       player.gameStatus = "betting";
     }
 
     this.house.hand.length = 0;
-    this.house.hand = [new Card("?", "?"), new Card("?", "?")];
     this.house.gameStatus = "betting";
   }
   nextRound(): void {
@@ -300,12 +324,11 @@ export class BlackJackTable extends Table {
 
   formatPlayer() {
     this.blackjackClearPlayerHandsAndBets();
-    for (let i = 0; i < this.players.length; i++) {
-      this.players[i].chips = 400;
-      this.players[i].grades = []; //成績
-      this.players[i].investment = new Investments(
-        this.players[i].chips
-      ).getInvestment(); //投資法
+
+    for (const player of this.players) {
+      player.chips = 400;
+      player.grades = []; //成績
+      player.investment = new Investments(player.chips).getInvestment(); //投資法
     }
   }
 }

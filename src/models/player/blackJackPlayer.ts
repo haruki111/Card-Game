@@ -1,11 +1,9 @@
 import { Player } from "@/models/player/player";
 import { GameDecision } from "@/models/gameDecision";
-import { Card } from "@/stores/card";
 
 export class BlackJackPlayer extends Player {
   constructor(name: string, type: string, chips: number) {
     super(name, type, chips);
-    this._hand = [new Card("?", "?"), new Card("?", "?")];
   }
 
   // gameStatus if(betting, bet, hit)

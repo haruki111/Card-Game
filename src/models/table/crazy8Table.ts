@@ -70,7 +70,7 @@ export class Crazy8Table extends Table {
               if (i == howManyDistribute - 1 && j == this.players.length - 1)
                 resolve("success");
             },
-            300 * (i * howManyDistribute - 1 + j),
+            300 * (i * this.players.length - 1 + j),
             i,
             j
           );
