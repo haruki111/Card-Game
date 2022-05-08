@@ -20,14 +20,13 @@ const toContinue = (): void => {
   render.renderEndResult = false;
   table.formatTable();
   table.formatPlayer();
-  render.renderTableAiHelper(null, table);
+  render.renderTableHelper(null, table);
 };
 
 const toHome = (): void => {
   render.renderEndResult = false;
   table.deck.resetDeck();
   useTableStore().$reset();
-  console.log(table);
   router.push("/");
 };
 

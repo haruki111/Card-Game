@@ -23,7 +23,7 @@ const selectSuit = (suit: string) => {
   const cardPlace = table.cardPlaceArr[table.cardPlaceArr.length - 1];
   cardPlace.suit = suit;
   render.renderSelectSuit = false;
-  render.renderTableUserHelper(
+  render.renderTableHelper(
     {
       card: cardPlace,
       nextSuit: suit,
@@ -128,7 +128,7 @@ render.renderTable(table);
     "
     @click="
       render.renderAction = false;
-      render.renderTableUserHelper('path', table);
+      render.renderTableHelper('path', table);
     "
   >
     path

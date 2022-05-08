@@ -10,17 +10,7 @@ export const useBlackJackRenderStore = defineStore({
     renderEndResult: false,
   }),
   actions: {
-    async renderTableUserHelper(
-      userData: number | string | null,
-      table: BlackJackTable
-    ) {
-      await table.haveTurn(userData);
-      setTimeout(() => {
-        this.renderTable(table);
-      }, 1000 / table.gameSpeed);
-    },
-
-    async renderTableAiHelper(
+    async renderTableHelper(
       userData: number | string | null,
       table: BlackJackTable
     ) {
@@ -41,10 +31,10 @@ export const useBlackJackRenderStore = defineStore({
         } else if (table.gamePhase == "acting") {
           if (player.gameStatus == "bet" || player.gameStatus == "hit") {
             this.renderAction = true;
-          } else this.renderTableAiHelper(player.gameStatus, table);
+          } else this.renderTableHelper(player.gameStatus, table);
         }
       } else if (player.type == "ai" || player.type == "house")
-        this.renderTableAiHelper(null, table);
+        this.renderTableHelper(null, table);
     },
   },
 });

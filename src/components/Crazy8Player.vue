@@ -73,7 +73,7 @@ const play = (card: Card) => {
       table.cardPlaceArr.push(card);
     } else if (card.suit == cardPlace.suit || card.rank == cardPlace.rank) {
       render.renderAction = false;
-      render.renderTableUserHelper({ card: card, nextSuit: "" }, table);
+      render.renderTableHelper({ card: card, nextSuit: "" }, table);
     }
   }
 };

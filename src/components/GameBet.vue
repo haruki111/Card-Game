@@ -59,7 +59,7 @@ const stackChipStyle = (num: number) => {
 };
 
 const betChips = () => {
-  render.renderTableUserHelper(bet.value, table);
+  render.renderTableHelper(bet.value, table);
   render.renderBet = false;
   chipsInBet.clear();
 };
