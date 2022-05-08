@@ -1,13 +1,27 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 import type { Player } from "@/models/player/player";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
+import { gsap } from "gsap";
 
 let props = defineProps<{
   player: Player;
 }>();
 const table = useTableStore().table as BlackJackTable;
+
+const tweened = reactive({
+  chips: props.player.chips,
+  bet: props.player.bet,
+});
+
+watch(props.player, (n) => {
+  gsap.to(tweened, {
+    duration: 0.5,
+    chips: Number(n.chips) || 0,
+    bet: Number(n.bet) || 0,
+  });
+});
 
 const statusColor = computed(() => {
   if (props.player.gameStatus == "blackjack") return "text-yellow-400";
@@ -55,8 +69,8 @@ const winOrLose = computed(() => {
       <p class="px-1">
         S:<span :class="statusColor">{{ player.gameStatus }}</span>
       </p>
-      <p class="px-1">B:{{ player.bet }}</p>
-      <p class="px-1">C:{{ player.chips }}</p>
+      <p class="px-1">B:{{ tweened.bet.toFixed(0) }}</p>
+      <p class="px-1">C:{{ tweened.chips.toFixed(0) }}</p>
     </div>
     <div id="playerScore" class="pb-2">
       <span
