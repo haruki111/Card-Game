@@ -1,5 +1,5 @@
 import type { Card } from "@/stores/card";
-import type { GameDecision } from "@/models/gameDecision";
+
 import {
   Investments,
   MartingaleMethod,

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useTableStore } from "@/stores/table";
-import { useRenderStore } from "@/stores/render";
+import { useBlackJackRenderStore } from "@/stores/blackJackRender";
+
 import type { BlackJackTable } from "@/models/table/blackjackTable";
 
 const table = useTableStore().table as BlackJackTable;
-const render = useRenderStore();
+const render = useBlackJackRenderStore();
 
 const user = table.players[1];
 
@@ -58,7 +59,7 @@ const stackChipStyle = (num: number) => {
 };
 
 const betChips = () => {
-  render.renderTableUserHelper(bet.value);
+  render.renderTableUserHelper(bet.value, table);
   render.renderBet = false;
   chipsInBet.clear();
 };

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
-import { useRenderStore } from "@/stores/render";
+import { useBlackJackRenderStore } from "@/stores/blackJackRender";
+import type { BlackJackTable } from "@/models/table/blackjackTable";
 
-const table = useTableStore().table;
-const render = useRenderStore();
+const table = useTableStore().table as BlackJackTable;
+const render = useBlackJackRenderStore();
 
 const validUserStatusBet = computed(() => {
   const user = table.players[1];
@@ -22,7 +23,7 @@ const disabledBgRedColor = computed(() => {
 });
 
 const action = (action: string) => {
-  render.renderTableUserHelper(action);
+  render.renderTableUserHelper(action, table);
   render.renderAction = false;
 };
 </script>

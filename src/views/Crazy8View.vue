@@ -33,8 +33,8 @@ const selectSuit = (suit: string) => {
 };
 
 const stackDeckStyle = (index: number) => {
-  if (index == 0) return "70px";
-  return "margin-left: -70px";
+  if (index == 0) return "ml-12";
+  return "-ml-12";
 };
 
 render.renderTable(table);
@@ -98,7 +98,8 @@ render.renderTable(table);
             :card="card"
             :isHide="true"
             :rotate="{ isRotate: false, class: '' }"
-            :style="stackDeckStyle(index)"
+            :class="stackDeckStyle(index)"
+            class="mx-0"
           />
         </TransitionGroup>
       </div>

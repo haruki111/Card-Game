@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useTableStore } from "@/stores/table";
-import { useRenderStore } from "@/stores/render";
+import { useBlackJackRenderStore } from "@/stores/blackJackRender";
 import { useRouter } from "vue-router";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
 
 const table = useTableStore().table as BlackJackTable;
-const render = useRenderStore();
+const render = useBlackJackRenderStore();
 const router = useRouter();
 
 const players = table.players;
@@ -22,7 +22,7 @@ const toContinue = (): void => {
   render.renderEndResult = false;
   table.formatTable();
   table.formatPlayer();
-  render.renderTable();
+  render.renderTable(table);
 };
 
 const toHome = (): void => {

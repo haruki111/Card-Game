@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useTableStore } from "@/stores/table";
+import { useBlackJackRenderStore } from "@/stores/blackJackRender";
+import type { BlackJackTable } from "@/models/table/blackjackTable";
 import House from "../components/House.vue";
 import Player from "../components/Player.vue";
 import GameAction from "@/components/GameAction.vue";
@@ -7,13 +10,10 @@ import GameBet from "@/components/GameBet.vue";
 import GameResult from "../components/GameResult.vue";
 import GameEndResult from "../components/GameEndResult.vue";
 
-import { useTableStore } from "@/stores/table";
-import { useRenderStore } from "@/stores/render";
+const table = useTableStore().table as BlackJackTable;
+const render = useBlackJackRenderStore();
 
-const table = useTableStore().table;
-const render = useRenderStore();
-
-render.renderTable();
+render.renderTable(table);
 </script>
 <template>
   <div class="-mt-24">
@@ -36,10 +36,6 @@ render.renderTable();
     <GameResult v-else-if="render.renderResult" />
     <GameEndResult v-else-if="render.renderEndResult" />
   </Transition>
-
-  <!-- <div class="text-center">
-    <router-link to="/">homeページ</router-link>
-  </div> -->
 </template>
 
 <style scoped>
