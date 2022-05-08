@@ -24,7 +24,6 @@ export const useBlackJackRenderStore = defineStore({
       const player = table.getTurnPlayer();
 
       if (table.gamePhase == "end") this.renderEndResult = true;
-      else if (table.gamePhase == "evaluatingEnd") this.renderResult = true;
       else if (player.type == "user") {
         if (table.gamePhase == "betting") {
           this.renderBet = true;

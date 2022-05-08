@@ -100,10 +100,7 @@ export class BlackJackTable extends Table {
     return true;
   }
 
-  blackjackGetRoundResults(): {
-    round: number;
-    result: Result[];
-  } {
+  blackjackGetRoundResults(): void {
     const hash: {
       round: number;
       result: Result[];
@@ -123,7 +120,6 @@ export class BlackJackTable extends Table {
       };
     }
     this.resultsLog.push(hash);
-    return hash;
   }
 
   assignPlayerHands(): Promise<unknown> {
@@ -242,13 +238,24 @@ export class BlackJackTable extends Table {
             this.house.gameStatus = "bet";
           resolve("success");
         } else {
-          for (let i = 0; i < this.players.length; i++) {
-            this.blackjackEvaluate(this.players[i]);
+          for (const player of this.players) {
+            this.blackjackEvaluate(player);
           }
           this.gamePhase = "evaluatingEnd";
-          this.blackjackGetRoundResults();
           resolve("success");
         }
+      } else if (this.gamePhase == "evaluatingEnd") {
+        this.blackjackGetRoundResults();
+        const haveTurnEvaluatingHelper = async () => {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              this.nextRound();
+              resolve("success");
+            }, 3000);
+          });
+          resolve("success");
+        };
+        haveTurnEvaluatingHelper();
       }
     });
   }

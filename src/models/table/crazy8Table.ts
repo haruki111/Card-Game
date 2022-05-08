@@ -34,6 +34,9 @@ export class Crazy8Table extends Table {
   get winPlayers(): Player[] {
     return this._winPlayers;
   }
+  set winPlayers(players: Player[]) {
+    this._winPlayers = players;
+  }
 
   get dealerNum(): number {
     return this._dealerNum;
@@ -222,6 +225,7 @@ export class Crazy8Table extends Table {
       this.cardPlaceArr = [];
       this.dealerNum = Math.floor(Math.random() * this.players.length);
       this.gamePhase = "distribute";
+      this.winPlayers = [];
       this.deck.resetDeck();
       this.clearPlayerHands();
     }

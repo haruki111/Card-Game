@@ -2,11 +2,12 @@
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
 import type { Player } from "@/models/player/player";
+import type { BlackJackTable } from "@/models/table/blackjackTable";
 
 let props = defineProps<{
   player: Player;
 }>();
-const table = useTableStore().table;
+const table = useTableStore().table as BlackJackTable;
 
 const statusColor = computed(() => {
   if (props.player.gameStatus == "blackjack") return "text-yellow-400";
@@ -25,10 +26,25 @@ const displayScore = computed(() => {
   if (!player.hand.length) return 0;
   else return player.getHandScore();
 });
+
+const winOrLose = computed(() => {
+  const player = props.player;
+  const newestGrade = player.grades[player.grades.length - 1];
+  if (newestGrade == 1) return "win";
+  else if (newestGrade == 0) return "draw";
+  return "lose";
+});
 </script>
 
 <template>
   <div id="playerInfo" class="text-gray-100">
+    <div
+      v-if="table.gamePhase === 'evaluatingEnd'"
+      class="text-3xl font-bold"
+      style="text-shadow: 0px 2px 3px darkgrey"
+    >
+      {{ winOrLose }}
+    </div>
     <p
       :class="blinkTurnPlayer"
       class="playerName sm:text-3xl text-2xl font-bold mb-2"
