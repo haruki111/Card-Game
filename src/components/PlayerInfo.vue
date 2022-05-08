@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from "vue";
+import { computed, ref, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 import type { Player } from "@/models/player/player";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
@@ -21,6 +21,18 @@ watch(props.player, (n) => {
     chips: Number(n.chips) || 0,
     bet: Number(n.bet) || 0,
   });
+});
+
+const isDisplayBalloon = ref(false);
+
+watch(props.player, (n) => {
+  const arr = ["surrender", "stand", "hit", "double", "bust"];
+  if (arr.includes(n.gameStatus)) {
+    isDisplayBalloon.value = true;
+    setTimeout(() => {
+      isDisplayBalloon.value = false;
+    }, 2000);
+  }
 });
 
 const statusColor = computed(() => {
@@ -51,7 +63,7 @@ const winOrLose = computed(() => {
 </script>
 
 <template>
-  <div id="playerInfo" class="text-gray-100">
+  <div id="playerInfo" class="text-gray-100 relative">
     <div
       v-if="table.gamePhase === 'evaluatingEnd'"
       class="text-3xl font-bold"
@@ -78,10 +90,55 @@ const winOrLose = computed(() => {
         >{{ displayScore }}
       </span>
     </div>
+    <Transition name="fade">
+      <div
+        v-if="table.gamePhase == 'acting' && isDisplayBalloon == true"
+        class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
+      >
+        <p class="sm:text-xl text-lg font-bold">
+          {{ player.gameStatus }}
+        </p>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
+.status-balloon {
+  display: inline-block;
+  padding: 7px 10px;
+  max-width: 100%;
+  color: #030303;
+  font-size: 16px;
+  background: #f9f9f9;
+  border-radius: 15px;
+}
+
+.status-balloon:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -15px;
+  border: 15px solid transparent;
+  border-top: 15px solid #f9f9f9;
+}
+
+.status-balloon p {
+  margin: 0;
+  padding: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .blinkTurnPlayer {
   animation: blink 0.8s ease-in-out infinite alternate;
 }
