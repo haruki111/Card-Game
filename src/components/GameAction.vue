@@ -28,7 +28,7 @@ const action = (action: string) => {
 };
 </script>
 <template>
-  <div class="fixed z-10 inset-0 mt-36">
+  <div class="fixed z-10 inset-0 mt-48">
     <div class="flex items-center justify-center min-h-screen">
       <div class="action mt-5 flex justify-center">
         <button
