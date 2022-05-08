@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
+import type { BlackJackTable } from "@/models/table/blackjackTable";
 
 import PlayerInfo from "./PlayerInfo.vue";
 import GameCard from "./GameCard.vue";
 
-const table = useTableStore().table;
+let props = defineProps<{
+  index: number;
+}>();
+
+const table = useTableStore().table as BlackJackTable;
+const players = table.players;
+const player = players[props.index];
 
 const playerCardHide = computed(() => {
   if (table.gamePhase == "betting" || table.gamePhase == "distribute")
@@ -18,17 +25,10 @@ const playerCardHide = computed(() => {
     return hideArr;
   }
 });
-
-let props = defineProps<{
-  index: number;
-}>();
-
-const players = table.players;
-const player = players[props.index];
 </script>
 <template>
   <div class="text-center">
-    <PlayerInfo :index="props.index" />
+    <PlayerInfo :player="player" />
     <TransitionGroup
       name="player-cards"
       tag="div"

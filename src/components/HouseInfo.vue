@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
 
 import type { BlackJackTable } from "@/models/table/blackjackTable";
+
 const table = useTableStore().table as BlackJackTable;
 
 const house = table.house;
@@ -20,10 +21,20 @@ const statusColor = computed(() => {
   if (house.gameStatus == "blackjack") return "text-yellow-400";
   return "";
 });
+
+const blinkTurnPlayer = computed(() => {
+  if (table.getTurnPlayer() == house && table.gamePhase !== "evaluatingEnd") {
+    return "blinkTurnPlayer";
+  }
+  return "";
+});
 </script>
 <template>
   <div id="houseInfo" class="text-gray-100 pb-2">
-    <p class="playerName sm:text-3xl text-2xl font-bold mb-2">
+    <p
+      :class="blinkTurnPlayer"
+      class="playerName sm:text-3xl text-2xl font-bold mb-2"
+    >
       {{ house.name }}
     </p>
     <div class="playerStatus text-base">
@@ -39,3 +50,17 @@ const statusColor = computed(() => {
     </div>
   </div>
 </template>
+<style scoped>
+.blinkTurnPlayer {
+  animation: blink 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+</style>

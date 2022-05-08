@@ -1,23 +1,32 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
+import type { Player } from "@/models/player/player";
 
 let props = defineProps<{
-  index: number;
+  player: Player;
 }>();
-
-const players = useTableStore().table.players;
-const player = players[props.index];
+const table = useTableStore().table;
 
 const statusColor = computed(() => {
-  if (player.gameStatus == "blackjack") return "text-yellow-400";
+  if (props.player.gameStatus == "blackjack") return "text-yellow-400";
+  return "";
+});
+
+const blinkTurnPlayer = computed(() => {
+  if (table.getTurnPlayer() == props.player) {
+    return "blinkTurnPlayer";
+  }
   return "";
 });
 </script>
 
 <template>
   <div id="playerInfo" class="text-gray-100">
-    <p class="playerName sm:text-3xl text-2xl font-bold mb-2">
+    <p
+      :class="blinkTurnPlayer"
+      class="playerName sm:text-3xl text-2xl font-bold mb-2"
+    >
       {{ player.name }}
     </p>
     <div class="playerStatus text-base flex justify-between">
@@ -35,3 +44,18 @@ const statusColor = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.blinkTurnPlayer {
+  animation: blink 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+</style>
