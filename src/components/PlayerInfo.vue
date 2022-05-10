@@ -26,7 +26,7 @@ watch(props.player, (n) => {
 const isDisplayBalloon = ref(false);
 
 watch(props.player, (n) => {
-  const arr = ["surrender", "stand", "hit", "double", "bust"];
+  const arr = ["surrender", "stand", "hit", "double", "bust", "blackjack"];
   if (arr.includes(n.gameStatus)) {
     isDisplayBalloon.value = true;
     setTimeout(() => {
@@ -36,7 +36,9 @@ watch(props.player, (n) => {
 });
 
 const statusColor = computed(() => {
-  if (props.player.gameStatus == "blackjack") return "text-yellow-400";
+  if (props.player.gameStatus == "blackjack") {
+    return "text-yellow-500";
+  }
   return "";
 });
 
@@ -49,15 +51,20 @@ const blinkTurnPlayer = computed(() => {
 
 const displayScore = computed(() => {
   const player = props.player;
-  if (!player.hand.length) return 0;
-  else return player.getHandScore();
+  if (!player.hand.length) {
+    return 0;
+  }
+  return player.getHandScore();
 });
 
 const winOrLose = computed(() => {
   const player = props.player;
   const newestGrade = player.grades[player.grades.length - 1];
-  if (newestGrade == 1) return "win";
-  else if (newestGrade == 0) return "draw";
+  if (newestGrade == 1) {
+    return "win";
+  } else if (newestGrade == 0) {
+    return "draw";
+  }
   return "lose";
 });
 </script>
@@ -77,15 +84,13 @@ const winOrLose = computed(() => {
     >
       {{ player.name }}
     </p>
-    <div class="playerStatus text-base flex justify-between">
-      <p class="px-1">
-        S:<span :class="statusColor">{{ player.gameStatus }}</span>
-      </p>
-      <p class="px-1">B:{{ tweened.bet.toFixed(0) }}</p>
-      <p class="px-1">C:{{ tweened.chips.toFixed(0) }}</p>
+    <div class="playerStatus text-base flex justify-center">
+      <p class="px-2 w-16">B:{{ tweened.bet.toFixed(0) }}</p>
+      <p class="px-2 w-16">C:{{ tweened.chips.toFixed(0) }}</p>
     </div>
     <div id="playerScore" class="pb-2">
       <span
+        :class="statusColor"
         class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
         >{{ displayScore }}
       </span>

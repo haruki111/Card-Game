@@ -65,54 +65,52 @@ const betChips = () => {
 };
 </script>
 <template>
-  <div class="fixed z-10 inset-0 mt-60">
-    <div class="flex flex-col items-center justify-center min-h-screen">
-      <div class="flex justify-center items-center h-16 mt-4">
-        <TransitionGroup
-          name="betChip"
-          tag="div"
-          v-for="[key, sheets] in Array.from(chipsInBet)"
-          :key="key"
-          class="flex px-2"
-          @click="minusBet(key)"
-        >
-          <div
-            v-for="sheet in sheets"
-            :key="sheet"
-            :style="stackChipStyle(sheet)"
-          >
-            <img :src="table.betDenominations[key]" class="h-16" alt="" />
-          </div>
-        </TransitionGroup>
-      </div>
-
+  <div class="flex flex-col items-center justify-center">
+    <div class="flex justify-center items-center h-16 mt-4">
       <TransitionGroup
-        name="chipList"
+        name="betChip"
         tag="div"
-        class="h-16 mt-4 flex justify-center"
+        v-for="[key, sheets] in Array.from(chipsInBet)"
+        :key="key"
+        class="flex px-2"
+        @click="minusBet(key)"
       >
-        <div v-for="chip in renderChips" :key="chip" class="px-2">
-          <img
-            @click="plusBet(chip)"
-            :src="table.betDenominations[chip]"
-            class="h-16"
-            alt=""
-          />
+        <div
+          v-for="sheet in sheets"
+          :key="sheet"
+          :style="stackChipStyle(sheet)"
+        >
+          <img :src="table.betDenominations[key]" class="h-16" alt="" />
         </div>
       </TransitionGroup>
+    </div>
 
-      <div class="mt-4 flex justify-center">
-        <button
-          :disabled="validBet"
-          :class="disabledBgBlueColor"
-          id="betSubmitBtn"
-          type="submit"
-          class="text-white focus:outline-none focus:ring-4 focus:ring-blue-500 font-medium rounded-full text-sm px-5 py-2.5 text-center"
-          @click="betChips"
-        >
-          Submit your bet for {{ bet }}
-        </button>
+    <TransitionGroup
+      name="chipList"
+      tag="div"
+      class="h-16 mt-4 flex justify-center"
+    >
+      <div v-for="chip in renderChips" :key="chip" class="px-2">
+        <img
+          @click="plusBet(chip)"
+          :src="table.betDenominations[chip]"
+          class="h-16"
+          alt=""
+        />
       </div>
+    </TransitionGroup>
+
+    <div class="mt-4 flex justify-center">
+      <button
+        :disabled="validBet"
+        :class="disabledBgBlueColor"
+        id="betSubmitBtn"
+        type="submit"
+        class="text-white focus:outline-none focus:ring-4 focus:ring-blue-500 font-medium rounded-full text-sm px-5 py-2.5 text-center"
+        @click="betChips"
+      >
+        Submit your bet for {{ bet }}
+      </button>
     </div>
   </div>
 </template>

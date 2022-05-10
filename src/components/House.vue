@@ -31,7 +31,7 @@ const houseCardHide = computed(() => {
   <TransitionGroup
     name="house-cards"
     tag="div"
-    class="flex justify-center pb-2"
+    class="flex justify-center h-16"
   >
     <GameCard
       v-for="(card, index) in house.hand"

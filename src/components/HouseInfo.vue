@@ -31,7 +31,7 @@ const blinkTurnPlayer = computed(() => {
 });
 </script>
 <template>
-  <div id="houseInfo" class="text-gray-100 pb-2">
+  <div id="houseInfo" class="text-gray-100">
     <p
       :class="blinkTurnPlayer"
       class="playerName sm:text-3xl text-2xl font-bold mb-2"
