@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
+import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 
 import PlayerInfo from "./PlayerInfo.vue";
 import GameCard from "./GameCard.vue";
@@ -11,7 +12,7 @@ let props = defineProps<{
 }>();
 
 const table = useTableStore().table as BlackJackTable;
-const players = table.players;
+const players = table.players as BlackJackPlayer[];
 const player = players[props.index];
 
 const playerCardHide = computed(() => {

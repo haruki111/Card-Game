@@ -1,5 +1,7 @@
 import type { Player } from "@/models/player/player";
 import { useDeckStore } from "../../stores/deck";
+import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
+import type { Crazy8Player } from "@/models/player/crazy8Player";
 
 export abstract class Table {
   protected _gameType: string;
@@ -9,13 +11,13 @@ export abstract class Table {
   protected _currRound: number;
   protected _gameSpeed: number;
   protected _deck;
-  protected _players: Player[];
+  protected _players: BlackJackPlayer[] | Crazy8Player[];
   constructor(
     gameType: string,
     gamePhase: string,
     round: number,
     gameSpeed: number,
-    players: Player[]
+    players: BlackJackPlayer[] | Crazy8Player[]
   ) {
     this._gameType = gameType;
     this._gamePhase = gamePhase;

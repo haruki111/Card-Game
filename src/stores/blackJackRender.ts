@@ -8,13 +8,17 @@ export const useBlackJackRenderStore = defineStore({
     renderAction: false,
     renderResult: false,
     renderEndResult: false,
+    blinkPlayerName: false,
   }),
   actions: {
     async renderTableHelper(
       userData: number | string | null,
       table: BlackJackTable
     ) {
+      this.blinkPlayerName = true;
       await table.haveTurn(userData);
+      this.blinkPlayerName = false;
+
       setTimeout(() => {
         this.renderTable(table);
       }, 1000 / table.gameSpeed);

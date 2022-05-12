@@ -2,10 +2,17 @@ import { Player } from "@/models/player/player";
 import { GameDecision } from "@/models/gameDecision";
 
 export class BlackJackPlayer extends Player {
+  private _isAction: boolean;
   constructor(name: string, type: string, chips: number) {
     super(name, type, chips);
+    this._isAction = false;
   }
-
+  get isAction() {
+    return this._isAction;
+  }
+  set isAction(flag: boolean) {
+    this._isAction = flag;
+  }
   // gameStatus if(betting, bet, hit)
   public promptPlayer(
     userData: number | string | null,

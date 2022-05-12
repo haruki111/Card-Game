@@ -17,7 +17,7 @@ export class Crazy8Table extends Table {
     gameSpeed: number
   ) {
     const userType = userName.toLowerCase() == "ai" ? "ai" : "user";
-    const players: Player[] = [
+    const players: Crazy8Player[] = [
       new Crazy8Player("player1", "ai", 0),
       new Crazy8Player("player2", "ai", 0),
       new Crazy8Player(userName, userType, 0),

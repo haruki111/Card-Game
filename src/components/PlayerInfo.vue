@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed, ref, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
-import type { Player } from "@/models/player/player";
+import { useBlackJackRenderStore } from "@/stores/blackJackRender";
+
+import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
 import { gsap } from "gsap";
 
 let props = defineProps<{
-  player: Player;
+  player: BlackJackPlayer;
 }>();
 const table = useTableStore().table as BlackJackTable;
+const render = useBlackJackRenderStore();
 
 const tweened = reactive({
   chips: props.player.chips,
@@ -25,13 +28,16 @@ watch(props.player, (n) => {
 
 const isDisplayBalloon = ref(false);
 
-watch(props.player, (n) => {
+watch(props.player, (player) => {
   const arr = ["surrender", "stand", "hit", "double", "bust", "blackjack"];
-  if (arr.includes(n.gameStatus)) {
+  if (
+    arr.includes(player.gameStatus) &&
+    (player.isAction || player.gameStatus === "bust")
+  ) {
     isDisplayBalloon.value = true;
     setTimeout(() => {
       isDisplayBalloon.value = false;
-    }, 2000);
+    }, 500);
   }
 });
 
@@ -43,7 +49,10 @@ const statusColor = computed(() => {
 });
 
 const blinkTurnPlayer = computed(() => {
-  if (table.getTurnPlayer() == props.player) {
+  if (
+    table.getTurnPlayer() == props.player &&
+    (render.blinkPlayerName || render.renderAction || render.renderBet)
+  ) {
     return "blinkTurnPlayer";
   }
   return "";
