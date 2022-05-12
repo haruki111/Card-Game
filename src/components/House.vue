@@ -27,7 +27,7 @@ const houseCardHide = computed(() => {
 });
 </script>
 <template>
-  <HouseInfo :isHide="houseCardHide[1]" />
+  <HouseInfo :isHide="houseCardHide" />
   <TransitionGroup
     name="house-cards"
     tag="div"

@@ -9,6 +9,7 @@ import { gsap } from "gsap";
 
 let props = defineProps<{
   player: BlackJackPlayer;
+  isHide: boolean[];
 }>();
 const table = useTableStore().table as BlackJackTable;
 const render = useBlackJackRenderStore();
@@ -62,8 +63,10 @@ const displayScore = computed(() => {
   const player = props.player;
   if (!player.hand.length) {
     return 0;
+  } else if (!props.isHide[0]) {
+    return player.getHandScore();
   }
-  return player.getHandScore();
+  return 0;
 });
 
 const winOrLose = computed(() => {

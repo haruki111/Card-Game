@@ -9,13 +9,17 @@ const table = useTableStore().table as BlackJackTable;
 const house = table.house;
 
 let props = defineProps<{
-  isHide: boolean;
+  isHide: boolean[];
 }>();
 
 const displayHouseScore = computed(() => {
   if (!house.hand.length) return 0;
-  else if (props.isHide == true) return house.hand[0].getRankNumber();
-  return house.getHandScore();
+  else if (!props.isHide[0] && props.isHide[1])
+    return house.hand[0].getRankNumber();
+  else if (!props.isHide[1]) {
+    return house.getHandScore();
+  }
+  return 0;
 });
 
 const statusColor = computed(() => {

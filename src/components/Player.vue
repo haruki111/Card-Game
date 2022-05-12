@@ -29,7 +29,7 @@ const playerCardHide = computed(() => {
 </script>
 <template>
   <div class="text-center">
-    <PlayerInfo :player="player" />
+    <PlayerInfo :player="player" :isHide="playerCardHide" />
     <TransitionGroup
       name="player-cards"
       tag="div"
