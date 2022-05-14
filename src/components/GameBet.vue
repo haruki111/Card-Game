@@ -24,10 +24,10 @@ const disabledBgBlueColor = computed(() => {
 
 const renderChips = computed(() => {
   let chipsArr: number[] = [];
-  for (let chips in table.betDenominations) {
+  table.betDenominations.forEach((img, chips) => {
     if ((user.chips - bet.value) / Number(chips) >= 1)
       chipsArr.push(Number(chips));
-  }
+  });
 
   return chipsArr;
 });
@@ -80,7 +80,7 @@ const betChips = () => {
           :key="sheet"
           :style="stackChipStyle(sheet)"
         >
-          <img :src="table.betDenominations[key]" class="h-16" alt="" />
+          <img :src="table.betDenominations.get(key)" class="h-16" alt="" />
         </div>
       </TransitionGroup>
     </div>
@@ -93,7 +93,7 @@ const betChips = () => {
       <div v-for="chip in renderChips" :key="chip" class="px-2">
         <img
           @click="plusBet(chip)"
-          :src="table.betDenominations[chip]"
+          :src="table.betDenominations.get(chip)"
           class="h-16"
           alt=""
         />

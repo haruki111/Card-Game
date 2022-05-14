@@ -11,17 +11,20 @@ export const useBlackJackRenderStore = defineStore({
     blinkPlayerName: false,
   }),
   actions: {
-    async renderTableHelper(
-      userData: number | string | null,
-      table: BlackJackTable
-    ) {
+    renderTableHelper(userData: number | string | null, table: BlackJackTable) {
+      let timer = 1000;
+      const slowSpeedStatus = ["stand", "surrender", "double", "bust"];
+      if (slowSpeedStatus.includes(table.getTurnPlayer().gameStatus)) {
+        timer = 500;
+      } else if (table.getTurnPlayer().type === "user") {
+        timer = 0;
+      }
       this.blinkPlayerName = true;
-      await table.haveTurn(userData);
-      this.blinkPlayerName = false;
-
-      setTimeout(() => {
+      setTimeout(async () => {
+        await table.haveTurn(userData);
+        this.blinkPlayerName = false;
         this.renderTable(table);
-      }, 1000 / table.gameSpeed);
+      }, timer);
     },
 
     renderTable(table: BlackJackTable) {

@@ -3,7 +3,7 @@ import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
 import { Card } from "@/stores/card";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
-import Crazy8Player from "../components/Crazy8Player.vue";
+import Crazy8Player from "../components/player/Crazy8Player.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
 import Crazy8EndResult from "@/components/results/Crazy8EndResult.vue";

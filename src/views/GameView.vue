@@ -2,28 +2,28 @@
 import { useTableStore } from "@/stores/table";
 import { useBlackJackRenderStore } from "@/stores/blackJackRender";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
-import House from "../components/House.vue";
-import Player from "../components/Player.vue";
+import BJHouse from "../components/player/BJHouse.vue";
+import BJPlayer from "../components/player/BJPlayer.vue";
 import GameAction from "@/components/GameAction.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameBet from "@/components/GameBet.vue";
-import BlackJackEndResult from "../components/results/BlackJackEndResult.vue";
+import BJEndResult from "../components/results/BJEndResult.vue";
 import GameCard from "@/components/GameCard.vue";
 
 const table = useTableStore().table as BlackJackTable;
 const render = useBlackJackRenderStore();
 
-render.renderTable(table);
-
 const stackDeckStyle = (index: number) => {
   if (index == 0) return "ml-0";
   return "-ml-12";
 };
+
+render.renderTable(table);
 </script>
 <template>
   <div class="">
     <div id="houseWrap" class="flex justify-start flex-col text-center h-48">
-      <House />
+      <BJHouse />
     </div>
     <div class="flex justify-center items-center mt-5">
       <TransitionGroup
@@ -44,7 +44,7 @@ const stackDeckStyle = (index: number) => {
       </TransitionGroup>
     </div>
     <div id="playersWrap" class="flex justify-around mt-5">
-      <Player
+      <BJPlayer
         v-for="(player, index) in table.players"
         :key="index"
         :index="index"
@@ -63,7 +63,7 @@ const stackDeckStyle = (index: number) => {
         v-else-if="render.renderBet"
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       />
-      <BlackJackEndResult v-else-if="render.renderEndResult" />
+      <BJEndResult v-else-if="render.renderEndResult" />
     </Transition>
   </div>
 </template>

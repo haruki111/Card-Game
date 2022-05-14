@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
-import HouseInfo from "./HouseInfo.vue";
-import GameCard from "./GameCard.vue";
+import BJHouseInfo from "./BJHouseInfo.vue";
+import GameCard from "../GameCard.vue";
 
 import type { BlackJackTable } from "@/models/table/blackjackTable";
 
@@ -27,7 +27,7 @@ const houseCardHide = computed(() => {
 });
 </script>
 <template>
-  <HouseInfo :isHide="houseCardHide" />
+  <BJHouseInfo :isHide="houseCardHide" />
   <TransitionGroup
     name="house-cards"
     tag="div"

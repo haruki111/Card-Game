@@ -20,12 +20,7 @@ interface Result {
 export class BlackJackTable extends Table {
   private _house: BlackJackPlayer;
   private _nextGamePhase: string;
-  private _betDenominations: {
-    5: string;
-    20: string;
-    50: string;
-    100: string;
-  };
+  private _betDenominations: Map<number, string>;
   private _resultsLog: {
     round: number;
     result: Result[];
@@ -47,12 +42,12 @@ export class BlackJackTable extends Table {
     this._house = new BlackJackPlayer("house", "house", -1);
     this._nextGamePhase = "";
     this._resultsLog = [];
-    this._betDenominations = {
-      5: chipNum5,
-      20: chipNum20,
-      50: chipNum50,
-      100: chipNum100,
-    };
+    this._betDenominations = new Map([
+      [5, chipNum5],
+      [20, chipNum20],
+      [50, chipNum50],
+      [100, chipNum100],
+    ]);
   }
 
   get house(): BlackJackPlayer {
@@ -67,7 +62,7 @@ export class BlackJackTable extends Table {
     this._nextGamePhase = str;
   }
 
-  get betDenominations() {
+  get betDenominations(): Map<number, string> {
     return this._betDenominations;
   }
 
@@ -216,6 +211,7 @@ export class BlackJackTable extends Table {
         const haveTurnBettingHelper = async () => {
           await this.evaluateMove(player, gameDecision);
           if (this.onLastPlayer()) {
+            this.gamePhase = "assignPlayerHands";
             await this.assignPlayerHands(); //2枚カードを割り当て
             this.gamePhase = "acting";
             this.house.gameStatus = "waitingForActions";
@@ -272,7 +268,7 @@ export class BlackJackTable extends Table {
             setTimeout(() => {
               this.nextRound();
               resolve("success");
-            }, 3000);
+            }, 2000);
           });
           resolve("success");
         };

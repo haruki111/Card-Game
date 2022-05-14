@@ -4,8 +4,8 @@ import { useTableStore } from "@/stores/table";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
 import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 
-import PlayerInfo from "./PlayerInfo.vue";
-import GameCard from "./GameCard.vue";
+import BJPlayerInfo from "./BJPlayerInfo.vue";
+import GameCard from "../GameCard.vue";
 
 let props = defineProps<{
   index: number;
@@ -29,7 +29,7 @@ const playerCardHide = computed(() => {
 </script>
 <template>
   <div class="text-center">
-    <PlayerInfo :player="player" :isHide="playerCardHide" />
+    <BJPlayerInfo :player="player" :isHide="playerCardHide" />
     <TransitionGroup
       name="player-cards"
       tag="div"

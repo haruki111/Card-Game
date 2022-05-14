@@ -19,20 +19,27 @@ const tweened = reactive({
   bet: props.player.bet,
 });
 
-watch(props.player, (n) => {
+watch(props.player, (player) => {
   gsap.to(tweened, {
     duration: 0.5,
-    chips: Number(n.chips) || 0,
-    bet: Number(n.bet) || 0,
+    chips: Number(player.chips) || 0,
+    bet: Number(player.bet) || 0,
   });
 });
 
 const isDisplayBalloon = ref(false);
 
 watch(props.player, (player) => {
-  const arr = ["surrender", "stand", "hit", "double", "bust", "blackjack"];
+  const displayStatus = [
+    "surrender",
+    "stand",
+    "hit",
+    "double",
+    "bust",
+    "blackjack",
+  ];
   if (
-    arr.includes(player.gameStatus) &&
+    displayStatus.includes(player.gameStatus) &&
     (player.isAction || player.gameStatus === "bust")
   ) {
     isDisplayBalloon.value = true;
@@ -51,7 +58,8 @@ const statusColor = computed(() => {
 
 const blinkTurnPlayer = computed(() => {
   if (
-    table.getTurnPlayer() == props.player &&
+    table.getTurnPlayer() === props.player &&
+    table.gamePhase !== "assignPlayerHands" &&
     (render.blinkPlayerName || render.renderAction || render.renderBet)
   ) {
     return "blinkTurnPlayer";
