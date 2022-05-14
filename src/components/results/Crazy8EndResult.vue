@@ -10,6 +10,7 @@ const render = useCrazy8RenderStore();
 const router = useRouter();
 
 const players = table.players;
+let sortPlayers: Player[];
 
 const tableHeadsRound = (): string[] => {
   const tableHeads: string[] = ["name", "score"];
@@ -31,17 +32,23 @@ const toHome = (): void => {
 };
 
 const sortRankPlayers = (players: Player[]) => {
-  players.sort(function (a, b) {
+  sortPlayers = Array.from(players).sort(function (a, b) {
     if (a.chips > b.chips) return -1;
     if (a.chips < b.chips) return 1;
     return 0;
   });
-  return players;
+  return sortPlayers;
 };
 
-const rankAndName = (index: number, name: string): string => {
+const rankAndName = (index: number, player: Player): string => {
+  for (let i = 0; i < index + 1; i++) {
+    if (sortPlayers[i].chips == player.chips && sortPlayers[i] != player) {
+      index--;
+    }
+  }
+
   let arr = ["st", "nd", "rd", "th"];
-  return index + 1 + arr[index] + "   " + name;
+  return index + 1 + arr[index] + "   " + player.name;
 };
 </script>
 
@@ -77,7 +84,7 @@ const rankAndName = (index: number, name: string): string => {
                 scope="row"
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
               >
-                {{ rankAndName(index, player.name) }}
+                {{ rankAndName(index, player) }}
               </th>
               <td class="px-6 py-4">
                 {{ player.chips }}

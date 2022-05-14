@@ -7,7 +7,7 @@ import Player from "../components/Player.vue";
 import GameAction from "@/components/GameAction.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameBet from "@/components/GameBet.vue";
-import GameEndResult from "../components/GameEndResult.vue";
+import BlackJackEndResult from "../components/results/BlackJackEndResult.vue";
 import GameCard from "@/components/GameCard.vue";
 
 const table = useTableStore().table as BlackJackTable;
@@ -63,7 +63,7 @@ const stackDeckStyle = (index: number) => {
         v-else-if="render.renderBet"
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       />
-      <GameEndResult v-else-if="render.renderEndResult" />
+      <BlackJackEndResult v-else-if="render.renderEndResult" />
     </Transition>
   </div>
 </template>
