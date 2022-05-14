@@ -241,29 +241,10 @@ export class BlackJackTable extends Table {
         };
         haveTurnActingHelper();
       } else if (this.gamePhase == "evaluatingWinners") {
-        if (this.house.gameStatus == "waitingForActions") {
-          if (this.house.getHandScore() == 21 && this.house.hand.length == 2)
-            this.house.gameStatus = "blackjack";
-          else if (this.house.getHandScore() < 17)
-            this.house.gameStatus = "hit";
-          else this.house.gameStatus = "bet";
-          resolve("success");
-        } else if (this.house.gameStatus == "hit") {
-          this.house.hand.push(this.deck.drawOne());
-          if (this.house.getHandScore() > 21) this.house.gameStatus = "bust";
-          else if (this.house.getHandScore() >= 17)
-            this.house.gameStatus = "bet";
-          resolve("success");
-        } else {
-          for (const player of this.players) {
-            this.blackjackEvaluate(player);
-          }
-          this.gamePhase = "evaluatingEnd";
-          resolve("success");
-        }
+        this.haveTurnEvaluatingWinnersHelper(resolve);
       } else if (this.gamePhase == "evaluatingEnd") {
-        this.blackjackGetRoundResults();
         const haveTurnEvaluatingHelper = async () => {
+          this.blackjackGetRoundResults();
           await new Promise((resolve) => {
             setTimeout(() => {
               this.nextRound();
@@ -272,9 +253,31 @@ export class BlackJackTable extends Table {
           });
           resolve("success");
         };
+
         haveTurnEvaluatingHelper();
       }
     });
+  }
+
+  haveTurnEvaluatingWinnersHelper(resolve: (value: unknown) => void): void {
+    if (this.house.gameStatus == "waitingForActions") {
+      if (this.house.getHandScore() == 21 && this.house.hand.length == 2)
+        this.house.gameStatus = "blackjack";
+      else if (this.house.getHandScore() < 17) this.house.gameStatus = "hit";
+      else this.house.gameStatus = "bet";
+      resolve("success");
+    } else if (this.house.gameStatus == "hit") {
+      this.house.hand.push(this.deck.drawOne());
+      if (this.house.getHandScore() > 21) this.house.gameStatus = "bust";
+      else if (this.house.getHandScore() >= 17) this.house.gameStatus = "bet";
+      resolve("success");
+    } else {
+      for (const player of this.players) {
+        this.blackjackEvaluate(player);
+      }
+      this.gamePhase = "evaluatingEnd";
+      resolve("success");
+    }
   }
 
   blackjackEvaluate(player: Player | BlackJackPlayer): void {

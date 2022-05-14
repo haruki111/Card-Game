@@ -148,8 +148,8 @@ export class Crazy8Table extends Table {
     return new Promise((resolve) => {
       const player = this.getTurnPlayer() as Crazy8Player;
       if (this.gamePhase === "distribute") {
-        const haveTurnDistributeHelper = (time: number) =>
-          new Promise((resolve) => {
+        const haveTurnDistributeHelper = (time: number) => {
+          return new Promise((resolve) => {
             setTimeout(() => {
               this.cardPlaceArr.push(this.deck.drawOne());
               this.gamePhase = "play";
@@ -157,6 +157,7 @@ export class Crazy8Table extends Table {
               resolve("success");
             }, time);
           });
+        };
 
         const haveTurnDistribute = async () => {
           await this.assignPlayerHands();
@@ -179,10 +180,17 @@ export class Crazy8Table extends Table {
           } else resolve("success");
         };
         haveTurnPlay();
-      } else if (this.gamePhase === "evaluatingDeckRunsOut") {
-        this.Crazy8EvaluateDeckRunsOut();
+      } else if (
+        this.gamePhase === "evaluatingDeckRunsOut" ||
+        this.gamePhase === "evaluatingWinners"
+      ) {
+        if (this.gamePhase === "evaluatingDeckRunsOut") {
+          this.Crazy8EvaluateDeckRunsOut();
+        } else if (this.gamePhase === "evaluatingWinners") {
+          this.Crazy8EvaluateDeckRunsOut();
+        }
         this.gamePhase = "betweenGames";
-        const temp = async () => {
+        const haveTurnEvaluatingHelper = async () => {
           await new Promise((resolve) => {
             setTimeout(() => {
               this.nextRound();
@@ -191,20 +199,7 @@ export class Crazy8Table extends Table {
           });
           resolve("success");
         };
-        temp();
-      } else if (this.gamePhase === "evaluatingWinners") {
-        this.crazy8Evaluate(player);
-        this.gamePhase = "betweenGames";
-        const temp = async () => {
-          await new Promise((resolve) => {
-            setTimeout(() => {
-              this.nextRound();
-              resolve("success");
-            }, 3000);
-          });
-          resolve("success");
-        };
-        temp();
+        haveTurnEvaluatingHelper();
       }
     });
   }

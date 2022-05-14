@@ -3,10 +3,18 @@ import { GameDecision } from "@/models/gameDecision";
 
 export class BlackJackPlayer extends Player {
   private _isAction: boolean;
+
+  static readonly mapAction: Map<string, string> = new Map([
+    ["H", "hit"],
+    ["D", "double"],
+    ["S", "stand"],
+    ["R", "surrender"],
+  ]);
   constructor(name: string, type: string, chips: number) {
     super(name, type, chips);
     this._isAction = false;
   }
+
   get isAction() {
     return this._isAction;
   }
@@ -83,13 +91,6 @@ export class BlackJackPlayer extends Player {
       ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
     ];
 
-    const mapAction: Map<string, string> = new Map([
-      ["H", "hit"],
-      ["D", "double"],
-      ["S", "stand"],
-      ["R", "surrender"],
-    ]);
-
     const playerSelectArr: number[] = [13, 14, 15, 16, 17, 18, 19, 20];
     const houseSelectArr: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
@@ -99,7 +100,7 @@ export class BlackJackPlayer extends Player {
     if (playerScore > 20) playerSelect = 7;
 
     let playerAction = String(
-      mapAction.get(softHand[playerSelect][houseSelect])
+      BlackJackPlayer.mapAction.get(softHand[playerSelect][houseSelect])
     );
     if (this.hand.length > 2 && playerAction == "double") playerAction = "hit";
     if (playerAction == "double" && this.bet > this.chips) playerAction = "hit";
@@ -121,13 +122,6 @@ export class BlackJackPlayer extends Player {
       ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"],
     ];
 
-    const mapAction: Map<string, string> = new Map([
-      ["H", "hit"],
-      ["D", "double"],
-      ["S", "stand"],
-      ["R", "surrender"],
-    ]);
-
     const playerSelectArr = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
     const houseSelectArr = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
@@ -137,7 +131,7 @@ export class BlackJackPlayer extends Player {
     if (playerScore > 17) playerSelect = 9;
 
     let playerAction = String(
-      mapAction.get(hardHand[playerSelect][houseSelect])
+      BlackJackPlayer.mapAction.get(hardHand[playerSelect][houseSelect])
     );
 
     if (
