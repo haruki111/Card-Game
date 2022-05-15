@@ -10,7 +10,8 @@ const table = useTableStore().table as BlackJackTable;
 const house = table.house;
 
 const houseCardHide = computed(() => {
-  if (table.gamePhase == "betting") return [true, true];
+  if (table.gamePhase == "betting" || table.gamePhase == "assignPlayerHands")
+    return [true, true];
   else if (
     table.gamePhase != "evaluatingWinners" &&
     table.gamePhase != "evaluatingEnd" &&

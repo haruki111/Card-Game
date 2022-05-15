@@ -16,7 +16,7 @@ const players = table.players as BlackJackPlayer[];
 const player = players[props.index];
 
 const playerCardHide = computed(() => {
-  if (table.gamePhase == "betting" || table.gamePhase == "distribute")
+  if (table.gamePhase == "betting" || table.gamePhase == "assignPlayerHands")
     return [true, true];
   else {
     let hideArr: boolean[] = [];
