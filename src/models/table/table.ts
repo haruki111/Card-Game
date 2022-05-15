@@ -1,4 +1,3 @@
-import type { Player } from "@/models/player/player";
 import { useDeckStore } from "../../stores/deck";
 import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import type { Crazy8Player } from "@/models/player/crazy8Player";
@@ -75,6 +74,10 @@ export abstract class Table {
 
   public onLastPlayer(): boolean {
     return this.getTurnPlayer() == this.players[this.players.length - 1];
+  }
+
+  public onFirstPlayer(): boolean {
+    return this.getTurnPlayer() == this.players[0];
   }
 
   abstract getTurnPlayer(): BlackJackPlayer | Crazy8Player;

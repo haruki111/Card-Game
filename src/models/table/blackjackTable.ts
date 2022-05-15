@@ -1,4 +1,5 @@
 import { Table } from "./table";
+import { useSpeechStore } from "@/stores/speech";
 import { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import type { Player } from "@/models/player/player";
 
@@ -160,19 +161,23 @@ export class BlackJackTable extends Table {
         resolve("success");
       } else if (this.gamePhase == "acting") {
         let isDraw = false;
-        if (gameDecision.getAction() == "surrender") {
-          player.gameStatus = "surrender";
+        const actinon = gameDecision.getAction() as string;
+
+        player.gameStatus = actinon;
+        useSpeechStore().speech(
+          player.gameStatus,
+          this.players.indexOf(player)
+        );
+
+        if (actinon == "surrender") {
           player.bet -= Math.ceil(player.bet / 2);
           player.chips += player.bet;
           player.isAction = true;
-        } else if (gameDecision.getAction() == "stand") {
-          player.gameStatus = "stand";
+        } else if (actinon === "stand") {
           player.isAction = true;
-        } else if (gameDecision.getAction() == "hit") {
-          player.gameStatus = "hit";
+        } else if (actinon === "hit") {
           isDraw = true;
-        } else if (gameDecision.getAction() == "double") {
-          player.gameStatus = "double";
+        } else if (actinon === "double") {
           player.bet *= 2;
           player.chips -= player.bet / 2;
           isDraw = true;
@@ -186,6 +191,10 @@ export class BlackJackTable extends Table {
             if (player.getHandScore() > 21) {
               setTimeout(() => {
                 player.gameStatus = "bust";
+                useSpeechStore().speech(
+                  player.gameStatus,
+                  this.players.indexOf(player)
+                );
                 resolve("success");
               }, 200);
             } else {
@@ -201,8 +210,10 @@ export class BlackJackTable extends Table {
 
   validBlackJack(): void {
     for (const player of this.players) {
-      if (player.getHandScore() == 21 && player.hand.length == 2)
+      if (player.getHandScore() == 21 && player.hand.length == 2) {
         player.gameStatus = "blackjack";
+        useSpeechStore().mcSpeech(player.gameStatus);
+      }
     }
   }
 

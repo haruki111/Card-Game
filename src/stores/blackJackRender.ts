@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useSpeechStore } from "@/stores/speech";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
 
 export const useBlackJackRenderStore = defineStore({
@@ -29,7 +30,9 @@ export const useBlackJackRenderStore = defineStore({
 
     renderTable(table: BlackJackTable) {
       const player = table.getTurnPlayer();
-
+      if (table.gamePhase === "betting" && table.onFirstPlayer()) {
+        useSpeechStore().mcSpeech("Round" + table.currRound);
+      }
       if (table.gamePhase == "end") this.renderEndResult = true;
       else if (player.type == "user") {
         if (table.gamePhase == "betting") {

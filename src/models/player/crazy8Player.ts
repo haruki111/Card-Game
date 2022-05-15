@@ -6,31 +6,30 @@ export class Crazy8Player extends Player {
   private _cardSuitMap: Map<string, Card[]>;
   private _cardRankMap: Map<string, Card[]>;
   private _card8Arr: Card[];
-  public readonly initialCardSuitMap: Map<string, Card[]> = new Map([
-    ["H", []],
-    ["D", []],
-    ["C", []],
-    ["S", []],
-  ]);
-  public readonly initialCardRankMap: Map<string, Card[]> = new Map([
-    ["A", []],
-    ["2", []],
-    ["3", []],
-    ["4", []],
-    ["5", []],
-    ["6", []],
-    ["7", []],
-    ["9", []],
-    ["10", []],
-    ["J", []],
-    ["Q", []],
-    ["K", []],
-  ]);
 
   constructor(name: string, type: string, chips: number) {
     super(name, type, chips);
-    this._cardSuitMap = this.initialCardSuitMap;
-    this._cardRankMap = this.initialCardRankMap;
+    this._cardSuitMap = new Map([
+      ["H", []],
+      ["D", []],
+      ["C", []],
+      ["S", []],
+    ]);
+    this._cardRankMap = new Map([
+      ["A", []],
+      ["2", []],
+      ["3", []],
+      ["4", []],
+      ["5", []],
+      ["6", []],
+      ["7", []],
+      ["9", []],
+      ["10", []],
+      ["J", []],
+      ["Q", []],
+      ["K", []],
+    ]);
+
     this._card8Arr = [];
   }
 

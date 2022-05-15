@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useTableStore } from "@/stores/table";
+import { useSpeechStore } from "@/stores/speech";
 const table = useTableStore();
+const speech = useSpeechStore();
+
+speechSynthesis.onvoiceschanged = () => {
+  speech.appendVoices();
+};
 
 const startGame = () => {
   if (gameSettingHash.name == "") inputs.alert = true;

@@ -3,6 +3,7 @@ import type { GameDecision } from "../gameDecision";
 import type { Player } from "@/models/player/player";
 import { Crazy8Player } from "@/models/player/crazy8Player";
 import type { Card } from "@/stores/card";
+import { useSpeechStore } from "@/stores/speech";
 
 export class Crazy8Table extends Table {
   // gamePhase distribute, play
@@ -75,8 +76,9 @@ export class Crazy8Table extends Table {
             () => {
               this.players[j].drawCard(this.deck.drawOne());
 
-              if (i == howManyDistribute - 1 && j == this.players.length - 1)
+              if (i == howManyDistribute - 1 && j == this.players.length - 1) {
                 resolve("success");
+              }
             },
             300 * (i * this.players.length - 1 + j),
             i,
@@ -110,6 +112,10 @@ export class Crazy8Table extends Table {
       if (gameDecision.getAction() === "draw") {
         if (this.deck.deck.length == 0) {
           player.gameStatus = "path";
+          useSpeechStore().speech(
+            player.gameStatus,
+            this.players.indexOf(player)
+          );
           this.turnCounter++;
           resolve("success");
           return;
@@ -141,6 +147,10 @@ export class Crazy8Table extends Table {
           resolve("success");
         }
       } else if (gameDecision.getAction() === "path") {
+        useSpeechStore().speech(
+          player.gameStatus,
+          this.players.indexOf(player)
+        );
         this.turnCounter++;
         resolve("success");
       }
@@ -213,8 +223,27 @@ export class Crazy8Table extends Table {
     for (const player of this.players) {
       player.hand = [];
       player.gameStatus = "betting";
-      player.cardSuitMap = player.initialCardSuitMap;
-      player.cardRankMap = player.initialCardRankMap;
+      player.cardSuitMap = new Map([
+        ["H", []],
+        ["D", []],
+        ["C", []],
+        ["S", []],
+      ]);
+      player.cardRankMap = new Map([
+        ["A", []],
+        ["2", []],
+        ["3", []],
+        ["4", []],
+        ["5", []],
+        ["6", []],
+        ["7", []],
+        ["9", []],
+        ["10", []],
+        ["J", []],
+        ["Q", []],
+        ["K", []],
+      ]);
+
       player.card8Arr = [];
     }
   }
