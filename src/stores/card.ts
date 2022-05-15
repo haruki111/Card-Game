@@ -32,20 +32,3 @@ export class Card {
     return String(Card.imgMap.get(this.suit));
   }
 }
-
-// export const useCardStore = defineStore({
-//   id: "card",
-//   state: () => ({
-//     suit: "" as string,
-//     rank: "" as string,
-//   }),
-//   getters: {
-//     getRankNumber: (state) => {
-//       if (state.rank == "A") return 11;
-//       else if (state.rank == "J" || state.rank == "Q" || state.rank == "K")
-//         return 10;
-
-//       return Number(state.rank);
-//     },
-//   },
-// });

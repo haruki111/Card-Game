@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
+import type { BlackJackTable } from "@/models/table/blackjackTable";
+import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 
-import PlayerInfo from "./PlayerInfo.vue";
-import GameCard from "./GameCard.vue";
+import BJPlayerInfo from "./BJPlayerInfo.vue";
+import GameCard from "../GameCard.vue";
 
-const table = useTableStore().table;
+let props = defineProps<{
+  index: number;
+}>();
+
+const table = useTableStore().table as BlackJackTable;
+const players = table.players as BlackJackPlayer[];
+const player = players[props.index];
 
 const playerCardHide = computed(() => {
-  if (table.gamePhase == "betting" || table.gamePhase == "distribute")
+  if (table.gamePhase == "betting" || table.gamePhase == "assignPlayerHands")
     return [true, true];
   else {
     let hideArr: boolean[] = [];
@@ -18,21 +26,14 @@ const playerCardHide = computed(() => {
     return hideArr;
   }
 });
-
-let props = defineProps<{
-  index: number;
-}>();
-
-const players = table.players;
-const player = players[props.index];
 </script>
 <template>
   <div class="text-center">
-    <PlayerInfo :index="props.index" />
+    <BJPlayerInfo :player="player" :isHide="playerCardHide" />
     <TransitionGroup
       name="player-cards"
       tag="div"
-      class="flex justify-center pb-2"
+      class="flex justify-center h-16"
     >
       <GameCard
         v-for="(card, index) in player.hand"

@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { useTableStore } from "@/stores/table";
-import { useRenderStore } from "@/stores/render";
+import { useBlackJackRenderStore } from "@/stores/blackJackRender";
 import { useRouter } from "vue-router";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
+import type { Player } from "@/models/player/player";
 
 const table = useTableStore().table as BlackJackTable;
-const render = useRenderStore();
+const render = useBlackJackRenderStore();
 const router = useRouter();
 
 const players = table.players;
+let sortPlayers: Player[];
 
 const tableHeadsRound = (): string[] => {
   const tableHeads: string[] = ["name"];
@@ -18,11 +20,34 @@ const tableHeadsRound = (): string[] => {
   return tableHeads;
 };
 
+const sortRankPlayers = (players: Player[]) => {
+  sortPlayers = Array.from(players).sort(function (a, b) {
+    if (a.chips > b.chips) return -1;
+    if (a.chips < b.chips) return 1;
+    return 0;
+  });
+  return sortPlayers;
+};
+
+const rankAndName = (index: number, player: Player): string => {
+  for (let i = 0; i < index + 1; i++) {
+    if (sortPlayers[i].chips == player.chips && sortPlayers[i] != player) {
+      index--;
+    }
+  }
+  let arr = ["st", "nd", "rd", "th"];
+  return index + 1 + arr[index] + "   " + player.name;
+};
+
+const transitionScore = (round: number, player: Player) => {
+  return table.resultsLog[round - 1].result[players.indexOf(player)].chips;
+};
+
 const toContinue = (): void => {
   render.renderEndResult = false;
   table.formatTable();
   table.formatPlayer();
-  render.renderTable();
+  render.renderTable(table);
 };
 
 const toHome = (): void => {
@@ -57,7 +82,7 @@ const toHome = (): void => {
           </thead>
           <tbody>
             <tr
-              v-for="(player, index) in players"
+              v-for="(player, index) in sortRankPlayers(players)"
               :key="index"
               class="bg-white border-b"
             >
@@ -65,14 +90,14 @@ const toHome = (): void => {
                 scope="row"
                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
               >
-                {{ player.name }}
+                {{ rankAndName(index, player) }}
               </th>
               <td
                 v-for="round in table.currRound"
                 :key="round"
                 class="px-6 py-4"
               >
-                {{ table.resultsLog[round - 1].result[index].chips }}
+                {{ transitionScore(round, player) }}
               </td>
             </tr>
           </tbody>

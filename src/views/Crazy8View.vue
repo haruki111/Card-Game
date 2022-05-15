@@ -3,7 +3,7 @@ import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
 import { Card } from "@/stores/card";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
-import Crazy8Player from "../components/Crazy8Player.vue";
+import Crazy8Player from "../components/player/Crazy8Player.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
 import Crazy8EndResult from "@/components/results/Crazy8EndResult.vue";
@@ -14,8 +14,7 @@ const render = useCrazy8RenderStore();
 const draw = () => {
   const player = table.getTurnPlayer();
   if (render.renderAction == true && player.type == "user") {
-    const drawCard: Card = table.deck.drawOne();
-    player.hand.push(drawCard);
+    player.drawCard(table.deck.drawOne());
   }
 };
 
@@ -23,7 +22,7 @@ const selectSuit = (suit: string) => {
   const cardPlace = table.cardPlaceArr[table.cardPlaceArr.length - 1];
   cardPlace.suit = suit;
   render.renderSelectSuit = false;
-  render.renderTableUserHelper(
+  render.renderTableHelper(
     {
       card: cardPlace,
       nextSuit: suit,
@@ -33,8 +32,8 @@ const selectSuit = (suit: string) => {
 };
 
 const stackDeckStyle = (index: number) => {
-  if (index == 0) return "70px";
-  return "margin-left: -70px";
+  if (index == 0) return "ml-12";
+  return "-ml-12";
 };
 
 render.renderTable(table);
@@ -98,7 +97,8 @@ render.renderTable(table);
             :card="card"
             :isHide="true"
             :rotate="{ isRotate: false, class: '' }"
-            :style="stackDeckStyle(index)"
+            :class="stackDeckStyle(index)"
+            class="mx-0"
           />
         </TransitionGroup>
       </div>
@@ -127,7 +127,7 @@ render.renderTable(table);
     "
     @click="
       render.renderAction = false;
-      render.renderTableUserHelper('path', table);
+      render.renderTableHelper('path', table);
     "
   >
     path

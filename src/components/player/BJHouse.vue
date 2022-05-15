@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTableStore } from "@/stores/table";
-import HouseInfo from "./HouseInfo.vue";
-import GameCard from "./GameCard.vue";
+import BJHouseInfo from "./BJHouseInfo.vue";
+import GameCard from "../GameCard.vue";
 
 import type { BlackJackTable } from "@/models/table/blackjackTable";
 
@@ -10,7 +10,8 @@ const table = useTableStore().table as BlackJackTable;
 const house = table.house;
 
 const houseCardHide = computed(() => {
-  if (table.gamePhase == "betting") return [true, true];
+  if (table.gamePhase == "betting" || table.gamePhase == "assignPlayerHands")
+    return [true, true];
   else if (
     table.gamePhase != "evaluatingWinners" &&
     table.gamePhase != "evaluatingEnd" &&
@@ -27,11 +28,11 @@ const houseCardHide = computed(() => {
 });
 </script>
 <template>
-  <HouseInfo :isHide="houseCardHide[1]" />
+  <BJHouseInfo :isHide="houseCardHide" />
   <TransitionGroup
     name="house-cards"
     tag="div"
-    class="flex justify-center pb-2"
+    class="flex justify-center h-16"
   >
     <GameCard
       v-for="(card, index) in house.hand"
