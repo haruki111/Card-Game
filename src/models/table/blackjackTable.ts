@@ -79,7 +79,11 @@ export class BlackJackTable extends Table {
     this._resultsLog = log;
   }
 
-  getTurnPlayer(): Player {
+  get players() {
+    return this._players as BlackJackPlayer[];
+  }
+
+  getTurnPlayer(): BlackJackPlayer {
     if (this.turnCounter == -1) return this.house;
     const turnPlayer = this.turnCounter % this.players.length;
     return turnPlayer == 0

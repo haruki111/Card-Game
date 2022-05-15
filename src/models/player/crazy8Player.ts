@@ -3,9 +3,58 @@ import { GameDecision } from "@/models/gameDecision";
 import type { Card } from "@/stores/card";
 
 export class Crazy8Player extends Player {
+  private _cardSuitMap: Map<string, Card[]>;
+  private _cardRankMap: Map<string, Card[]>;
+  private _card8Arr: Card[];
+  public readonly initialCardSuitMap: Map<string, Card[]> = new Map([
+    ["H", []],
+    ["D", []],
+    ["C", []],
+    ["S", []],
+  ]);
+  public readonly initialCardRankMap: Map<string, Card[]> = new Map([
+    ["A", []],
+    ["2", []],
+    ["3", []],
+    ["4", []],
+    ["5", []],
+    ["6", []],
+    ["7", []],
+    ["9", []],
+    ["10", []],
+    ["J", []],
+    ["Q", []],
+    ["K", []],
+  ]);
+
   constructor(name: string, type: string, chips: number) {
     super(name, type, chips);
+    this._cardSuitMap = this.initialCardSuitMap;
+    this._cardRankMap = this.initialCardRankMap;
+    this._card8Arr = [];
   }
+
+  get cardSuitMap(): Map<string, Card[]> {
+    return this._cardSuitMap;
+  }
+  set cardSuitMap(map: Map<string, Card[]>) {
+    this._cardSuitMap = map;
+  }
+
+  get cardRankMap(): Map<string, Card[]> {
+    return this._cardRankMap;
+  }
+  set cardRankMap(map: Map<string, Card[]>) {
+    this._cardRankMap = map;
+  }
+
+  get card8Arr(): Card[] {
+    return this._card8Arr;
+  }
+  set card8Arr(arr: Card[]) {
+    this._card8Arr = arr;
+  }
+
   public getHandScore(): number {
     let score = 0;
 
@@ -18,49 +67,70 @@ export class Crazy8Player extends Player {
     return score;
   }
 
+  public drawCard(card: Card) {
+    this.hand.push(card);
+
+    const suit: string = card.suit;
+    const rank: string = card.rank;
+
+    if (rank !== "8") {
+      const suitArr: Card[] = this.cardSuitMap.get(suit) ?? [];
+      suitArr.push(card);
+      this.cardSuitMap.set(suit, suitArr);
+
+      const rankArr = this.cardRankMap.get(rank) ?? [];
+      rankArr.push(card);
+      this.cardRankMap.set(rank, rankArr);
+    } else {
+      this.card8Arr.push(card);
+    }
+  }
+
+  public outCard(card: Card) {
+    this.hand.splice(this.hand.indexOf(card), 1);
+
+    const suit: string = card.suit;
+    const rank: string = card.rank;
+
+    if (rank !== "8") {
+      const suitArr: Card[] = this.cardSuitMap.get(suit) ?? [];
+      suitArr.splice(suitArr.indexOf(card), 1);
+      this.cardSuitMap.set(suit, suitArr);
+
+      const rankArr = this.cardRankMap.get(rank) ?? [];
+      rankArr.splice(rankArr.indexOf(card), 1);
+      this.cardRankMap.set(rank, rankArr);
+    } else {
+      this.card8Arr.splice(this.card8Arr.indexOf(card), 1);
+    }
+  }
+
   public promptPlayer(
     userData: string | number | { card: Card; nextSuit: string } | null,
     cardPlace: Card
   ): GameDecision {
     if (this.gameStatus == "play") {
-      const playCardArr: Card[] = [];
-      const Card8Arr: Card[] = [];
-      const cardSuitMap: Map<string, number> = new Map([
-        ["H", 0],
-        ["D", 0],
-        ["C", 0],
-        ["S", 0],
-      ]);
       if (userData == null) {
-        for (const handCard of this.hand) {
-          const suit: string = handCard.suit;
-          const count: number = cardSuitMap.get(suit) ?? 0;
-          cardSuitMap.set(suit, count + 1);
+        const suitArr = this.cardSuitMap.get(cardPlace.suit) ?? [];
+        const rankArr = this.cardRankMap.get(cardPlace.rank) ?? [];
+        let playCard: Card;
 
-          if (
-            handCard.rank !== "8" &&
-            (handCard.suit == cardPlace.suit || handCard.rank == cardPlace.rank)
-          ) {
-            playCardArr.push(handCard);
-          } else if (handCard.rank === "8") {
-            Card8Arr.push(handCard);
-          }
-        }
-
-        if (playCardArr.length) {
-          const playCard =
-            playCardArr[Math.floor(Math.random() * playCardArr.length)];
+        if (suitArr.length > 0) {
+          playCard = suitArr[Math.floor(Math.random() * suitArr.length)];
+          return new GameDecision("play", { card: playCard, nextSuit: "" });
+        } else if (rankArr.length > 0) {
+          playCard = rankArr[Math.floor(Math.random() * rankArr.length)];
           return new GameDecision("play", { card: playCard, nextSuit: "" });
         } //8のみ持っているので出す
-        else if (Card8Arr.length) {
-          const playCard =
-            Card8Arr[Math.floor(Math.random() * Card8Arr.length)];
+        else if (this.card8Arr.length > 0) {
+          playCard =
+            this.card8Arr[Math.floor(Math.random() * this.card8Arr.length)];
 
           let nextSuit = "H";
-          for (const cardSuit of cardSuitMap) {
-            if (cardSuit[0] == playCard.suit) cardSuit[1]--;
-            if (cardSuit[1] > (cardSuitMap.get(nextSuit) ?? 0))
-              nextSuit = cardSuit[0];
+
+          for (const [suit, cardArr] of this.cardSuitMap) {
+            const nextSuitArr = this.cardSuitMap.get(nextSuit) ?? [];
+            if (cardArr.length > nextSuitArr.length) nextSuit = suit;
           }
 
           return new GameDecision("play", {
@@ -78,6 +148,6 @@ export class Crazy8Player extends Player {
     } else if (userData === "path") {
       this.gameStatus = "path";
       return new GameDecision("path", 1);
-    } else return new GameDecision("draw", 1); //temp
+    } else return new GameDecision("draw", 1);
   }
 }

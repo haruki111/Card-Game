@@ -59,8 +59,12 @@ export class Crazy8Table extends Table {
     this._orderCorrection = number;
   }
 
+  get players() {
+    return this._players as Crazy8Player[];
+  }
+
   //playerに7 or 5枚ずつカードを配る
-  public assignPlayerHands() {
+  public assignPlayerHands(): Promise<unknown> {
     return new Promise((resolve) => {
       let howManyDistribute = 0;
       if (this.players.length == 2) howManyDistribute = 7;
@@ -69,7 +73,8 @@ export class Crazy8Table extends Table {
         for (let j = 0; j < this.players.length; j++) {
           setTimeout(
             () => {
-              this.players[j].hand.push(this.deck.drawOne());
+              this.players[j].drawCard(this.deck.drawOne());
+
               if (i == howManyDistribute - 1 && j == this.players.length - 1)
                 resolve("success");
             },
@@ -82,7 +87,7 @@ export class Crazy8Table extends Table {
     });
   }
 
-  public getTurnPlayer(): Player {
+  public getTurnPlayer(): Crazy8Player {
     const turnPlayer: number =
       (this.turnCounter + this.dealerNum + this.orderCorrection) %
       this.players.length;
@@ -113,7 +118,8 @@ export class Crazy8Table extends Table {
 
         const helper = async () => {
           await new Promise((resolve) => {
-            player.hand.push(drawCard);
+            player.drawCard(drawCard);
+
             setTimeout(() => {
               resolve("success");
             }, 1000);
@@ -125,8 +131,7 @@ export class Crazy8Table extends Table {
         const amount = gameDecision.getAmount();
         if (typeof amount === "object") {
           const card = amount.card;
-          const index: number = player.hand.indexOf(card);
-          player.hand.splice(index, 1);
+          player.outCard(card);
           if (amount.nextSuit !== "") {
             card.suit = amount.nextSuit;
           }
@@ -208,6 +213,9 @@ export class Crazy8Table extends Table {
     for (const player of this.players) {
       player.hand = [];
       player.gameStatus = "betting";
+      player.cardSuitMap = player.initialCardSuitMap;
+      player.cardRankMap = player.initialCardRankMap;
+      player.card8Arr = [];
     }
   }
 

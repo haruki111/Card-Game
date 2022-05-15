@@ -61,7 +61,7 @@ export abstract class Table {
     this._currRound = round;
   }
 
-  get players(): Player[] {
+  get players(): BlackJackPlayer[] | Crazy8Player[] {
     return this._players;
   }
 
@@ -72,15 +72,12 @@ export abstract class Table {
   get deck() {
     return this._deck;
   }
-  public getTurnPlayer(): Player {
-    const turnPlayer: number = this.turnCounter % this.players.length;
-    return turnPlayer == 0
-      ? this.players[this.players.length - 1]
-      : this.players[turnPlayer - 1];
-  }
+
   public onLastPlayer(): boolean {
     return this.getTurnPlayer() == this.players[this.players.length - 1];
   }
+
+  abstract getTurnPlayer(): BlackJackPlayer | Crazy8Player;
 
   abstract assignPlayerHands(): void;
 

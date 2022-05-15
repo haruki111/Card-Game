@@ -14,8 +14,7 @@ const render = useCrazy8RenderStore();
 const draw = () => {
   const player = table.getTurnPlayer();
   if (render.renderAction == true && player.type == "user") {
-    const drawCard: Card = table.deck.drawOne();
-    player.hand.push(drawCard);
+    player.drawCard(table.deck.drawOne());
   }
 };
 
