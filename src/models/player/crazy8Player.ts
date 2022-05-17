@@ -1,6 +1,7 @@
 import { Player } from "@/models/player/player";
 import { GameDecision } from "@/models/gameDecision";
 import type { Card } from "@/stores/card";
+import { userSoundStore } from "@/stores/sound";
 
 export class Crazy8Player extends Player {
   private _cardSuitMap: Map<string, Card[]>;
@@ -67,6 +68,7 @@ export class Crazy8Player extends Player {
   }
 
   public drawCard(card: Card) {
+    userSoundStore().distributeCardSound();
     this.hand.push(card);
 
     const suit: string = card.suit;
@@ -86,6 +88,7 @@ export class Crazy8Player extends Player {
   }
 
   public outCard(card: Card) {
+    userSoundStore().playCardSound();
     this.hand.splice(this.hand.indexOf(card), 1);
 
     const suit: string = card.suit;

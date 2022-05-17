@@ -12,6 +12,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@types/howler": "^2.2.7",
     "pinia": "^2.0.11",
     "vue": "^3.2.31",
     "vue-router": "^4.0.12"
@@ -32,6 +33,7 @@
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-vue": "^8.2.0",
     "gsap": "^3.10.4",
+    "howler": "^2.2.3",
     "jsdom": "^19.0.0",
     "postcss": "^8.4.12",
     "prettier": "^2.5.1",

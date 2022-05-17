@@ -80,7 +80,7 @@ export class Crazy8Table extends Table {
                 resolve("success");
               }
             },
-            300 * (i * this.players.length - 1 + j),
+            500 * (i * this.players.length - 1 + j),
             i,
             j
           );

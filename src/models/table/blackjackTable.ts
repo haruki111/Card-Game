@@ -1,5 +1,6 @@
 import { Table } from "./table";
 import { useSpeechStore } from "@/stores/speech";
+import { userSoundStore } from "@/stores/sound";
 import { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import type { Player } from "@/models/player/player";
 
@@ -128,16 +129,17 @@ export class BlackJackTable extends Table {
         for (let pj = 0; pj < this.players.length + 1; pj++) {
           setTimeout(
             () => {
+              userSoundStore().distributeCardSound();
               if (pj == this.players.length) {
-                this.house.hand[ci] = this.deck.drawOne();
+                this.house.hand.push(this.deck.drawOne());
               } else {
-                this.players[pj].hand[ci] = this.deck.drawOne();
+                this.players[pj].hand.push(this.deck.drawOne());
               }
               if (ci === 1 && pj === this.players.length) {
                 resolve("success");
               }
             },
-            300 * (ci * (this.players.length + 1) + pj),
+            500 * (ci * (this.players.length + 1) + pj),
             ci,
             pj
           );
@@ -187,6 +189,7 @@ export class BlackJackTable extends Table {
           player.isAction = true;
           setTimeout(() => {
             player.isAction = false;
+            userSoundStore().distributeCardSound();
             player.hand.push(this.deck.drawOne());
             if (player.getHandScore() > 21) {
               setTimeout(() => {
@@ -251,6 +254,7 @@ export class BlackJackTable extends Table {
           if (this.allPlayerActionsResolved() && this.onLastPlayer()) {
             this.gamePhase = "evaluatingWinners";
             this.turnCounter = -1;
+            userSoundStore().turnCardSound();
             resolve("success");
           } else resolve("success");
         };
@@ -282,7 +286,9 @@ export class BlackJackTable extends Table {
       else this.house.gameStatus = "bet";
       resolve("success");
     } else if (this.house.gameStatus == "hit") {
+      userSoundStore().distributeCardSound();
       this.house.hand.push(this.deck.drawOne());
+
       if (this.house.getHandScore() > 21) this.house.gameStatus = "bust";
       else if (this.house.getHandScore() >= 17) this.house.gameStatus = "bet";
       resolve("success");
@@ -346,6 +352,7 @@ export class BlackJackTable extends Table {
     this.house.hand.length = 0;
     this.house.gameStatus = "betting";
   }
+
   nextRound(): void {
     if (this.currRound == this.round || this.nextGamePhase == "end") {
       this.gamePhase = "end";

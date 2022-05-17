@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { Card } from "./card";
+import { userSoundStore } from "@/stores/sound";
 
 export const useDeckStore = defineStore({
   id: "deck",
@@ -52,6 +53,7 @@ export const useDeckStore = defineStore({
         this.deck.splice(random, 1);
       }
       this.deck = newDeck;
+      userSoundStore().shuffleCardSound();
     },
     drawOne(): Card {
       const drawCard = this.deck[0];

@@ -120,7 +120,7 @@ const winOrLose = computed(() => {
         v-if="table.gamePhase == 'acting' && isDisplayBalloon == true"
         class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
       >
-        <p class="sm:text-xl text-lg font-bold">
+        <p class="sm:text-xl text-lg font-bold mx-2.5">
           {{ player.gameStatus }}
         </p>
       </div>
@@ -131,7 +131,7 @@ const winOrLose = computed(() => {
 <style scoped>
 .status-balloon {
   display: inline-block;
-  padding: 7px 10px;
+  padding: 7px 0px;
   max-width: 100%;
   color: #030303;
   font-size: 16px;
@@ -150,7 +150,6 @@ const winOrLose = computed(() => {
 }
 
 .status-balloon p {
-  margin: 0;
   padding: 0;
 }
 

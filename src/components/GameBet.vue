@@ -55,9 +55,8 @@ const minusBet = (num: number): void => {
 
 const stackChipStyle = (num: number) => {
   if (num == 1) return "";
-  return "margin-left: -78px";
+  return "sm:ml-[-78px] ml-[-58px]";
 };
-
 const betChips = () => {
   render.renderTableHelper(bet.value, table);
   render.renderBet = false;
@@ -66,21 +65,25 @@ const betChips = () => {
 </script>
 <template>
   <div class="flex flex-col items-center justify-center">
-    <div class="flex justify-center items-center h-16 mt-4">
+    <div class="flex justify-center items-center sm:mt-4 mt-2">
       <TransitionGroup
         name="betChip"
         tag="div"
         v-for="[key, sheets] in Array.from(chipsInBet)"
         :key="key"
-        class="flex px-2"
+        class="flex sm:px-2 px-1"
         @click="minusBet(key)"
       >
         <div
           v-for="sheet in sheets"
           :key="sheet"
-          :style="stackChipStyle(sheet)"
+          :class="stackChipStyle(sheet)"
         >
-          <img :src="table.betDenominations.get(key)" class="h-16" alt="" />
+          <img
+            :src="table.betDenominations.get(key)"
+            class="sm:h-16 sm:w-16 h-12 w-12 max-w-none"
+            alt=""
+          />
         </div>
       </TransitionGroup>
     </div>
@@ -88,19 +91,19 @@ const betChips = () => {
     <TransitionGroup
       name="chipList"
       tag="div"
-      class="h-16 mt-4 flex justify-center"
+      class="flex justify-center sm:mt-4 mt-2"
     >
-      <div v-for="chip in renderChips" :key="chip" class="px-2">
+      <div v-for="chip in renderChips" :key="chip" class="sm:px-2 px-1">
         <img
           @click="plusBet(chip)"
           :src="table.betDenominations.get(chip)"
-          class="h-16"
+          class="sm:h-16 sm:w-16 h-12 w-12 max-w-none"
           alt=""
         />
       </div>
     </TransitionGroup>
 
-    <div class="mt-4 flex justify-center">
+    <div class="flex justify-center sm:mt-4 mt-2">
       <button
         :disabled="validBet"
         :class="disabledBgBlueColor"
