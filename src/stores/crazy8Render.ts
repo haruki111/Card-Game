@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
 import type { Card } from "@/stores/card";
+import { useSpeechStore } from "@/stores/speech";
 
 export const useCrazy8RenderStore = defineStore({
   id: "crazy8Render",
@@ -14,10 +15,15 @@ export const useCrazy8RenderStore = defineStore({
       userData: number | string | { card: Card; nextSuit: string } | null,
       table: Crazy8Table
     ) {
-      await table.haveTurn(userData);
-      setTimeout(() => {
+      let timer = 1000;
+      if (table.getTurnPlayer().type === "user") {
+        timer = 0;
+      }
+
+      setTimeout(async () => {
+        await table.haveTurn(userData);
         this.renderTable(table);
-      }, 1000);
+      }, timer);
     },
 
     renderTable(table: Crazy8Table) {
@@ -27,6 +33,10 @@ export const useCrazy8RenderStore = defineStore({
         "evaluatingDeckRunsOut",
         "evaluatingWinners",
       ];
+      if (table.gamePhase === "distribute") {
+        useSpeechStore().mcSpeech("Round" + table.currRound);
+      }
+
       if (table.gamePhase === "end") this.renderEndResult = true;
       else if (nullRenderTableArr.includes(table.gamePhase)) {
         this.renderTableHelper(null, table);
