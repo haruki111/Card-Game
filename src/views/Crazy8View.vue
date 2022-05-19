@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
-import { Card } from "@/stores/card";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
 import Crazy8Player from "../components/player/Crazy8Player.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
 import Crazy8EndResult from "@/components/results/Crazy8EndResult.vue";
+import Crazy8SelectSuit from "@/components/Crazy8SelectSuit.vue";
 
 const table = useTableStore().table as Crazy8Table;
 const render = useCrazy8RenderStore();
@@ -16,19 +16,6 @@ const draw = () => {
   if (render.renderAction == true && player.type == "user") {
     player.drawCard(table.deck.drawOne());
   }
-};
-
-const selectSuit = (suit: string) => {
-  const cardPlace = table.cardPlaceArr[table.cardPlaceArr.length - 1];
-  cardPlace.suit = suit;
-  render.renderSelectSuit = false;
-  render.renderTableHelper(
-    {
-      card: cardPlace,
-      nextSuit: suit,
-    },
-    table
-  );
 };
 
 const stackDeckStyle = (index: number) => {
@@ -47,37 +34,9 @@ render.renderTable(table);
     <Crazy8Player :index="0" class="h-1/4" />
     <div class="flex justify-between items-center h-2/3">
       <Crazy8Player :index="3" class="flex items-center justify-around w-1/5" />
-      <!-- コンポーネント化 -->
+
       <div class="flex relative">
-        <div
-          v-if="render.renderSelectSuit"
-          class="flex absolute top-32 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        >
-          <button
-            @click="selectSuit('H')"
-            class="h-10 w-10 mx-2 bg-gray-50 rounded"
-          >
-            <img :src="new Card('H', '').getImg()" alt="" />
-          </button>
-          <button
-            @click="selectSuit('D')"
-            class="h-10 w-10 mx-2 bg-gray-50 rounded"
-          >
-            <img :src="new Card('D', '').getImg()" alt="" />
-          </button>
-          <button
-            @click="selectSuit('C')"
-            class="h-10 w-10 mx-2 bg-gray-50 rounded"
-          >
-            <img :src="new Card('C', '').getImg()" alt="" />
-          </button>
-          <button
-            @click="selectSuit('S')"
-            class="h-10 w-10 mx-2 bg-gray-50 rounded"
-          >
-            <img :src="new Card('S', '').getImg()" alt="" />
-          </button>
-        </div>
+        <Crazy8SelectSuit v-if="render.renderSelectSuit" />
         <GameCard
           v-if="table.cardPlaceArr.length != 0"
           :card="table.cardPlaceArr[table.cardPlaceArr.length - 1]"
