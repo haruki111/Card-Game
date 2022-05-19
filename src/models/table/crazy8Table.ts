@@ -181,11 +181,17 @@ export class Crazy8Table extends Table {
         };
         haveTurnDistribute();
       } else if (this.gamePhase === "play") {
-        player.gameStatus = "play";
+        if (userData == "path") {
+          player.gameStatus = "path";
+        } else {
+          player.gameStatus = "play";
+        }
+
         const gameDecision: GameDecision = player.promptPlayer(
           userData,
           this.cardPlaceArr[this.cardPlaceArr.length - 1]
         );
+
         const haveTurnPlay = async () => {
           await this.evaluateMove(player, gameDecision);
 

@@ -112,27 +112,10 @@ render.renderTable(table);
   </div>
 
   <GameRound />
-  <div>{{ table.gamePhase }}</div>
 
   <Transition name="fade">
     <Crazy8EndResult v-if="render.renderEndResult == true" />
   </Transition>
-
-  <!-- temp TODO デザイン -->
-  <button
-    v-if="
-      render.renderAction == true &&
-      table.deck.deck.length == 0 &&
-      table.getTurnPlayer().type === 'user'
-    "
-    @click="
-      render.renderAction = false;
-      render.renderTableHelper('path', table);
-    "
-  >
-    path
-  </button>
-  <!-- ↑ -->
 </template>
 <style scoped>
 .fade-enter-active,

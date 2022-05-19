@@ -16,7 +16,7 @@ export const useCrazy8RenderStore = defineStore({
       table: Crazy8Table
     ) {
       let timer = 1000;
-      if (table.getTurnPlayer().type === "user") {
+      if (table.getTurnPlayer().type === "user" && !this.isValidPath(table)) {
         timer = 0;
       }
 
@@ -33,21 +33,39 @@ export const useCrazy8RenderStore = defineStore({
         "evaluatingDeckRunsOut",
         "evaluatingWinners",
       ];
-      if (table.gamePhase === "distribute") {
-        useSpeechStore().mcSpeech("Round" + table.currRound);
-      }
+      this.speechEvent(table);
 
       if (table.gamePhase === "end") this.renderEndResult = true;
       else if (nullRenderTableArr.includes(table.gamePhase)) {
         this.renderTableHelper(null, table);
       } else if (table.gamePhase === "play") {
-        if (
+        if (this.isValidPath(table)) {
+          this.renderTableHelper("path", table);
+        } else if (
           player.type === "user" &&
           (player.gameStatus === "play" || player.gameStatus === "path")
-        )
+        ) {
           this.renderAction = true;
-        else this.renderTableHelper(null, table);
+        } else this.renderTableHelper(null, table);
       }
+    },
+
+    speechEvent(table: Crazy8Table) {
+      if (table.gamePhase === "distribute") {
+        useSpeechStore().mcSpeech("Round" + table.currRound);
+      }
+    },
+
+    isValidPath(table: Crazy8Table): boolean {
+      const cardPlace = table.cardPlaceArr[table.cardPlaceArr.length - 1];
+      if (
+        table.deck.deck.length == 0 &&
+        !table.getTurnPlayer().havePlayCard(cardPlace)
+      ) {
+        return true;
+      }
+
+      return false;
     },
   },
 });

@@ -117,14 +117,14 @@ export class Crazy8Player extends Player {
         const rankArr = this.cardRankMap.get(cardPlace.rank) ?? [];
         let playCard: Card;
 
-        if (suitArr.length > 0) {
+        if (suitArr.length) {
           playCard = suitArr[Math.floor(Math.random() * suitArr.length)];
           return new GameDecision("play", { card: playCard, nextSuit: "" });
-        } else if (rankArr.length > 0) {
+        } else if (rankArr.length) {
           playCard = rankArr[Math.floor(Math.random() * rankArr.length)];
           return new GameDecision("play", { card: playCard, nextSuit: "" });
         } //8のみ持っているので出す
-        else if (this.card8Arr.length > 0) {
+        else if (this.card8Arr.length) {
           playCard =
             this.card8Arr[Math.floor(Math.random() * this.card8Arr.length)];
 
@@ -148,8 +148,15 @@ export class Crazy8Player extends Player {
         return new GameDecision("draw", 0);
       }
     } else if (userData === "path") {
-      this.gameStatus = "path";
       return new GameDecision("path", 1);
     } else return new GameDecision("draw", 1);
+  }
+
+  public havePlayCard(cardPlace: Card): boolean {
+    const suitArr = this.cardSuitMap.get(cardPlace.suit) ?? [];
+    const rankArr = this.cardRankMap.get(cardPlace.rank) ?? [];
+
+    if (suitArr.length || rankArr.length || this.card8Arr.length) return true;
+    return false;
   }
 }

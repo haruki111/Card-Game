@@ -31,15 +31,9 @@ export const useBlackJackRenderStore = defineStore({
 
     renderTable(table: BlackJackTable) {
       const player = table.getTurnPlayer();
-      if (table.gamePhase === "betting" && table.onFirstPlayer()) {
-        useSpeechStore().mcSpeech("Round" + table.currRound);
-      }
-      if (
-        table.gamePhase === "acting" &&
-        table.turnCounter == table.players.length + 1
-      ) {
-        userSoundStore().turnCardSound();
-      }
+
+      this.speechEvent(table);
+      this.soundEvent(table);
 
       if (table.gamePhase == "end") this.renderEndResult = true;
       else if (player.type == "user") {
@@ -52,6 +46,21 @@ export const useBlackJackRenderStore = defineStore({
         }
       } else if (player.type == "ai" || player.type == "house")
         this.renderTableHelper(null, table);
+    },
+
+    speechEvent(table: BlackJackTable) {
+      if (table.gamePhase === "betting" && table.onFirstPlayer()) {
+        useSpeechStore().mcSpeech("Round" + table.currRound);
+      }
+    },
+
+    soundEvent(table: BlackJackTable) {
+      if (
+        table.gamePhase === "acting" &&
+        table.turnCounter == table.players.length + 1
+      ) {
+        userSoundStore().turnCardSound();
+      }
     },
   },
 });
