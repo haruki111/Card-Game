@@ -117,10 +117,7 @@ export class Crazy8Table extends Table {
       if (gameDecision.getAction() === "draw") {
         if (this.deck.deck.length == 0) {
           player.gameStatus = "path";
-          useSpeechStore().speech(
-            player.gameStatus,
-            this.players.indexOf(player)
-          );
+          useSpeechStore().speech(player.gameStatus, player.id);
           this.turnCounter++;
           resolve("success");
           return;
@@ -152,10 +149,7 @@ export class Crazy8Table extends Table {
           resolve("success");
         }
       } else if (gameDecision.getAction() === "path") {
-        useSpeechStore().speech(
-          player.gameStatus,
-          this.players.indexOf(player)
-        );
+        useSpeechStore().speech(player.gameStatus, player.id);
         this.turnCounter++;
         resolve("success");
       }

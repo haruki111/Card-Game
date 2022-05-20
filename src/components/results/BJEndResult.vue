@@ -3,14 +3,14 @@ import { useTableStore } from "@/stores/table";
 import { useBlackJackRenderStore } from "@/stores/blackJackRender";
 import { useRouter } from "vue-router";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
-import type { Player } from "@/models/player/player";
+import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 
 const table = useTableStore().table as BlackJackTable;
 const render = useBlackJackRenderStore();
 const router = useRouter();
 
 const players = table.players;
-let sortPlayers: Player[];
+let sortPlayers: BlackJackPlayer[];
 
 const tableHeadsRound = (): string[] => {
   const tableHeads: string[] = ["name"];
@@ -20,7 +20,7 @@ const tableHeadsRound = (): string[] => {
   return tableHeads;
 };
 
-const sortRankPlayers = (players: Player[]) => {
+const sortRankPlayers = (players: BlackJackPlayer[]) => {
   sortPlayers = Array.from(players).sort(function (a, b) {
     if (a.chips > b.chips) return -1;
     if (a.chips < b.chips) return 1;
@@ -29,7 +29,7 @@ const sortRankPlayers = (players: Player[]) => {
   return sortPlayers;
 };
 
-const rankAndName = (index: number, player: Player): string => {
+const rankAndName = (index: number, player: BlackJackPlayer): string => {
   for (let i = 0; i < index + 1; i++) {
     if (sortPlayers[i].chips == player.chips && sortPlayers[i] != player) {
       index--;
@@ -39,7 +39,7 @@ const rankAndName = (index: number, player: Player): string => {
   return index + 1 + arr[index] + "   " + player.name;
 };
 
-const transitionScore = (round: number, player: Player) => {
+const transitionScore = (round: number, player: BlackJackPlayer) => {
   return table.resultsLog[round - 1].result[players.indexOf(player)].chips;
 };
 

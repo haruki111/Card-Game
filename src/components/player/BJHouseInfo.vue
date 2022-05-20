@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 
 import type { BlackJackTable } from "@/models/table/blackjackTable";
@@ -12,6 +12,18 @@ let props = defineProps<{
   isHide: boolean[];
 }>();
 
+const isDisplayBalloon = ref(false);
+
+watch(house, (player) => {
+  const displayStatus = ["stand", "hit", "bust", "blackjack"];
+  if (displayStatus.includes(player.gameStatus)) {
+    isDisplayBalloon.value = true;
+    setTimeout(() => {
+      isDisplayBalloon.value = false;
+    }, 500);
+  }
+});
+
 const displayHouseScore = computed(() => {
   if (!house.hand.length) return 0;
   else if (!props.isHide[0] && props.isHide[1])
@@ -22,11 +34,6 @@ const displayHouseScore = computed(() => {
   return 0;
 });
 
-const statusColor = computed(() => {
-  if (house.gameStatus == "blackjack") return "text-yellow-400";
-  return "";
-});
-
 const blinkTurnPlayer = computed(() => {
   if (table.getTurnPlayer() == house && table.gamePhase !== "evaluatingEnd") {
     return "blinkTurnPlayer";
@@ -35,29 +42,66 @@ const blinkTurnPlayer = computed(() => {
 });
 </script>
 <template>
-  <div id="houseInfo" class="text-gray-100">
+  <div id="houseInfo" class="text-gray-100 relative">
     <p
       :class="blinkTurnPlayer"
       class="playerName sm:text-3xl text-2xl font-bold mb-2"
     >
       {{ house.name }}
     </p>
-    <div class="playerStatus text-base">
-      <p>
-        S:<span :class="statusColor">{{ house.gameStatus }}</span>
-      </p>
-    </div>
     <div id="playerScore" class="pb-2">
       <span
         class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
         >{{ displayHouseScore }}
       </span>
     </div>
+    <Transition name="fade">
+      <div
+        v-if="
+          table.gamePhase == 'evaluatingWinners' && isDisplayBalloon == true
+        "
+        class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
+      >
+        <p class="sm:text-xl text-lg font-bold mx-2.5">
+          {{ house.gameStatus }}
+        </p>
+      </div>
+    </Transition>
   </div>
 </template>
 <style scoped>
+.status-balloon {
+  display: inline-block;
+  padding: 7px 0px;
+  max-width: 100%;
+  color: #030303;
+  font-size: 16px;
+  background: #f9f9f9;
+  border-radius: 15px;
+}
+
+.status-balloon:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -15px;
+  border: 15px solid transparent;
+  border-top: 15px solid #f9f9f9;
+}
+
 .blinkTurnPlayer {
   animation: blink 0.8s ease-in-out infinite alternate;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 @keyframes blink {

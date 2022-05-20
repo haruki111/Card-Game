@@ -166,10 +166,7 @@ export class BlackJackTable extends Table {
         const actinon = gameDecision.getAction() as string;
 
         player.gameStatus = actinon;
-        useSpeechStore().speech(
-          player.gameStatus,
-          this.players.indexOf(player)
-        );
+        useSpeechStore().speech(player.gameStatus, player.id);
 
         if (actinon == "surrender") {
           player.bet -= Math.ceil(player.bet / 2);
@@ -194,10 +191,7 @@ export class BlackJackTable extends Table {
             if (player.getHandScore() > 21) {
               setTimeout(() => {
                 player.gameStatus = "bust";
-                useSpeechStore().speech(
-                  player.gameStatus,
-                  this.players.indexOf(player)
-                );
+                useSpeechStore().speech(player.gameStatus, player.id);
                 resolve("success");
               }, 200);
             } else {
@@ -280,17 +274,27 @@ export class BlackJackTable extends Table {
 
   haveTurnEvaluatingWinnersHelper(resolve: (value: unknown) => void): void {
     if (this.house.gameStatus == "waitingForActions") {
-      if (this.house.getHandScore() == 21 && this.house.hand.length == 2)
+      if (this.house.getHandScore() == 21 && this.house.hand.length == 2) {
         this.house.gameStatus = "blackjack";
-      else if (this.house.getHandScore() < 17) this.house.gameStatus = "hit";
-      else this.house.gameStatus = "bet";
+      } else if (this.house.getHandScore() < 17) {
+        this.house.gameStatus = "hit";
+      } else {
+        this.house.gameStatus = "stand";
+      }
+      useSpeechStore().speech(this.house.gameStatus, this.house.id);
+
       resolve("success");
     } else if (this.house.gameStatus == "hit") {
       userSoundStore().distributeCardSound();
       this.house.hand.push(this.deck.drawOne());
 
-      if (this.house.getHandScore() > 21) this.house.gameStatus = "bust";
-      else if (this.house.getHandScore() >= 17) this.house.gameStatus = "bet";
+      if (this.house.getHandScore() > 21) {
+        this.house.gameStatus = "bust";
+      } else if (this.house.getHandScore() >= 17) {
+        this.house.gameStatus = "stand";
+      }
+      useSpeechStore().speech(this.house.gameStatus, this.house.id);
+
       resolve("success");
     } else {
       for (const player of this.players) {

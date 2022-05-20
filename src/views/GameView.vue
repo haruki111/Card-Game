@@ -37,6 +37,7 @@ render.renderTable(table);
           :key="index"
           :card="card"
           :isHide="true"
+          :isShadow="false"
           :rotate="{ isRotate: false, class: '' }"
           :class="stackDeckStyle(index)"
           class="mx-0"
