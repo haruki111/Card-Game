@@ -7,6 +7,8 @@ export const useDeckStore = defineStore({
   state: () => ({
     gameType: "blackjack" as string,
     deck: [] as Card[],
+    suitArr: ["H", "D", "C", "S"] as string[],
+    rankArr: ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"],
   }),
   actions: {
     setGameType(gameType: string): void {
@@ -14,27 +16,11 @@ export const useDeckStore = defineStore({
     },
     generateDeck(): Card[] {
       const newDeck = [];
-      const suit = ["H", "D", "C", "S"];
-      const rank = [
-        "A",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "J",
-        "Q",
-        "K",
-      ];
 
       if (this.gameType == "blackjack") {
-        for (let i = 0; i < suit.length; i++) {
-          for (let j = 0; j < rank.length; j++) {
-            newDeck.push(new Card(suit[i], rank[j]));
+        for (let i = 0; i < this.suitArr.length; i++) {
+          for (let j = 0; j < this.rankArr.length; j++) {
+            newDeck.push(new Card(this.suitArr[i], this.rankArr[j]));
           }
         }
       }

@@ -1,4 +1,4 @@
-// import { defineStore } from "pinia";
+import { useDeckStore } from "@/stores/deck";
 import Heart from "../assets/cardSuit/heart.png";
 import Diamond from "../assets/cardSuit/diamond.png";
 import Clover from "../assets/cardSuit/clover.png";
@@ -20,9 +20,26 @@ export class Card {
     this.rank = rank;
   }
 
+  public getSuitOrder(): number {
+    return useDeckStore().suitArr.indexOf(this.suit);
+  }
+
   public getRankNumber(): number {
+    return useDeckStore().rankArr.indexOf(this.rank);
+  }
+
+  public getBJRankNumber(): number {
     if (this.rank == "?") return 0;
-    if (this.rank == "A") return 11;
+    else if (this.rank == "A") return 11;
+    else if (this.rank == "J" || this.rank == "Q" || this.rank == "K")
+      return 10;
+    return Number(this.rank);
+  }
+
+  public getCrazy8RankNumber(): number {
+    if (this.rank == "?") return 0;
+    else if (this.rank == "A") return 1;
+    else if (this.rank == "8") return 50;
     else if (this.rank == "J" || this.rank == "Q" || this.rank == "K")
       return 10;
     return Number(this.rank);

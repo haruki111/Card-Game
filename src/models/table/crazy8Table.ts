@@ -70,6 +70,7 @@ export class Crazy8Table extends Table {
       let howManyDistribute = 0;
       if (this.players.length == 2) howManyDistribute = 7;
       else howManyDistribute = 5;
+
       for (let i = 0; i < howManyDistribute; i++) {
         for (let j = 0; j < this.players.length; j++) {
           setTimeout(
@@ -168,7 +169,9 @@ export class Crazy8Table extends Table {
             setTimeout(() => {
               this.cardPlaceArr.push(this.deck.drawOne());
               this.gamePhase = "play";
-              for (const player of this.players) player.gameStatus = "play";
+              for (const player of this.players) {
+                player.gameStatus = "play";
+              }
               resolve("success");
             }, time);
           });

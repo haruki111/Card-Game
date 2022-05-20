@@ -110,11 +110,19 @@ export abstract class Player {
     this._investment = investment;
   }
 
-  abstract getHandScore(): number;
+  public sortHandCard(): void {
+    this.hand.sort(
+      (a, b) =>
+        a.getRankNumber() - b.getRankNumber() ||
+        a.getSuitOrder() - b.getSuitOrder()
+    );
+  }
 
   public updateGrades() {
     if (this.winAmount > 0) this.grades.push(1);
     else if (this.winAmount == 0) this.grades.push(0);
     else if (this.winAmount < 0) this.grades.push(-1);
   }
+
+  abstract getHandScore(): number;
 }

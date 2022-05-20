@@ -69,7 +69,7 @@ export class BlackJackPlayer extends Player {
     let score = 0;
     let haveA = 0;
     for (let i = 0; i < this.hand.length; i++) {
-      score += this.hand[i].getRankNumber();
+      score += this.hand[i].getBJRankNumber();
       if (this.hand[i].rank == "A") haveA++;
     }
     while (score > 21 && haveA > 0) {

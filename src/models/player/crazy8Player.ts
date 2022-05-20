@@ -59,9 +59,7 @@ export class Crazy8Player extends Player {
     let score = 0;
 
     for (let i = 0; i < this.hand.length; i++) {
-      score += this.hand[i].getRankNumber();
-      if (this.hand[i].rank === "A") score -= 10;
-      if (this.hand[i].rank === "8") score += 42;
+      score += this.hand[i].getCrazy8RankNumber();
     }
 
     return score;
@@ -70,6 +68,7 @@ export class Crazy8Player extends Player {
   public drawCard(card: Card) {
     userSoundStore().distributeCardSound();
     this.hand.push(card);
+    this.sortHandCard();
 
     const suit: string = card.suit;
     const rank: string = card.rank;

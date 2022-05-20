@@ -245,7 +245,7 @@ export class BlackJackTable extends Table {
           if (player.gameStatus == "bet" || player.gameStatus == "hit") {
             const gameDecision: GameDecision = player.promptPlayer(
               userData,
-              this.house.hand[0].getRankNumber()
+              this.house.hand[0].getBJRankNumber()
             );
             await this.evaluateMove(player, gameDecision);
           }
