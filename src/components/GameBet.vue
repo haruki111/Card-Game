@@ -65,7 +65,7 @@ const betChips = () => {
 </script>
 <template>
   <div class="flex flex-col items-center justify-center">
-    <div class="flex justify-center items-center sm:mt-4 mt-2">
+    <div class="flex justify-center items-center sm:h-16 h-12 sm:mt-4 mt-2">
       <TransitionGroup
         name="betChip"
         tag="div"

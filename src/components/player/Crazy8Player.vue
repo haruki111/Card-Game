@@ -48,11 +48,15 @@ const playerCardHide = computed(() => {
   }
 });
 
-const cardsRow = (index: number): "" | "flex-col" => {
-  if (index == 1 || index == 3) {
-    return "flex-col";
+const cardsRow = (index: number) => {
+  if (index == 0) {
+    return "flex-wrap-reverse w-[800px]";
+  } else if (index == 1) {
+    return "flex-col h-[600px]";
+  } else if (index == 3) {
+    return "flex-wrap-reverse flex-col h-[600px]";
   }
-  return "";
+  return "w-[800px]";
 };
 
 const cardRotate = (
@@ -111,17 +115,17 @@ const winOrLose = computed(() => {
       >
         {{ winOrLose }}
       </div>
-      <div
-        v-if="table.dealerNum == index"
-        class="w-8 h-8 m-auto flex items-center justify-center border border-gray-600 bg-gray-100 text-gray-800 text-sm font-medium rounded-full"
-      >
-        D
-      </div>
 
       <p
         :class="blinkTurnPlayer"
-        class="playerName sm:text-3xl text-2xl font-bold mb-2"
+        class="playerName sm:text-3xl text-2xl font-bold flex items-center justify-center mb-2"
       >
+        <span
+          v-if="table.dealerNum == index"
+          class="inline-block w-8 h-8 leading-8 mx-2 border border-gray-600 bg-gray-100 text-gray-800 text-sm font-medium rounded-full"
+        >
+          D
+        </span>
         {{ player.name }}
       </p>
 
@@ -144,7 +148,7 @@ const winOrLose = computed(() => {
       name="player-cards"
       tag="div"
       :class="cardsRow(props.index)"
-      class="flex justify-center pb-2"
+      class="flex-wrap flex justify-center m-auto pb-2"
     >
       <GameCard
         v-for="(card, index) in player.hand"
@@ -160,6 +164,12 @@ const winOrLose = computed(() => {
   </div>
 </template>
 <style scoped>
+.box {
+  width: 800px;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
 .status-balloon {
   display: inline-block;
   padding: 7px 0px;

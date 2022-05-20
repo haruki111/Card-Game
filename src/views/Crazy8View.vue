@@ -28,12 +28,11 @@ render.renderTable(table);
 <template>
   <div
     id="playersWrap"
-    class="flex justify-between flex-col w-4/5 m-auto z-10"
-    style="height: 70vh"
+    class="flex justify-between flex-col h-full w-full m-auto z-10"
   >
     <Crazy8Player :index="0" class="h-1/4" />
-    <div class="flex justify-between items-center h-2/3">
-      <Crazy8Player :index="3" class="flex items-center justify-around w-1/5" />
+    <div class="flex justify-between items-center h-1/2">
+      <Crazy8Player :index="3" class="flex items-center justify-around w-1/3" />
 
       <div class="flex relative">
         <Crazy8SelectSuit v-if="render.renderSelectSuit" />
@@ -66,7 +65,7 @@ render.renderTable(table);
 
       <Crazy8Player
         :index="1"
-        class="flex items-center flex-row-reverse justify-around w-1/5"
+        class="flex items-center flex-row-reverse justify-around w-1/3"
       />
     </div>
     <Crazy8Player :index="2" class="h-1/4" />

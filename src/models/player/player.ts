@@ -23,7 +23,7 @@ export abstract class Player {
   protected _winAmount: number; // 勝利金額
   protected _gameStatus: string;
   protected _id: number;
-  protected static _idCount = 0; 
+  protected static _idCount = 0;
 
   constructor(name: string, type: string, chips: number) {
     this._name = name;
@@ -36,7 +36,7 @@ export abstract class Player {
     this._bet = 0; // 現在のラウンドでのベットしているチップ
     this._winAmount = 0; // 勝利金額
     this._gameStatus = "betting";
-    this._id = Player._idCount;
+    this._id = Player._idCount % 4;
     Player._idCount++;
   }
 

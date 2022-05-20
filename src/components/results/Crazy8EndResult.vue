@@ -26,7 +26,6 @@ const toContinue = (): void => {
 
 const toHome = (): void => {
   render.renderEndResult = false;
-  table.deck.resetDeck();
   useTableStore().$reset();
   router.push("/");
 };
