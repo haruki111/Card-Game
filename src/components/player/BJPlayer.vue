@@ -40,6 +40,7 @@ const playerCardHide = computed(() => {
         :key="index"
         :card="card"
         :isHide="playerCardHide[index]"
+        :isShadow="false"
         :rotate="{ isRotate: false, class: '' }"
       />
     </TransitionGroup>

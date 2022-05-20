@@ -64,6 +64,10 @@ export class Crazy8Table extends Table {
     return this._players as Crazy8Player[];
   }
 
+  public peekCardPlaceArr() {
+    return this.cardPlaceArr[this.cardPlaceArr.length - 1];
+  }
+
   //playerに7 or 5枚ずつカードを配る
   public assignPlayerHands(): Promise<unknown> {
     return new Promise((resolve) => {
@@ -192,7 +196,7 @@ export class Crazy8Table extends Table {
 
         const gameDecision: GameDecision = player.promptPlayer(
           userData,
-          this.cardPlaceArr[this.cardPlaceArr.length - 1]
+          this.peekCardPlaceArr()
         );
 
         const haveTurnPlay = async () => {

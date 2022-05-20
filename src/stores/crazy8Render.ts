@@ -57,10 +57,9 @@ export const useCrazy8RenderStore = defineStore({
     },
 
     isValidPath(table: Crazy8Table): boolean {
-      const cardPlace = table.cardPlaceArr[table.cardPlaceArr.length - 1];
       if (
         table.deck.deck.length == 0 &&
-        !table.getTurnPlayer().havePlayCard(cardPlace)
+        !table.getTurnPlayer().isHavePlayCard(table.peekCardPlaceArr())
       ) {
         return true;
       }

@@ -151,11 +151,18 @@ export class Crazy8Player extends Player {
     } else return new GameDecision("draw", 1);
   }
 
-  public havePlayCard(cardPlace: Card): boolean {
+  public isHavePlayCard(cardPlace: Card): boolean {
     const suitArr = this.cardSuitMap.get(cardPlace.suit) ?? [];
     const rankArr = this.cardRankMap.get(cardPlace.rank) ?? [];
 
     if (suitArr.length || rankArr.length || this.card8Arr.length) return true;
     return false;
+  }
+
+  public getHavePlayCard(cardPlace: Card): Card[] {
+    const suitArr = this.cardSuitMap.get(cardPlace.suit) ?? [];
+    const rankArr = this.cardRankMap.get(cardPlace.rank) ?? [];
+
+    return suitArr.concat(rankArr, this.card8Arr);
   }
 }

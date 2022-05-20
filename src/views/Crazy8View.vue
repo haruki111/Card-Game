@@ -39,8 +39,9 @@ render.renderTable(table);
         <Crazy8SelectSuit v-if="render.renderSelectSuit" />
         <GameCard
           v-if="table.cardPlaceArr.length != 0"
-          :card="table.cardPlaceArr[table.cardPlaceArr.length - 1]"
+          :card="table.peekCardPlaceArr()"
           :isHide="false"
+          :isShadow="false"
           :rotate="{ isRotate: false, class: '' }"
         />
         <TransitionGroup
@@ -55,6 +56,7 @@ render.renderTable(table);
             @click="draw()"
             :card="card"
             :isHide="true"
+            :isShadow="false"
             :rotate="{ isRotate: false, class: '' }"
             :class="stackDeckStyle(index)"
             class="mx-0"

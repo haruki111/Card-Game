@@ -8,7 +8,7 @@ const table = useTableStore().table as Crazy8Table;
 const render = useCrazy8RenderStore();
 
 const selectSuit = (suit: string) => {
-  const cardPlace = table.cardPlaceArr[table.cardPlaceArr.length - 1];
+  const cardPlace = table.peekCardPlaceArr();
   cardPlace.suit = suit;
   render.renderSelectSuit = false;
   render.renderTableHelper(

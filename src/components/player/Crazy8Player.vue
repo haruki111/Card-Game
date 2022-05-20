@@ -48,14 +48,19 @@ const playerCardHide = computed(() => {
   }
 });
 
-const cardsRow = (index: number) => {
+const cardsRow = (index: number): "" | "flex-col" => {
   if (index == 1 || index == 3) {
     return "flex-col";
   }
   return "";
 };
 
-const cardRotate = (index: number) => {
+const cardRotate = (
+  index: number
+): {
+  isRotate: boolean;
+  class: string;
+} => {
   if (index == 1) {
     return { isRotate: true, class: "-rotate-90" };
   } else if (index == 3) {
@@ -64,8 +69,8 @@ const cardRotate = (index: number) => {
   return { isRotate: false, class: "" };
 };
 
-const play = (card: Card) => {
-  const cardPlace = table.cardPlaceArr[table.cardPlaceArr.length - 1];
+const play = (card: Card): void => {
+  const cardPlace = table.peekCardPlaceArr();
   if (render.renderAction == true && player.type == "user") {
     if (card.rank === "8") {
       render.renderAction = false;
@@ -76,6 +81,12 @@ const play = (card: Card) => {
       render.renderTableHelper({ card: card, nextSuit: "" }, table);
     }
   }
+};
+
+const shadowCard = (card: Card): boolean => {
+  if (render.renderAction == true && player.type === "user")
+    return !player.getHavePlayCard(table.peekCardPlaceArr()).includes(card);
+  else return false;
 };
 
 const blinkTurnPlayer = computed(() => {
@@ -141,6 +152,7 @@ const winOrLose = computed(() => {
         :key="index"
         :card="card"
         :isHide="playerCardHide[index]"
+        :isShadow="shadowCard(card)"
         :rotate="cardRotate(props.index)"
         class="mx-1"
       />

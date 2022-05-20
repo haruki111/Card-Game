@@ -39,6 +39,7 @@ const houseCardHide = computed(() => {
       :key="index"
       :card="card"
       :isHide="houseCardHide[index]"
+      :isShadow="false"
       :rotate="{ isRotate: false, class: '' }"
     />
   </TransitionGroup>

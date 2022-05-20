@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import type { Card } from "../stores/card";
 
 let props = defineProps<{
   card: Card;
   isHide: boolean;
+  isShadow: boolean;
   rotate: {
     isRotate: boolean;
     class: string;
   };
 }>();
+
 const rotateCard = (rotate: { isRotate: boolean; class: string }) => {
   if (rotate.isRotate == true && rotate.class == "-rotate-90") {
     return "flex justify-around items-center h-12 w-16 my-2";
@@ -22,13 +25,20 @@ const rotateImg = (isRotate: boolean) => {
   if (isRotate == true) return "my-auto";
   else return "mx-auto";
 };
+
+const shadowCard = computed(() => {
+  if (props.isShadow) {
+    return "bg-gray-400";
+  }
+  return "";
+});
 </script>
 <template>
   <transition
     mode="out-in"
     tag="div"
     name="card-reverse"
-    :class="rotateCard(rotate)"
+    :class="[rotateCard(rotate), shadowCard]"
     class="card bg-white p-1 rounded border border-gray-500 shadow-md"
   >
     <div key="hide" v-if="isHide == true">
