@@ -45,7 +45,7 @@ watch(props.player, (player) => {
     isDisplayBalloon.value = true;
     setTimeout(() => {
       isDisplayBalloon.value = false;
-    }, 500);
+    }, table.balloonTime);
   }
 });
 

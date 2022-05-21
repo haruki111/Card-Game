@@ -1,5 +1,7 @@
 import { Player } from "@/models/player/player";
 import { GameDecision } from "@/models/gameDecision";
+import type { Card } from "@/models/card";
+import { userSoundStore } from "@/stores/sound";
 
 export class BlackJackPlayer extends Player {
   private _isAction: boolean;
@@ -21,6 +23,12 @@ export class BlackJackPlayer extends Player {
   set isAction(flag: boolean) {
     this._isAction = flag;
   }
+
+  public drawCard(card: Card): void {
+    userSoundStore().distributeCardSound();
+    this.hand.push(card);
+  }
+
   // gameStatus if(betting, bet, hit)
   public promptPlayer(
     userData: number | string | null,

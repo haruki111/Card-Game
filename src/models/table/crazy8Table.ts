@@ -2,7 +2,7 @@ import { Table } from "./table";
 import type { GameDecision } from "../gameDecision";
 import type { Player } from "@/models/player/player";
 import { Crazy8Player } from "@/models/player/crazy8Player";
-import type { Card } from "@/stores/card";
+import type { Card } from "@/models/card";
 import { useSpeechStore } from "@/stores/speech";
 
 export class Crazy8Table extends Table {
@@ -67,8 +67,12 @@ export class Crazy8Table extends Table {
   public assignPlayerHands(): Promise<unknown> {
     return new Promise((resolve) => {
       let howManyDistribute = 0;
-      if (this.players.length == 2) howManyDistribute = 7;
-      else howManyDistribute = 5;
+
+      if (this.players.length == 2) {
+        howManyDistribute = 7;
+      } else {
+        howManyDistribute = 5;
+      }
 
       for (let i = 0; i < howManyDistribute; i++) {
         for (let j = 0; j < this.players.length; j++) {
@@ -80,7 +84,7 @@ export class Crazy8Table extends Table {
                 resolve("success");
               }
             },
-            500 * (i * this.players.length - 1 + j),
+            this.drawTime * (i * this.players.length - 1 + j),
             i,
             j
           );
@@ -125,7 +129,7 @@ export class Crazy8Table extends Table {
 
             setTimeout(() => {
               resolve("success");
-            }, 1000);
+            }, this.drawTime);
           });
           resolve("success");
         };
@@ -157,7 +161,7 @@ export class Crazy8Table extends Table {
     return new Promise((resolve) => {
       const player = this.getTurnPlayer() as Crazy8Player;
       if (this.gamePhase === "distribute") {
-        const haveTurnDistributeHelper = (time: number) => {
+        const haveTurnDistributeHelper = () => {
           return new Promise((resolve) => {
             setTimeout(() => {
               this.cardPlaceArr.push(this.deck.drawOne());
@@ -166,13 +170,13 @@ export class Crazy8Table extends Table {
                 player.gameStatus = "play";
               }
               resolve("success");
-            }, time);
+            }, this.drawTime);
           });
         };
 
         const haveTurnDistribute = async () => {
           await this.assignPlayerHands();
-          await haveTurnDistributeHelper(500);
+          await haveTurnDistributeHelper();
           resolve("success");
         };
         haveTurnDistribute();
@@ -212,7 +216,7 @@ export class Crazy8Table extends Table {
             setTimeout(() => {
               this.nextRound();
               resolve("success");
-            }, 3000);
+            }, this.nextRoundTime);
           });
           resolve("success");
         };

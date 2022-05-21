@@ -4,10 +4,10 @@ import { useBlackJackRenderStore } from "@/stores/blackJackRender";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
 import BJHouse from "../components/player/BJHouse.vue";
 import BJPlayer from "../components/player/BJPlayer.vue";
-import GameAction from "@/components/GameAction.vue";
-import GameRound from "@/components/GameRound.vue";
-import GameBet from "@/components/GameBet.vue";
+import BJAction from "@/components/BJAction.vue";
+import BJBet from "@/components/BJBet.vue";
 import BJEndResult from "../components/results/BJEndResult.vue";
+import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
 
 const table = useTableStore().table as BlackJackTable;
@@ -56,11 +56,11 @@ render.renderTable(table);
   <div class="relative h-56 mt-2">
     <GameRound />
     <Transition name="fade">
-      <GameAction
+      <BJAction
         v-if="render.renderAction"
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       />
-      <GameBet
+      <BJBet
         v-else-if="render.renderBet"
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
       />

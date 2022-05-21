@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Card } from "./card";
+import { Card } from "@/models/card";
 import { userSoundStore } from "@/stores/sound";
 
 export const useDeckStore = defineStore({

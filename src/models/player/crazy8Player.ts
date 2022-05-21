@@ -1,6 +1,6 @@
 import { Player } from "@/models/player/player";
 import { GameDecision } from "@/models/gameDecision";
-import type { Card } from "@/stores/card";
+import type { Card } from "@/models/card";
 import { userSoundStore } from "@/stores/sound";
 
 export class Crazy8Player extends Player {
@@ -65,7 +65,7 @@ export class Crazy8Player extends Player {
     return score;
   }
 
-  public drawCard(card: Card) {
+  public drawCard(card: Card): void {
     userSoundStore().distributeCardSound();
     this.hand.push(card);
     this.sortHandCard();
@@ -86,7 +86,7 @@ export class Crazy8Player extends Player {
     }
   }
 
-  public outCard(card: Card) {
+  public outCard(card: Card): void {
     userSoundStore().playCardSound();
     this.hand.splice(this.hand.indexOf(card), 1);
 

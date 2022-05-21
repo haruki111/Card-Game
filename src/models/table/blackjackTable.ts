@@ -134,7 +134,7 @@ export class BlackJackTable extends Table {
                 resolve("success");
               }
             },
-            500 * (ci * (this.players.length + 1) + pj),
+            this.drawTime * (ci * (this.players.length + 1) + pj),
             ci,
             pj
           );
@@ -181,14 +181,14 @@ export class BlackJackTable extends Table {
           player.isAction = true;
           setTimeout(() => {
             player.isAction = false;
-            userSoundStore().distributeCardSound();
-            player.hand.push(this.deck.drawOne());
+            player.drawCard(this.deck.drawOne());
+
             if (player.getHandScore() > 21) {
               setTimeout(() => {
                 player.gameStatus = "bust";
                 useSpeechStore().speech(player.gameStatus, player.id);
                 resolve("success");
-              }, 200);
+              }, this.balloonTime);
             } else {
               resolve("success");
             }
@@ -257,7 +257,7 @@ export class BlackJackTable extends Table {
             setTimeout(() => {
               this.nextRound();
               resolve("success");
-            }, 2000);
+            }, this.nextRoundTime);
           });
           resolve("success");
         };

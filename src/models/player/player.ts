@@ -1,4 +1,4 @@
-import type { Card } from "@/stores/card";
+import type { Card } from "@/models/card";
 
 import {
   Investments,
@@ -133,4 +133,5 @@ export abstract class Player {
   }
 
   abstract getHandScore(): number;
+  abstract drawCard(card: Card): void;
 }

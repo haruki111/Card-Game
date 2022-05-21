@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
-import type { Card } from "@/stores/card";
+import type { Card } from "@/models/card";
 import { useSpeechStore } from "@/stores/speech";
 
 export const useCrazy8RenderStore = defineStore({

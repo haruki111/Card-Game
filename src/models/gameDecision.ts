@@ -1,4 +1,4 @@
-import type { Card } from "@/stores/card";
+import type { Card } from "@/models/card";
 export class GameDecision {
   private action: string | number | null;
   private amount: string | number | { card: Card; nextSuit: string };

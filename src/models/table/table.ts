@@ -10,6 +10,10 @@ export abstract class Table {
   protected _currRound: number;
   protected _deck;
   protected _players: BlackJackPlayer[] | Crazy8Player[];
+  protected _drawTime: number;
+  protected _balloonTime: number;
+  protected _nextRoundTime: number;
+
   constructor(
     gameType: string,
     gamePhase: string,
@@ -23,6 +27,9 @@ export abstract class Table {
     this._currRound = 1;
     this._deck = useDeckStore();
     this._players = players;
+    this._drawTime = 500;
+    this._balloonTime = 500;
+    this._nextRoundTime = 500;
   }
 
   get gameType(): string {
@@ -63,6 +70,18 @@ export abstract class Table {
 
   get deck() {
     return this._deck;
+  }
+
+  get drawTime(): number {
+    return this._drawTime;
+  }
+
+  get balloonTime(): number {
+    return this._balloonTime;
+  }
+
+  get nextRoundTime(): number {
+    return this._nextRoundTime;
   }
 
   public onLastPlayer(): boolean {
