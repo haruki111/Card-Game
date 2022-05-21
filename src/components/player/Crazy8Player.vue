@@ -37,10 +37,14 @@ watch(player, (n) => {
 });
 
 const playerCardHide = computed(() => {
-  if (table.gamePhase === "distribute")
-    return [false, false, false, false, false];
-  else {
-    let hideArr: boolean[] = [];
+  let hideArr: boolean[] = [];
+
+  if (player.type !== "user") {
+    for (let i = 0; i < player.hand.length; i++) {
+      hideArr.push(true);
+    }
+    return hideArr;
+  } else {
     for (let i = 0; i < player.hand.length; i++) {
       hideArr.push(false);
     }

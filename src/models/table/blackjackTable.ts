@@ -28,19 +28,14 @@ export class BlackJackTable extends Table {
     result: Result[];
   }[];
 
-  constructor(
-    userName: string,
-    gameType: string,
-    round: number,
-    gameSpeed: number
-  ) {
+  constructor(userName: string, gameType: string, round: number) {
     const userType = userName.toLowerCase() == "ai" ? "ai" : "user";
     const players: BlackJackPlayer[] = [
       new BlackJackPlayer("player1", "ai", 400),
       new BlackJackPlayer(userName, userType, 400),
       new BlackJackPlayer("player3", "ai", 400),
     ];
-    super(gameType, "betting", round, gameSpeed, players);
+    super(gameType, "betting", round, players);
     this._house = new BlackJackPlayer("house", "house", -1);
     this._nextGamePhase = "";
     this._resultsLog = [];

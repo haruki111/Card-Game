@@ -11,12 +11,7 @@ export class Crazy8Table extends Table {
   private _dealerNum: number;
   private _cardPlaceArr: Card[];
   private _orderCorrection: number;
-  constructor(
-    userName: string,
-    gameType: string,
-    round: number,
-    gameSpeed: number
-  ) {
+  constructor(userName: string, gameType: string, round: number) {
     const userType = userName.toLowerCase() == "ai" ? "ai" : "user";
     const players: Crazy8Player[] = [
       new Crazy8Player("player1", "ai", 0),
@@ -25,7 +20,7 @@ export class Crazy8Table extends Table {
       new Crazy8Player("player3", "ai", 0),
     ];
 
-    super(gameType, "distribute", round, gameSpeed, players);
+    super(gameType, "distribute", round, players);
     this._winPlayers = [];
     this._dealerNum = Math.floor(Math.random() * this.players.length);
     this._cardPlaceArr = [];

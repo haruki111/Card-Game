@@ -27,21 +27,16 @@ const selectGame = () => {
 const selectRound = () => {
   gameSettingHash.round = Number(selects[1].selected);
 };
-const selectSpeed = () => {
-  gameSettingHash.speed = Number(selects[2].selected);
-};
 
-const gameSettingHash = reactive({
-  name: "haruki",
-  game: "Black Jack",
-  round: 5,
-  speed: 1,
-}) as {
+const gameSettingHash: {
   name: string;
   game: string;
   round: number;
-  speed: number;
-};
+} = reactive({
+  name: "haruki",
+  game: "Black Jack",
+  round: 5,
+});
 
 const inputs: {
   text: string;
@@ -74,12 +69,6 @@ const selects: {
     options: [5, 3, 1],
     label: "Round",
     method: selectRound,
-  },
-  {
-    selected: gameSettingHash.speed,
-    options: [10, 5, 2, 1],
-    label: "Speed",
-    method: selectSpeed,
   },
 ]);
 </script>

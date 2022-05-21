@@ -15,14 +15,12 @@ export const useTableStore = defineStore({
       name: string;
       game: string;
       round: number;
-      speed: number;
     }): void {
       if (gameSettingHash.game === "Black Jack") {
         this.table = new BlackJackTable(
           gameSettingHash.name,
           gameSettingHash.game,
-          gameSettingHash.round,
-          gameSettingHash.speed
+          gameSettingHash.round
         );
         this.table.deck.resetDeck();
         router.push("game");
@@ -30,8 +28,7 @@ export const useTableStore = defineStore({
         this.table = new Crazy8Table(
           gameSettingHash.name,
           gameSettingHash.game,
-          gameSettingHash.round,
-          gameSettingHash.speed
+          gameSettingHash.round
         );
         this.table.deck.resetDeck();
         router.push("Crazy8");

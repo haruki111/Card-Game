@@ -121,8 +121,8 @@ export abstract class Player {
   public sortHandCard(): void {
     this.hand.sort(
       (a, b) =>
-        a.getRankNumber() - b.getRankNumber() ||
-        a.getSuitOrder() - b.getSuitOrder()
+        a.getSuitOrder() - b.getSuitOrder() ||
+        a.getRankNumber() - b.getRankNumber()
     );
   }
 
