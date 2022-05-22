@@ -119,6 +119,43 @@ const selects: {
       />
     </div>
 
+    <label class="block mb-2 text-sm font-medium text-gray-100"> Game </label>
+    <div class="sm:flex flex-none justify-around">
+      <div
+        class="sm:w-2/5 sm:mb-0 mb-4 bg-white rounded-lg border border-gray-200 shadow-md"
+      >
+        <div href="#">
+          <img
+            class="rounded-t-lg"
+            src="/docs/images/blog/image-1.jpg"
+            alt=""
+          />
+        </div>
+        <div class="p-5 text-center">
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+            Black Jack
+          </h5>
+        </div>
+      </div>
+
+      <div
+        class="sm:w-2/5 sm:mb-0 mb-4 bg-white rounded-lg border border-gray-200 shadow-md"
+      >
+        <div href="#">
+          <img
+            class="rounded-t-lg"
+            src="/docs/images/blog/image-1.jpg"
+            alt=""
+          />
+        </div>
+        <div class="p-5 text-center">
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+            Crazy 8
+          </h5>
+        </div>
+      </div>
+    </div>
+
     <div class="mb-6" v-for="(select, index) in selects" :key="index">
       <label class="block mb-2 text-sm font-medium text-gray-100">
         {{ select.label }}
