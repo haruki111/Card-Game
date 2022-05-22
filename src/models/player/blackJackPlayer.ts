@@ -87,7 +87,7 @@ export class BlackJackPlayer extends Player {
     return { score: score, haveA: haveA };
   }
 
-  public softHandAction(playerScore: number, houseScore: number) {
+  public softHandAction(playerScore: number, houseScore: number): string {
     const softHand: string[][] = [
       ["H", "H", "H", "D", "D", "H", "H", "H", "H", "H"],
       ["H", "H", "H", "D", "D", "H", "H", "H", "H", "H"],
@@ -105,18 +105,16 @@ export class BlackJackPlayer extends Player {
     const houseSelect: number = houseSelectArr.indexOf(houseScore);
     let playerSelect: number = playerSelectArr.indexOf(playerScore);
     if (playerScore < 13) playerSelect = 0;
-    if (playerScore > 20) playerSelect = 7;
+    else if (playerScore > 20) playerSelect = 7;
 
-    let playerAction = String(
+    const playerAction = String(
       BlackJackPlayer.mapAction.get(softHand[playerSelect][houseSelect])
     );
-    if (this.hand.length > 2 && playerAction == "double") playerAction = "hit";
-    if (playerAction == "double" && this.bet > this.chips) playerAction = "hit";
 
-    return playerAction;
+    return this.handActionHelper(playerAction);
   }
 
-  public hardHandAction(playerScore: number, houseScore: number) {
+  public hardHandAction(playerScore: number, houseScore: number): string {
     const hardHand = [
       ["H", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
       ["H", "D", "D", "D", "D", "H", "H", "H", "H", "H"],
@@ -136,19 +134,28 @@ export class BlackJackPlayer extends Player {
     const houseSelect = houseSelectArr.indexOf(houseScore);
     let playerSelect = playerSelectArr.indexOf(playerScore);
     if (playerScore < 8) playerSelect = 0;
-    if (playerScore > 17) playerSelect = 9;
+    else if (playerScore > 17) playerSelect = 9;
 
-    let playerAction = String(
+    const playerAction = String(
       BlackJackPlayer.mapAction.get(hardHand[playerSelect][houseSelect])
     );
 
-    if (
-      this.hand.length > 2 &&
-      (playerAction == "double" || playerAction == "surrender")
-    )
-      playerAction = "hit";
-    if (playerAction == "double" && this.bet > this.chips) playerAction = "hit";
+    return this.handActionHelper(playerAction);
+  }
 
+  public handActionHelper(playerAction: string): string {
+    // 3枚以上の場合は hit or stand
+    const firstTimeAction: boolean =
+      this.hand.length > 2 &&
+      (playerAction == "double" || playerAction == "surrender");
+
+    // chipsが '-' になるのを防ぐ
+    const isActionDouble: boolean =
+      playerAction == "double" && this.bet > this.chips;
+
+    if (firstTimeAction || isActionDouble) {
+      playerAction = "hit";
+    }
     return playerAction;
   }
 }

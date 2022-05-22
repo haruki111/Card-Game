@@ -225,7 +225,7 @@ export class Crazy8Table extends Table {
     });
   }
 
-  clearPlayerHands(): void {
+  public clearPlayerHands(): void {
     for (const player of this.players) {
       player.hand = [];
       player.gameStatus = "betting";
@@ -254,7 +254,7 @@ export class Crazy8Table extends Table {
     }
   }
 
-  nextRound(): void {
+  public nextRound(): void {
     if (this.currRound == this.round) {
       this.gamePhase = "end";
     } else {
@@ -269,7 +269,7 @@ export class Crazy8Table extends Table {
     }
   }
 
-  Crazy8EvaluateDeckRunsOut(): void {
+  public Crazy8EvaluateDeckRunsOut(): void {
     let playersTotalScore = this.players[0].getHandScore();
     let lowScorePlayers = [this.players[0]];
     for (let i = 1; i < this.players.length; i++) {
@@ -296,7 +296,7 @@ export class Crazy8Table extends Table {
     }
   }
 
-  formatTable(): void {
+  public formatTable(): void {
     this.gamePhase = "distribute";
     this.currRound = 1;
     this.turnCounter = 1;
@@ -305,14 +305,14 @@ export class Crazy8Table extends Table {
     this.deck.resetDeck();
   }
 
-  formatPlayer(): void {
+  public formatPlayer(): void {
     this.clearPlayerHands();
     for (const player of this.players) {
       player.chips = 0;
     }
   }
 
-  isGameOut(player: Crazy8Player): void {
+  public isGameOut(player: Crazy8Player): void {
     if (player.hand.length == 0) {
       this.winPlayers.push(player);
       this.gamePhase = "evaluatingWinners";

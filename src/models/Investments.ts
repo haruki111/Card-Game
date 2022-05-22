@@ -58,7 +58,7 @@ export class GranMartingaleMethod implements BasicMethod {
     this.bet = 0;
   }
 
-  method(player: Player) {
+  public method(player: Player) {
     const winOrLose: number = player.grades[player.grades.length - 1];
     if (player.grades.length == 0) {
       this.bet = this.basic;
@@ -84,7 +84,7 @@ export class GoodManMethod implements BasicMethod {
     this.bet = 0;
   }
 
-  method(player: Player) {
+  public method(player: Player) {
     const winOrLose: number = player.grades[player.grades.length - 1];
     if (player.grades.length == 0) {
       this.bet = this.basic[0];
@@ -105,7 +105,7 @@ export class GoodManMethod implements BasicMethod {
 }
 
 export class TenPercentMethod implements BasicMethod {
-  method(player: Player) {
+  public method(player: Player) {
     return Math.floor(player.chips * 0.1);
   }
 }

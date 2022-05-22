@@ -80,7 +80,7 @@ export class BlackJackTable extends Table {
     return this._players as BlackJackPlayer[];
   }
 
-  getTurnPlayer(): BlackJackPlayer {
+  public getTurnPlayer(): BlackJackPlayer {
     if (this.turnCounter == -1) return this.house;
     const turnPlayer = this.turnCounter % this.players.length;
     return turnPlayer == 0
@@ -88,7 +88,7 @@ export class BlackJackTable extends Table {
       : this.players[turnPlayer - 1];
   }
 
-  allPlayerActionsResolved(): boolean {
+  public allPlayerActionsResolved(): boolean {
     const setStatus = ["bust", "stand", "surrender", "double", "blackjack"];
     for (let i = 0; i < this.players.length; i++) {
       if (!setStatus.includes(this.players[i].gameStatus)) return false;
@@ -96,7 +96,7 @@ export class BlackJackTable extends Table {
     return true;
   }
 
-  blackjackGetRoundResults(): void {
+  public blackjackGetRoundResults(): void {
     const hash: {
       round: number;
       result: Result[];
@@ -118,7 +118,7 @@ export class BlackJackTable extends Table {
     this.resultsLog.push(hash);
   }
 
-  assignPlayerHands(): Promise<unknown> {
+  public assignPlayerHands(): Promise<unknown> {
     return new Promise((resolve) => {
       for (let ci = 0; ci < 2; ci++) {
         for (let pj = 0; pj < this.players.length + 1; pj++) {
@@ -143,7 +143,7 @@ export class BlackJackTable extends Table {
     });
   }
 
-  evaluateMove(
+  public evaluateMove(
     player: BlackJackPlayer,
     gameDecision: GameDecision
   ): Promise<unknown> {
@@ -200,7 +200,7 @@ export class BlackJackTable extends Table {
     });
   }
 
-  validBlackJack(): void {
+  public validBlackJack(): void {
     for (const player of this.players) {
       if (player.getHandScore() == 21 && player.hand.length == 2) {
         player.gameStatus = "blackjack";
@@ -209,7 +209,7 @@ export class BlackJackTable extends Table {
     }
   }
 
-  haveTurn(userData: number | string | null): Promise<unknown> {
+  public haveTurn(userData: number | string | null): Promise<unknown> {
     return new Promise((resolve) => {
       const player = this.getTurnPlayer() as BlackJackPlayer;
 
@@ -267,7 +267,9 @@ export class BlackJackTable extends Table {
     });
   }
 
-  haveTurnEvaluatingWinnersHelper(resolve: (value: unknown) => void): void {
+  public haveTurnEvaluatingWinnersHelper(
+    resolve: (value: unknown) => void
+  ): void {
     if (this.house.gameStatus == "waitingForActions") {
       if (this.house.getHandScore() == 21 && this.house.hand.length == 2) {
         this.house.gameStatus = "blackjack";
@@ -300,7 +302,7 @@ export class BlackJackTable extends Table {
     }
   }
 
-  blackjackEvaluate(player: Player | BlackJackPlayer): void {
+  public blackjackEvaluate(player: Player | BlackJackPlayer): void {
     //プレイヤーがバ-スト or サレンダー
     if (player.gameStatus == "bust" || player.gameStatus == "surrender") {
       player.winAmount -= player.bet;
@@ -337,7 +339,7 @@ export class BlackJackTable extends Table {
     if (player.chips == 0 && player.type == "user") this.nextGamePhase = "end";
   }
 
-  blackjackClearPlayerHandsAndBets(): void {
+  public blackjackClearPlayerHandsAndBets(): void {
     this.deck.resetDeck();
 
     for (const player of this.players as BlackJackPlayer[]) {
@@ -352,7 +354,7 @@ export class BlackJackTable extends Table {
     this.house.gameStatus = "betting";
   }
 
-  nextRound(): void {
+  public nextRound(): void {
     if (this.currRound == this.round || this.nextGamePhase == "end") {
       this.gamePhase = "end";
     } else {
@@ -363,7 +365,7 @@ export class BlackJackTable extends Table {
     }
   }
 
-  formatTable() {
+  public formatTable() {
     this.gamePhase = "betting";
     this.nextGamePhase = "";
     this.currRound = 1;
@@ -371,7 +373,7 @@ export class BlackJackTable extends Table {
     this.resultsLog = [];
   }
 
-  formatPlayer() {
+  public formatPlayer() {
     this.blackjackClearPlayerHandsAndBets();
 
     for (const player of this.players) {
