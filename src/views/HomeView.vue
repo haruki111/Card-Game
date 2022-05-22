@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useSpeechStore } from "@/stores/speech";
+import alert from "@/components/alert.vue";
+
 const table = useTableStore();
 const speech = useSpeechStore();
 
@@ -11,6 +13,7 @@ speechSynthesis.onvoiceschanged = () => {
 
 const startGame = () => {
   if (gameSettingHash.name == "") inputs.alert = true;
+  if (gameSettingHash.game == "") gamesHash.alert = true;
   else {
     table.$reset();
     table.setTable(gameSettingHash);
@@ -21,9 +24,32 @@ const inputName = () => {
   gameSettingHash.name = inputs.text;
 };
 
-const selectGame = () => {
-  gameSettingHash.game = String(selects[0].selected);
+const selectBJ = () => {
+  gameSettingHash.game = "Black Jack";
+  gamesHash.games[0].state = true;
+  gamesHash.games[1].state = false;
 };
+
+const selectCrazy8 = () => {
+  gameSettingHash.game = "Crazy8";
+  gamesHash.games[1].state = true;
+  gamesHash.games[0].state = false;
+};
+
+const selectBJColor = computed(() => {
+  if (gamesHash.games[0].state) {
+    return "border-blue-400";
+  }
+  return "border-gray-50";
+});
+
+const selectCrazy8Color = computed(() => {
+  if (gamesHash.games[1].state) {
+    return "border-blue-400";
+  }
+  return "border-gray-50";
+});
+
 const selectRound = () => {
   gameSettingHash.round = Number(selects[1].selected);
 };
@@ -33,8 +59,8 @@ const gameSettingHash: {
   game: string;
   round: number;
 } = reactive({
-  name: "haruki",
-  game: "Black Jack",
+  name: "You",
+  game: "",
   round: 5,
 });
 
@@ -52,18 +78,26 @@ const inputs: {
   method: inputName,
 });
 
+const gamesHash = reactive({
+  games: [
+    { class: selectBJColor, name: "Black Jack", event: selectBJ, state: false },
+    {
+      class: selectCrazy8Color,
+      name: "Crazy8",
+      event: selectCrazy8,
+      state: false,
+    },
+  ],
+  alert: false,
+  alertText: "ゲームを選択してください",
+});
+
 const selects: {
   selected: string | number;
   options: string[] | number[];
   label: string;
   method: () => void;
 }[] = reactive([
-  {
-    selected: gameSettingHash.game,
-    options: ["Black Jack", "Crazy8"],
-    label: "Game",
-    method: selectGame,
-  },
   {
     selected: gameSettingHash.round,
     options: [5, 3, 1],
@@ -78,7 +112,7 @@ const selects: {
     Welcome to Card Game!
   </h1>
   <form class="lg:w-1/2 md:w-2/3 mx-auto">
-    <div class="mb-6">
+    <div class="mb-8">
       <div class="flex items-center">
         <label
           for="name-input"
@@ -86,28 +120,7 @@ const selects: {
         >
           {{ inputs.label }}
         </label>
-        <div
-          v-show="inputs.alert"
-          id="alert-1"
-          class="flex p-2 ml-2 mb-2 bg-blue-100 rounded-lg"
-          role="alert"
-        >
-          <svg
-            class="flex-shrink-0 w-5 h-5 text-blue-700"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <div class="ml-3 text-sm font-medium text-blue-700">
-            {{ inputs.alertText }}
-          </div>
-        </div>
+        <alert :isAlert="inputs.alert" :text="inputs.alertText" />
       </div>
       <input
         v-model="inputs.text"
@@ -119,44 +132,7 @@ const selects: {
       />
     </div>
 
-    <label class="block mb-2 text-sm font-medium text-gray-100"> Game </label>
-    <div class="sm:flex flex-none justify-around">
-      <div
-        class="sm:w-2/5 sm:mb-0 mb-4 bg-white rounded-lg border border-gray-200 shadow-md"
-      >
-        <div href="#">
-          <img
-            class="rounded-t-lg"
-            src="/docs/images/blog/image-1.jpg"
-            alt=""
-          />
-        </div>
-        <div class="p-5 text-center">
-          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-            Black Jack
-          </h5>
-        </div>
-      </div>
-
-      <div
-        class="sm:w-2/5 sm:mb-0 mb-4 bg-white rounded-lg border border-gray-200 shadow-md"
-      >
-        <div href="#">
-          <img
-            class="rounded-t-lg"
-            src="/docs/images/blog/image-1.jpg"
-            alt=""
-          />
-        </div>
-        <div class="p-5 text-center">
-          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-            Crazy 8
-          </h5>
-        </div>
-      </div>
-    </div>
-
-    <div class="mb-6" v-for="(select, index) in selects" :key="index">
+    <div class="mb-8" v-for="(select, index) in selects" :key="index">
       <label class="block mb-2 text-sm font-medium text-gray-100">
         {{ select.label }}
       </label>
@@ -173,6 +149,27 @@ const selects: {
           {{ option }}
         </option>
       </select>
+    </div>
+
+    <div class="mb-8">
+      <label class="block mb-2 text-sm font-medium text-gray-100">Game</label>
+      <alert :isAlert="gamesHash.alert" :text="gamesHash.alertText" />
+
+      <div class="sm:flex flex-none justify-around">
+        <div
+          v-for="(game, index) of gamesHash.games"
+          :key="index"
+          :class="game.class"
+          @click="game.event"
+          class="sm:w-2/5 sm:mb-0 mb-4 bg-white rounded-lg border-4 shadow-md"
+        >
+          <div class="p-5 text-center">
+            <h5 class="text-2xl font-bold tracking-tight text-gray-900">
+              {{ game.name }}
+            </h5>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="flex justify-center items-center">

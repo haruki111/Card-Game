@@ -2,7 +2,7 @@
 import { computed, ref, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
-import type { Card } from "@/stores/card";
+import type { Card } from "@/models/card";
 import GameCard from "../GameCard.vue";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
 import { gsap } from "gsap";
