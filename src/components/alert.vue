@@ -9,7 +9,7 @@ let props = defineProps<{
   <div
     v-show="props.isAlert"
     id="alert-1"
-    class="flex p-2 ml-2 mb-2 bg-blue-100 rounded-lg"
+    class="flex p-2 ml-2 bg-blue-100 rounded-lg"
     role="alert"
   >
     <svg
