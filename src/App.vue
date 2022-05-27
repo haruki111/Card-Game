@@ -1,11 +1,26 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
+import router from "./router";
+import { ref, computed } from "vue";
+
+let path = ref("");
+const justifyClass = computed(() => {
+  if (path.value === "/BlackJack") {
+    return "lg:justify-start justify-center relative";
+  }
+  return "justify-center";
+});
+
+router.afterEach((to) => {
+  path.value = to.path;
+});
 </script>
 
 <template>
   <div id="app">
     <main
-      class="container h-screen mx-auto flex justify-center flex-col px-5 sm:py-12 py-4"
+      :class="justifyClass"
+      class="container h-screen mx-auto flex flex-col px-5 md:py-12 py-4"
     >
       <RouterView />
     </main>

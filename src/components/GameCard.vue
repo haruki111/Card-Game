@@ -18,7 +18,7 @@ const rotateCard = (rotate: { isRotate: boolean; class: string }) => {
   } else if (rotate.isRotate == true && rotate.class == "rotate-90") {
     return "flex flex-row-reverse justify-around items-center h-12 w-16 my-2";
   }
-  return "h-16 w-12 mx-2";
+  return "sm:h-16 sm:w-12 h-10 w-8 sm:mx-2 mx-1";
 };
 
 const rotateImg = (isRotate: boolean) => {
@@ -46,11 +46,13 @@ const shadowCard = computed(() => {
     </div>
 
     <div key="show" v-else>
-      <div :class="rotateImg(rotate.isRotate)" class="h-8 w-8">
+      <div :class="rotateImg(rotate.isRotate)" class="sm:h-8 sm:w-8 h-4 w-4">
         <img :src="props.card.getImg()" :class="rotate.class" />
       </div>
       <div class="cardText pt-1 text-slate-900">
-        <p :class="rotate.class" class="text-center">{{ props.card.rank }}</p>
+        <p :class="rotate.class" class="sm:text-base text-xs text-center">
+          {{ props.card.rank }}
+        </p>
       </div>
     </div>
   </transition>

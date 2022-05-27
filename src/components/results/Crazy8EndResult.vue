@@ -54,9 +54,7 @@ const rankAndName = (index: number, player: Player): string => {
 <template>
   <div class="fixed z-10 inset-0">
     <div class="flex items-center justify-center min-h-screen">
-      <div
-        class="w-1/2 m-auto relative overflow-x-auto shadow-md sm:rounded-lg"
-      >
+      <div class="m-auto relative overflow-x-auto shadow-md sm:rounded-lg">
         <div class="py-2 text-center bg-white">
           <h3 class="text-2xl font-bold">Result</h3>
         </div>
@@ -67,7 +65,7 @@ const rankAndName = (index: number, player: Player): string => {
                 v-for="(tableHead, index) in tableHeadsRound()"
                 :key="index"
                 scope="col"
-                class="px-6 py-3"
+                class="xl:px-6 px-4 py-3"
               >
                 {{ tableHead }}
               </th>
@@ -81,11 +79,11 @@ const rankAndName = (index: number, player: Player): string => {
             >
               <th
                 scope="row"
-                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                class="xl:px-6 px-4 py-4 font-medium text-gray-900 whitespace-nowrap"
               >
                 {{ rankAndName(index, player) }}
               </th>
-              <td class="px-6 py-4">
+              <td class="xl:px-6 px-4 py-4">
                 {{ player.chips }}
               </td>
             </tr>

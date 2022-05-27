@@ -45,13 +45,13 @@ const blinkTurnPlayer = computed(() => {
   <div id="houseInfo" class="text-gray-100 relative">
     <p
       :class="blinkTurnPlayer"
-      class="playerName sm:text-3xl text-2xl font-bold mb-2"
+      class="playerName md:text-3xl sm:text-2xl text-xl font-bold mb-2"
     >
       {{ house.name }}
     </p>
     <div id="playerScore" class="pb-2">
       <span
-        class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
+        class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full"
         >{{ displayHouseScore }}
       </span>
     </div>

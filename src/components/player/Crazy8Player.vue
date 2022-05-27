@@ -130,7 +130,7 @@ const winOrLoseColor = () => {
 
       <p
         :class="blinkTurnPlayer"
-        class="playerName sm:text-3xl text-2xl font-bold flex items-center justify-center mb-2"
+        class="playerName md:text-3xl sm:text-2xl text-xl font-bold flex items-center justify-center mb-2"
       >
         <span
           v-if="table.dealerNum == index"
@@ -141,7 +141,7 @@ const winOrLoseColor = () => {
         {{ player.name }}
       </p>
 
-      <p class="sm:text-3xl text-2xl font-bold mb-2">
+      <p class="md:text-3xl sm:text-2xl text-xl font-bold mb-2">
         {{ tweened.score.toFixed(0) }}
       </p>
       <Transition name="fade">

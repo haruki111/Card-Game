@@ -104,24 +104,24 @@ const winOrLoseColor = () => {
     <div
       v-if="table.gamePhase === 'evaluatingEnd'"
       :class="winOrLoseColor()"
-      class="text-3xl font-bold"
+      class="md:text-3xl sm:text-2xl text-xl font-bold"
     >
       {{ winOrLose }}
     </div>
     <p
       :class="blinkTurnPlayer"
-      class="playerName sm:text-3xl text-2xl font-bold mb-2"
+      class="playerName md:text-3xl sm:text-2xl text-xl font-bold mb-2"
     >
       {{ player.name }}
     </p>
-    <div class="playerStatus text-base flex justify-center">
+    <div class="playerStatus sm:text-base text-xs flex justify-center">
       <p class="px-2 w-16">B:{{ tweened.bet.toFixed(0) }}</p>
       <p class="px-2 w-16">C:{{ tweened.chips.toFixed(0) }}</p>
     </div>
     <div id="playerScore" class="pb-2">
       <span
         :class="statusColor"
-        class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
+        class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full"
         >{{ displayScore }}
       </span>
     </div>

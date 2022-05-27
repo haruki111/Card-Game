@@ -65,7 +65,7 @@ const betChips = () => {
 </script>
 <template>
   <div class="flex flex-col items-center justify-center">
-    <div class="flex justify-center items-center sm:h-16 h-12 sm:mt-4 mt-2">
+    <div class="flex justify-center items-center sm:h-16 h-12 xl:mt-4 mt-2">
       <TransitionGroup
         name="betChip"
         tag="div"
@@ -91,7 +91,7 @@ const betChips = () => {
     <TransitionGroup
       name="chipList"
       tag="div"
-      class="flex justify-center sm:mt-4 mt-2"
+      class="flex justify-center xl:mt-4 mt-2"
     >
       <div v-for="chip in renderChips" :key="chip" class="sm:px-2 px-1">
         <img
@@ -103,7 +103,7 @@ const betChips = () => {
       </div>
     </TransitionGroup>
 
-    <div class="flex justify-center sm:mt-4 mt-2">
+    <div class="flex justify-center xl:mt-4 mt-2">
       <button
         :disabled="validBet"
         :class="disabledBgBlueColor"

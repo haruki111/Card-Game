@@ -23,7 +23,7 @@ export const useTableStore = defineStore({
           gameSettingHash.round
         );
         this.table.deck.resetDeck();
-        router.push("game");
+        router.push("BlackJack");
       } else if (gameSettingHash.game === "Crazy8") {
         this.table = new Crazy8Table(
           gameSettingHash.name,

@@ -121,10 +121,13 @@ const selects: {
   <h1 class="sm:text-4xl text-2xl font-bold text-gray-100 text-center mb-4">
     Welcome to Card Game!
   </h1>
-  <form class="lg:w-1/2 md:w-2/3 mx-auto">
-    <div class="mb-8">
+  <form class="lg:w-1/2 w-full mx-auto">
+    <div class="md:mb-8 sm:mb-6 mb-4">
       <div class="flex items-center h-10 mb-2">
-        <label for="name-input" class="block text-xl font-medium text-gray-100">
+        <label
+          for="name-input"
+          class="block sm:text-xl text-lg font-medium text-gray-100"
+        >
           {{ inputs.label }}
         </label>
         <alert :isAlert="inputs.alert" :text="inputs.alertText" />
@@ -139,8 +142,14 @@ const selects: {
       />
     </div>
 
-    <div class="mb-8" v-for="(select, index) in selects" :key="index">
-      <label class="block h-10 mb-2 text-xl font-medium text-gray-100">
+    <div
+      class="md:mb-8 sm:mb-6 mb-4"
+      v-for="(select, index) in selects"
+      :key="index"
+    >
+      <label
+        class="block h-10 mb-2 sm:text-xl text-lg font-medium text-gray-100"
+      >
         {{ select.label }}
       </label>
       <select
@@ -158,9 +167,11 @@ const selects: {
       </select>
     </div>
 
-    <div class="mb-8">
+    <div class="md:mb-8 sm:mb-6 mb-4">
       <div class="flex items-center h-10 mb-2">
-        <label class="block text-xl font-medium text-gray-100">Game</label>
+        <label class="block sm:text-xl text-lg font-medium text-gray-100"
+          >Game</label
+        >
         <alert :isAlert="gamesHash.alert" :text="gamesHash.alertText" />
       </div>
       <div class="sm:flex flex-none justify-around">
@@ -169,10 +180,12 @@ const selects: {
           :key="index"
           :class="game.class"
           @click="game.event"
-          class="sm:w-2/5 sm:mb-0 mb-4 bg-white rounded-lg border-4 shadow-md"
+          class="flex items-center justify-center sm:w-2/5 sm:mb-0 mb-4 bg-white rounded-lg border-4 shadow-md"
         >
-          <div class="p-5 text-center">
-            <h5 class="text-2xl font-bold tracking-tight text-gray-900">
+          <div class="sm:p-5 p-2 text-center">
+            <h5
+              class="sm:text-2xl text-xl font-bold tracking-tight text-gray-900"
+            >
               {{ game.name }}
             </h5>
           </div>
