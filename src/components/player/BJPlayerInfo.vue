@@ -81,20 +81,30 @@ const winOrLose = computed(() => {
   const player = props.player;
   const newestGrade = player.grades[player.grades.length - 1];
   if (newestGrade == 1) {
-    return "win";
+    return "Win";
   } else if (newestGrade == 0) {
-    return "draw";
+    return "Draw";
   }
-  return "lose";
+  return "Lose";
 });
+
+const winOrLoseColor = () => {
+  if (winOrLose.value === "Win") {
+    return "text-red-500";
+  } else if (winOrLose.value === "Draw") {
+    return "text-gray-200";
+  } else {
+    return "text-blue-600";
+  }
+};
 </script>
 
 <template>
   <div id="playerInfo" class="text-gray-100 relative">
     <div
       v-if="table.gamePhase === 'evaluatingEnd'"
+      :class="winOrLoseColor()"
       class="text-3xl font-bold"
-      style="text-shadow: 0px 2px 3px darkgrey"
     >
       {{ winOrLose }}
     </div>

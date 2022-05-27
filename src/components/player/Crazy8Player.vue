@@ -105,17 +105,25 @@ const blinkTurnPlayer = computed(() => {
 });
 
 const winOrLose = computed(() => {
-  if (table.winPlayers.includes(player)) return "WIN";
-  else return "LOSE";
+  if (table.winPlayers.includes(player)) return "Win";
+  else return "Lose";
 });
+
+const winOrLoseColor = () => {
+  if (winOrLose.value === "Win") {
+    return "text-red-500";
+  } else {
+    return "text-blue-600";
+  }
+};
 </script>
 <template>
   <div>
     <div id="playerInfo" class="text-gray-100 text-center relative">
       <div
         v-if="table.gamePhase === 'betweenGames'"
+        :class="winOrLoseColor()"
         class="text-3xl font-bold"
-        style="text-shadow: 0px 2px 3px darkgrey"
       >
         {{ winOrLose }}
       </div>

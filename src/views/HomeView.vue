@@ -61,7 +61,7 @@ const selectCrazy8Color = computed(() => {
 });
 
 const selectRound = () => {
-  gameSettingHash.round = Number(selects[1].selected);
+  gameSettingHash.round = Number(selects[0].selected);
 };
 
 const gameSettingHash: {
@@ -184,7 +184,7 @@ const selects: {
       <button
         @click="startGame"
         type="button"
-        class="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-lg font-bold px-5 py-2.5 text-center"
+        class="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 rounded-full text-lg font-bold px-5 py-2.5 text-center"
       >
         Start Game
       </button>
