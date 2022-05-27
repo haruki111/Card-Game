@@ -19,8 +19,8 @@ const draw = () => {
 };
 
 const stackDeckStyle = (index: number) => {
-  if (index == 0) return "ml-12";
-  return "-ml-12";
+  if (index != 0) return "xl:-ml-12 sm:-ml-9 -ml-8";
+  else return "xl:ml-12 lg:ml-9 ml-8";
 };
 
 render.renderTable(table);
@@ -30,9 +30,12 @@ render.renderTable(table);
     id="playersWrap"
     class="flex justify-between flex-col h-full w-full m-auto z-10"
   >
-    <Crazy8Player :index="0" class="h-1/4" />
-    <div class="flex justify-between items-center h-1/2">
-      <Crazy8Player :index="3" class="flex items-center justify-around w-1/3" />
+    <Crazy8Player :index="0" class="h-1/3 flex flex-col" />
+    <div class="flex justify-between items-center h-1/3">
+      <Crazy8Player
+        :index="3"
+        class="flex items-center lg:justify-around justify-between w-1/3"
+      />
 
       <div class="flex relative">
         <Crazy8SelectSuit v-if="render.renderSelectSuit" />
@@ -58,26 +61,39 @@ render.renderTable(table);
             :isShadow="false"
             :rotate="{ isRotate: false, class: '' }"
             :class="stackDeckStyle(index)"
-            class="mx-0"
+            class="sm:mx-0 mx-0"
           />
         </TransitionGroup>
       </div>
 
       <Crazy8Player
         :index="1"
-        class="flex items-center flex-row-reverse justify-around w-1/3"
+        class="flex items-center flex-row-reverse lg:justify-around justify-between w-1/3"
       />
     </div>
-    <Crazy8Player :index="2" class="h-1/4" />
+    <Crazy8Player :index="2" class="h-1/3" />
   </div>
 
-  <GameRound />
+  <GameRound class="round" />
 
   <Transition name="fade">
     <Crazy8EndResult v-if="render.renderEndResult == true" />
   </Transition>
 </template>
 <style scoped>
+.round {
+  position: absolute;
+  top: 90%;
+  left: 90%;
+  transform: translate(-90%, -90%);
+}
+@media (max-width: 640px) {
+  .round {
+    top: 95%;
+    left: 90%;
+    transform: translate(-90%, -95%);
+  }
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;

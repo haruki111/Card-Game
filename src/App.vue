@@ -6,7 +6,7 @@ import { ref, computed } from "vue";
 let path = ref("");
 const justifyClass = computed(() => {
   if (path.value === "/BlackJack") {
-    return "lg:justify-start justify-center relative";
+    return "lg:justify-start justify-center";
   }
   return "justify-center";
 });
@@ -20,7 +20,7 @@ router.afterEach((to) => {
   <div id="app">
     <main
       :class="justifyClass"
-      class="container h-screen mx-auto flex flex-col px-5 md:py-12 py-4"
+      class="container h-screen relative mx-auto flex flex-col px-5 xl:py-12 py-4"
     >
       <RouterView />
     </main>

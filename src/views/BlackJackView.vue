@@ -14,7 +14,7 @@ const table = useTableStore().table as BlackJackTable;
 const render = useBlackJackRenderStore();
 
 const stackDeckStyle = (index: number) => {
-  if (index != 0) return "sm:-ml-12 -ml-8";
+  if (index != 0) return "xl:-ml-12 sm:-ml-9 -ml-8";
 };
 
 render.renderTable(table);

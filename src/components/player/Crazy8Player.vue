@@ -54,13 +54,13 @@ const playerCardHide = computed(() => {
 
 const cardsRow = (index: number) => {
   if (index == 0) {
-    return "flex-wrap-reverse w-[800px]";
+    return "flex-wrap-reverse xl:w-[800px] lg:w-[600px] w-[500px] mx-auto";
   } else if (index == 1) {
-    return "flex-col h-[600px]";
+    return "flex-col xl:h-[450px] h-[350px]";
   } else if (index == 3) {
-    return "flex-wrap-reverse flex-col h-[600px]";
+    return "flex-wrap-reverse flex-col xl:h-[450px] h-[350px]";
   }
-  return "w-[800px]";
+  return "xl:w-[800px] lg:w-[600px] w-[500px] m-auto";
 };
 
 const cardRotate = (
@@ -116,10 +116,21 @@ const winOrLoseColor = () => {
     return "text-blue-600";
   }
 };
+
+const dealerBudgePosition = computed(() => {
+  if (cardRotate(props.index).isRotate) {
+    return "absolute top-[5px] left-[-15px] -translate-x-full ";
+  }
+  return "";
+});
 </script>
 <template>
   <div>
-    <div id="playerInfo" class="text-gray-100 text-center relative">
+    <div
+      id="playerInfo"
+      :class="cardRotate(props.index).class"
+      class="text-gray-100 text-center relative"
+    >
       <div
         v-if="table.gamePhase === 'betweenGames'"
         :class="winOrLoseColor()"
@@ -130,10 +141,11 @@ const winOrLoseColor = () => {
 
       <p
         :class="blinkTurnPlayer"
-        class="playerName md:text-3xl sm:text-2xl text-xl font-bold flex items-center justify-center mb-2"
+        class="relative playerName xl:text-3xl sm:text-2xl text-xl font-bold flex items-center justify-center mb-2"
       >
         <span
           v-if="table.dealerNum == index"
+          :class="dealerBudgePosition"
           class="inline-block w-8 h-8 leading-8 mx-2 border border-gray-600 bg-gray-100 text-gray-800 text-sm font-medium rounded-full"
         >
           D
@@ -141,7 +153,7 @@ const winOrLoseColor = () => {
         {{ player.name }}
       </p>
 
-      <p class="md:text-3xl sm:text-2xl text-xl font-bold mb-2">
+      <p class="xl:text-3xl sm:text-2xl text-xl font-bold">
         {{ tweened.score.toFixed(0) }}
       </p>
       <Transition name="fade">
@@ -160,7 +172,7 @@ const winOrLoseColor = () => {
       name="player-cards"
       tag="div"
       :class="cardsRow(props.index)"
-      class="flex-wrap flex justify-center m-auto pb-2"
+      class="flex-wrap flex justify-center pb-2"
     >
       <GameCard
         v-for="(card, index) in player.hand"
