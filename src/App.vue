@@ -14,6 +14,15 @@ const justifyClass = computed(() => {
 router.afterEach((to) => {
   path.value = to.path;
 });
+
+onload = () => {
+  let perfEntries = performance.getEntriesByType("navigation");
+  perfEntries.forEach(function (pe) {
+    if (pe.type === "reload") {
+      router.push("/");
+    }
+  });
+};
 </script>
 
 <template>

@@ -9,6 +9,7 @@ import BJBet from "@/components/BJBet.vue";
 import BJEndResult from "../components/results/BJEndResult.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
+import router from "@/router";
 
 const table = useTableStore().table as BlackJackTable;
 const render = useBlackJackRenderStore();
@@ -18,6 +19,12 @@ const stackDeckStyle = (index: number) => {
 };
 
 render.renderTable(table);
+
+// ブラウザバックでHome
+addEventListener("popstate", () => {
+  router.push("/");
+  location.reload();
+});
 </script>
 <template>
   <div>

@@ -4,6 +4,11 @@ import { useTableStore } from "@/stores/table";
 import { useSpeechStore } from "@/stores/speech";
 import alert from "@/components/alert.vue";
 
+// ブラウザバックを無効化
+addEventListener("popstate", () => {
+  history.pushState(null, "", null);
+});
+
 const table = useTableStore();
 const speech = useSpeechStore();
 

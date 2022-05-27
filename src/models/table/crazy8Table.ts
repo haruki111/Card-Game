@@ -17,7 +17,7 @@ export class Crazy8Table extends Table {
       new Crazy8Player("player1", "ai", 0),
       new Crazy8Player("player2", "ai", 0),
       new Crazy8Player(userName, userType, 0),
-      new Crazy8Player("player3", "ai", 0),
+      new Crazy8Player("player4", "ai", 0),
     ];
 
     super(gameType, "distribute", round, players);

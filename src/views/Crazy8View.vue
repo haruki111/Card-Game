@@ -7,6 +7,7 @@ import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
 import Crazy8EndResult from "@/components/results/Crazy8EndResult.vue";
 import Crazy8SelectSuit from "@/components/Crazy8SelectSuit.vue";
+import router from "@/router";
 
 const table = useTableStore().table as Crazy8Table;
 const render = useCrazy8RenderStore();
@@ -24,6 +25,12 @@ const stackDeckStyle = (index: number) => {
 };
 
 render.renderTable(table);
+
+// ブラウザバックでHome
+addEventListener("popstate", () => {
+  router.push("/");
+  location.reload();
+});
 </script>
 <template>
   <div

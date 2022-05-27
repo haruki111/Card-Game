@@ -60,7 +60,9 @@ const toHome = (): void => {
 <template>
   <div class="fixed z-10 inset-0">
     <div class="flex items-center justify-center min-h-screen">
-      <div class="m-auto relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div
+        class="min-w-[50%] m-auto relative overflow-x-auto shadow-md sm:rounded-lg"
+      >
         <div class="py-2 text-center bg-white">
           <h3 class="text-2xl font-bold">Result</h3>
         </div>
