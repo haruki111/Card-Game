@@ -207,8 +207,5 @@ const selects: {
         Start Game
       </button>
     </div>
-    <div v-for="(speec, index) of speech.voiceArr" :key="index">
-      {{ speec }}
-    </div>
   </form>
 </template>

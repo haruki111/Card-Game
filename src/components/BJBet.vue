@@ -55,7 +55,7 @@ const minusBet = (num: number): void => {
 
 const stackChipStyle = (num: number) => {
   if (num == 1) return "";
-  return "sm:ml-[-78px] ml-[-58px]";
+  return "sm:-ml-16 -ml-12";
 };
 const betChips = () => {
   render.renderTableHelper(bet.value, table);
@@ -81,7 +81,7 @@ const betChips = () => {
         >
           <img
             :src="table.betDenominations.get(key)"
-            class="sm:h-16 sm:w-16 h-12 w-12 max-w-none"
+            class="sm:h-16 sm:w-16 h-12 w-12 max-w-none mr-0.5"
             alt=""
           />
         </div>
