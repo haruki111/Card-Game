@@ -6,3 +6,9 @@ html,
 body {
   overflow: hidden;
 }
+
+input,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+}

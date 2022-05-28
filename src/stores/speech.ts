@@ -11,7 +11,7 @@ export const useSpeechStore = defineStore({
     appendVoices() {
       const voices = speechSynthesis.getVoices();
       voices.forEach((voice) => {
-        // 日本語と英語以外の声は選択肢に追加しない。
+        // 英語以外の声は選択肢に追加しない。
         if (!voice.lang.match("en-US")) return;
         this.voiceArr.push(voice);
         if (voice.voiceURI.match("Google US English")) {
