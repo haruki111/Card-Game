@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import type { Card } from "../stores/card";
+import type { Card } from "@/models/card";
 
 let props = defineProps<{
   card: Card;
@@ -14,11 +14,11 @@ let props = defineProps<{
 
 const rotateCard = (rotate: { isRotate: boolean; class: string }) => {
   if (rotate.isRotate == true && rotate.class == "-rotate-90") {
-    return "flex justify-around items-center h-12 w-16 my-2";
+    return "flex justify-around items-center xl:h-12 xl:w-16 sm:h-9 sm:w-12 h-8 w-10 my-2";
   } else if (rotate.isRotate == true && rotate.class == "rotate-90") {
-    return "flex flex-row-reverse justify-around items-center h-12 w-16 my-2";
+    return "flex flex-row-reverse justify-around items-center xl:h-12 xl:w-16 sm:h-9 sm:w-12 h-8 w-10 my-2";
   }
-  return "h-16 w-12 mx-2";
+  return "xl:h-16 xl:w-12 sm:h-12 sm:w-9 h-10 w-8 sm:mx-2 mx-1 mt-1";
 };
 
 const rotateImg = (isRotate: boolean) => {
@@ -46,11 +46,19 @@ const shadowCard = computed(() => {
     </div>
 
     <div key="show" v-else>
-      <div :class="rotateImg(rotate.isRotate)" class="h-8 w-8">
+      <div
+        :class="rotateImg(rotate.isRotate)"
+        class="xl:h-8 xl:w-8 sm:h-5 sm:w-5 h-4 w-4"
+      >
         <img :src="props.card.getImg()" :class="rotate.class" />
       </div>
       <div class="cardText pt-1 text-slate-900">
-        <p :class="rotate.class" class="text-center">{{ props.card.rank }}</p>
+        <p
+          :class="rotate.class"
+          class="xl:text-base sm:text-sm text-xs text-center"
+        >
+          {{ props.card.rank }}
+        </p>
       </div>
     </div>
   </transition>

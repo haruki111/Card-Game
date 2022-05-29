@@ -2,8 +2,10 @@
 import { computed, ref, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
-import type { Card } from "@/stores/card";
-import GameCard from "../GameCard.vue";
+import type { Card } from "@/models/card";
+import GameCard from "@/components/GameCard.vue";
+import statusBalloon from "@/components/statusBalloon.vue";
+
 import type { Crazy8Table } from "@/models/table/crazy8Table";
 import { gsap } from "gsap";
 
@@ -26,6 +28,9 @@ watch(useTableStore().table.players[props.index], (n) => {
 });
 
 const isDisplayBalloon = ref(false);
+const showBalloon = computed(() => {
+  return player.gameStatus === "path" && isDisplayBalloon.value == true;
+});
 
 watch(player, (n) => {
   if (n.gameStatus === "path") {
@@ -54,13 +59,13 @@ const playerCardHide = computed(() => {
 
 const cardsRow = (index: number) => {
   if (index == 0) {
-    return "flex-wrap-reverse w-[800px]";
+    return "flex-wrap-reverse xl:w-[800px] lg:w-[600px] w-[500px] min-h-[100px] mx-auto";
   } else if (index == 1) {
-    return "flex-col h-[600px]";
+    return "flex-col xl:h-[450px] h-[350px]";
   } else if (index == 3) {
-    return "flex-wrap-reverse flex-col h-[600px]";
+    return "flex-wrap-reverse flex-col xl:h-[450px] h-[350px]";
   }
-  return "w-[800px]";
+  return "xl:w-[800px] lg:w-[600px] w-[500px] min-h-[100px] m-auto";
 };
 
 const cardRotate = (
@@ -105,27 +110,47 @@ const blinkTurnPlayer = computed(() => {
 });
 
 const winOrLose = computed(() => {
-  if (table.winPlayers.includes(player)) return "WIN";
-  else return "LOSE";
+  if (table.winPlayers.includes(player)) return "Win";
+  else return "Lose";
+});
+
+const winOrLoseColor = () => {
+  if (winOrLose.value === "Win") {
+    return "text-red-500";
+  } else {
+    return "text-blue-600";
+  }
+};
+
+const dealerBudgePosition = computed(() => {
+  if (cardRotate(props.index).isRotate) {
+    return "absolute top-[5px] left-[-15px] -translate-x-full ";
+  }
+  return "";
 });
 </script>
 <template>
   <div>
-    <div id="playerInfo" class="text-gray-100 text-center relative">
+    <div
+      id="playerInfo"
+      :class="cardRotate(props.index).class"
+      class="text-gray-100 text-center relative"
+    >
       <div
         v-if="table.gamePhase === 'betweenGames'"
+        :class="winOrLoseColor()"
         class="text-3xl font-bold"
-        style="text-shadow: 0px 2px 3px darkgrey"
       >
         {{ winOrLose }}
       </div>
 
       <p
         :class="blinkTurnPlayer"
-        class="playerName sm:text-3xl text-2xl font-bold flex items-center justify-center mb-2"
+        class="relative playerName xl:text-3xl sm:text-2xl text-xl font-bold flex items-center justify-center mb-2"
       >
         <span
           v-if="table.dealerNum == index"
+          :class="dealerBudgePosition"
           class="inline-block w-8 h-8 leading-8 mx-2 border border-gray-600 bg-gray-100 text-gray-800 text-sm font-medium rounded-full"
         >
           D
@@ -133,18 +158,11 @@ const winOrLose = computed(() => {
         {{ player.name }}
       </p>
 
-      <p class="sm:text-3xl text-2xl font-bold mb-2">
+      <p class="xl:text-3xl sm:text-2xl text-xl font-bold">
         {{ tweened.score.toFixed(0) }}
       </p>
       <Transition name="fade">
-        <div
-          v-if="player.gameStatus === 'path' && isDisplayBalloon == true"
-          class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
-        >
-          <p class="sm:text-xl text-lg font-bold mx-2.5">
-            {{ player.gameStatus }}
-          </p>
-        </div>
+        <statusBalloon :player="player" :showBalloon="showBalloon" />
       </Transition>
     </div>
 
@@ -152,7 +170,7 @@ const winOrLose = computed(() => {
       name="player-cards"
       tag="div"
       :class="cardsRow(props.index)"
-      class="flex-wrap flex justify-center m-auto pb-2"
+      class="flex-wrap flex justify-center pb-2"
     >
       <GameCard
         v-for="(card, index) in player.hand"
@@ -172,30 +190,6 @@ const winOrLose = computed(() => {
   width: 800px;
   flex-wrap: wrap;
   margin: auto;
-}
-
-.status-balloon {
-  display: inline-block;
-  padding: 7px 0px;
-  max-width: 100%;
-  color: #030303;
-  font-size: 16px;
-  background: #f9f9f9;
-  border-radius: 15px;
-}
-
-.status-balloon:before {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -15px;
-  border: 15px solid transparent;
-  border-top: 15px solid #f9f9f9;
-}
-
-.status-balloon p {
-  padding: 0;
 }
 
 .player-cards-move,

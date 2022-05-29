@@ -7,22 +7,14 @@ describe("Deck Store", () => {
     setActivePinia(createPinia());
   });
 
-  it("setGameType", () => {
-    const deck = useDeckStore();
-    deck.setGameType("blackjack");
-    expect(deck.gameType).toEqual("blackjack");
-  });
-
   it("generateDeckBlackJack", () => {
     const deck = useDeckStore();
-    deck.setGameType("blackjack");
     deck.generateDeck();
     expect(deck.deck.length).toEqual(52);
   });
 
   it("drawOne", () => {
     const deck = useDeckStore();
-    deck.setGameType("blackjack");
     deck.generateDeck();
     expect(deck.drawOne()).toEqual({ rank: "A", suit: "H" });
     expect(deck.drawOne()).toEqual({ rank: "2", suit: "H" });

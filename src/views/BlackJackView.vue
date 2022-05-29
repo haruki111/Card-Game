@@ -9,20 +9,26 @@ import BJBet from "@/components/BJBet.vue";
 import BJEndResult from "../components/results/BJEndResult.vue";
 import GameRound from "@/components/GameRound.vue";
 import GameCard from "@/components/GameCard.vue";
+import router from "@/router";
 
 const table = useTableStore().table as BlackJackTable;
 const render = useBlackJackRenderStore();
 
 const stackDeckStyle = (index: number) => {
-  if (index == 0) return "ml-0";
-  return "-ml-12";
+  if (index != 0) return "xl:-ml-12 sm:-ml-9 -ml-8";
 };
 
 render.renderTable(table);
+
+// ブラウザバックでHome
+addEventListener("popstate", () => {
+  router.push("/");
+  location.reload();
+});
 </script>
 <template>
-  <div class="">
-    <div id="houseWrap" class="flex justify-start flex-col text-center h-48">
+  <div>
+    <div id="houseWrap" class="flex justify-start flex-col text-center xl:h-48">
       <BJHouse />
     </div>
     <div class="flex justify-center items-center mt-5">
@@ -40,7 +46,7 @@ render.renderTable(table);
           :isShadow="false"
           :rotate="{ isRotate: false, class: '' }"
           :class="stackDeckStyle(index)"
-          class="mx-0"
+          class="sm:mx-0 mx-0"
         />
       </TransitionGroup>
     </div>
@@ -49,27 +55,34 @@ render.renderTable(table);
         v-for="(player, index) in table.players"
         :key="index"
         :index="index"
-        class="w-1/3 flex justify-end flex-col h-52"
+        class="w-1/3 flex justify-end flex-col xl:h-52"
       />
     </div>
   </div>
-  <div class="relative h-56 mt-2">
-    <GameRound />
-    <Transition name="fade">
-      <BJAction
-        v-if="render.renderAction"
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-      />
-      <BJBet
-        v-else-if="render.renderBet"
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-      />
-      <BJEndResult v-else-if="render.renderEndResult" />
+  <div class="md:h-[300px] flex items-center justify-around">
+    <Transition name="fade" class="sm:w-1/2">
+      <BJAction v-if="render.renderAction" class="" />
+      <BJBet v-else-if="render.renderBet" class="-mt-12" />
+      <BJEndResult v-else-if="render.renderEndResult" class="sm:w-full" />
     </Transition>
+    <GameRound class="round" />
   </div>
 </template>
 
 <style scoped>
+.round {
+  position: absolute;
+  top: 90%;
+  left: 90%;
+  transform: translate(-90%, -90%);
+}
+@media (max-width: 640px) {
+  .round {
+    top: 95%;
+    left: 90%;
+    transform: translate(-90%, -95%);
+  }
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;

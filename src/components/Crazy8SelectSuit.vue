@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
-import { Card } from "@/stores/card";
+import { Card } from "@/models/card";
 import type { Crazy8Table } from "@/models/table/crazy8Table";
 
 const table = useTableStore().table as Crazy8Table;
