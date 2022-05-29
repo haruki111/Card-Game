@@ -2,6 +2,7 @@
 import { computed, ref, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useBlackJackRenderStore } from "@/stores/blackJackRender";
+import statusBalloon from "@/components/statusBalloon.vue";
 
 import type { BlackJackPlayer } from "@/models/player/blackJackPlayer";
 import type { BlackJackTable } from "@/models/table/blackjackTable";
@@ -28,6 +29,12 @@ watch(props.player, (player) => {
 });
 
 const isDisplayBalloon = ref(false);
+const showBalloon = computed(() => {
+  return (
+    (table.gamePhase == "acting" || table.gamePhase == "evaluatingWinners") &&
+    isDisplayBalloon.value == true
+  );
+});
 
 watch(props.player, (player) => {
   const displayStatus = [
@@ -126,47 +133,12 @@ const winOrLoseColor = () => {
       </span>
     </div>
     <Transition name="fade">
-      <div
-        v-if="
-          (table.gamePhase == 'acting' ||
-            table.gamePhase == 'evaluatingWinners') &&
-          isDisplayBalloon == true
-        "
-        class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
-      >
-        <p class="sm:text-xl text-lg font-bold mx-6">
-          {{ player.gameStatus }}
-        </p>
-      </div>
+      <statusBalloon :player="player" :showBalloon="showBalloon" />
     </Transition>
   </div>
 </template>
 
 <style scoped>
-.status-balloon {
-  display: inline-block;
-  padding: 7px 0px;
-  max-width: 100%;
-  color: #030303;
-  font-size: 16px;
-  background: #f9f9f9;
-  border-radius: 15px;
-}
-
-.status-balloon:before {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -15px;
-  border: 15px solid transparent;
-  border-top: 15px solid #f9f9f9;
-}
-
-.status-balloon p {
-  padding: 0;
-}
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;

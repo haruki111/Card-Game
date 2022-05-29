@@ -3,7 +3,9 @@ import { computed, ref, reactive, watch } from "vue";
 import { useTableStore } from "@/stores/table";
 import { useCrazy8RenderStore } from "@/stores/crazy8Render";
 import type { Card } from "@/models/card";
-import GameCard from "../GameCard.vue";
+import GameCard from "@/components/GameCard.vue";
+import statusBalloon from "@/components/statusBalloon.vue";
+
 import type { Crazy8Table } from "@/models/table/crazy8Table";
 import { gsap } from "gsap";
 
@@ -26,6 +28,9 @@ watch(useTableStore().table.players[props.index], (n) => {
 });
 
 const isDisplayBalloon = ref(false);
+const showBalloon = computed(() => {
+  return player.gameStatus === "path" && isDisplayBalloon.value == true;
+});
 
 watch(player, (n) => {
   if (n.gameStatus === "path") {
@@ -157,14 +162,7 @@ const dealerBudgePosition = computed(() => {
         {{ tweened.score.toFixed(0) }}
       </p>
       <Transition name="fade">
-        <div
-          v-if="player.gameStatus === 'path' && isDisplayBalloon == true"
-          class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
-        >
-          <p class="sm:text-xl text-lg font-bold mx-6">
-            {{ player.gameStatus }}
-          </p>
-        </div>
+        <statusBalloon :player="player" :showBalloon="showBalloon" />
       </Transition>
     </div>
 
@@ -192,30 +190,6 @@ const dealerBudgePosition = computed(() => {
   width: 800px;
   flex-wrap: wrap;
   margin: auto;
-}
-
-.status-balloon {
-  display: inline-block;
-  padding: 7px 0px;
-  max-width: 100%;
-  color: #030303;
-  font-size: 16px;
-  background: #f9f9f9;
-  border-radius: 15px;
-}
-
-.status-balloon:before {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -15px;
-  border: 15px solid transparent;
-  border-top: 15px solid #f9f9f9;
-}
-
-.status-balloon p {
-  padding: 0;
 }
 
 .player-cards-move,
