@@ -1,59 +1,37 @@
-# Card-Game(Vue ver)
+![Card Game](./public/logo.png)  
 
-This template should help get you started developing with Vue 3 in Vite.
+![gif](https://user-images.githubusercontent.com/68400191/170860703-e7f81b1a-246d-4fdd-8545-68d56f4fc14a.gif)
 
-## Recommended IDE Setup
+# About
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin).
+This application allows you to play card games on the web.
 
-## Type Support for `.vue` Imports in TS
+The games you can play are as follows
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+- Blackjack
+- Crazy Eights
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+# Features
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+## common
 
-## Customize configuration
+- animation
+- Web Audio API
+- Web Speech API
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+</br>
 
-## Project Setup
+### Blackjack
 
-```sh
-npm install
-```
+Ai selects one of the following four investment methods
 
-### Compile and Hot-Reload for Development
+- 10% method
+- Martingale method
+- Grand Martingale method
+- Goodman method
+  
+</br>
 
-```sh
-npm run dev
-```
+### Crazy Eights
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run build
-npm run test:e2e # or `npm run test:e2e:ci` for headless testing
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- Find the card to be played on the field by the quantity of O(1)
