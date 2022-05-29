@@ -59,7 +59,7 @@ addEventListener("popstate", () => {
       />
     </div>
   </div>
-  <div class="md:h-[300px] mt-5 flex items-center justify-around">
+  <div class="md:h-[300px] flex items-center justify-around">
     <Transition name="fade" class="sm:w-1/2">
       <BJAction v-if="render.renderAction" class="" />
       <BJBet v-else-if="render.renderBet" class="-mt-12" />
