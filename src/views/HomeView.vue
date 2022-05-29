@@ -12,14 +12,13 @@ addEventListener("popstate", () => {
 const table = useTableStore();
 const speech = useSpeechStore();
 
-speechSynthesis.onvoiceschanged = () => {
-  speech.appendVoices();
-};
-
 const startGame = () => {
   if (gameSettingHash.name != "" && gameSettingHash.game != "") {
     table.$reset();
     table.setTable(gameSettingHash);
+    speechSynthesis.onvoiceschanged = () => {
+      speech.appendVoices();
+    };
   }
 
   if (gameSettingHash.name == "") inputs.alert = true;

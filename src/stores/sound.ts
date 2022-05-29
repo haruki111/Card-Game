@@ -30,6 +30,7 @@ export const userSoundStore = defineStore({
         src: [playCardSound],
         volume: this.basicVolume,
         format: ["mp3"],
+        html5: true,
       }).play();
     },
     turnCardSound(): void {
@@ -37,6 +38,7 @@ export const userSoundStore = defineStore({
         src: [turnCardSound],
         volume: this.basicVolume,
         format: ["mp3"],
+        html5: true,
       }).play();
     },
     shuffleCardSound(): void {
@@ -44,6 +46,7 @@ export const userSoundStore = defineStore({
         src: [shuffleCardSound],
         volume: this.basicVolume,
         format: ["mp3"],
+        html5: true,
       }).play();
     },
     distributeCardSound(): void {
@@ -51,6 +54,7 @@ export const userSoundStore = defineStore({
         src: [distributeCardSound],
         volume: this.basicVolume,
         format: ["mp3"],
+        html5: true,
       }).play();
     },
     // onSound(): void {
