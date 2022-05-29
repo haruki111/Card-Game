@@ -134,7 +134,7 @@ const winOrLoseColor = () => {
         "
         class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
       >
-        <p class="sm:text-xl text-lg font-bold mx-2.5">
+        <p class="sm:text-xl text-lg font-bold mx-6">
           {{ player.gameStatus }}
         </p>
       </div>

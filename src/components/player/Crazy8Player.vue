@@ -54,13 +54,13 @@ const playerCardHide = computed(() => {
 
 const cardsRow = (index: number) => {
   if (index == 0) {
-    return "flex-wrap-reverse xl:w-[800px] lg:w-[600px] w-[500px] mx-auto";
+    return "flex-wrap-reverse xl:w-[800px] lg:w-[600px] w-[500px] min-h-[100px] mx-auto";
   } else if (index == 1) {
     return "flex-col xl:h-[450px] h-[350px]";
   } else if (index == 3) {
     return "flex-wrap-reverse flex-col xl:h-[450px] h-[350px]";
   }
-  return "xl:w-[800px] lg:w-[600px] w-[500px] m-auto";
+  return "xl:w-[800px] lg:w-[600px] w-[500px] min-h-[100px] m-auto";
 };
 
 const cardRotate = (
@@ -161,7 +161,7 @@ const dealerBudgePosition = computed(() => {
           v-if="player.gameStatus === 'path' && isDisplayBalloon == true"
           class="status-balloon absolute -top-1/2 left-1/2 -translate-x-1/2"
         >
-          <p class="sm:text-xl text-lg font-bold mx-2.5">
+          <p class="sm:text-xl text-lg font-bold mx-6">
             {{ player.gameStatus }}
           </p>
         </div>
