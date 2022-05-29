@@ -1,5 +1,3 @@
-![Card Game](./public/logo.png)  
-
 ![gif](https://user-images.githubusercontent.com/68400191/170860703-e7f81b1a-246d-4fdd-8545-68d56f4fc14a.gif)
 
 # About
@@ -19,7 +17,6 @@ The games you can play are as follows
 - Web Audio API
 - Web Speech API
 
-</br>
 
 ### Blackjack
 
@@ -30,7 +27,6 @@ Ai selects one of the following four investment methods
 - Grand Martingale method
 - Goodman method
   
-</br>
 
 ### Crazy Eights
 
